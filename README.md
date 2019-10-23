@@ -20,14 +20,26 @@ python3 manage.py runserver 8080
 
 To deploy App to Heroku, run the following commands.
 
-1. Connect local repo to Heroku
+1. Install and setup Heroku App
 
-(For new apps)
+```
+npm install -g heroku
+```
+
+Then for new apps, run
 ```
 heroku create
 ```
 
-(For existing app)
+For an existing app, run
 ```
 heroku git:remote -a $YOUR_HEROKU_APP_NAME
+```
+
+2. Deploy App
+
+```
+git init
+./push.sh $YOUR_COMMIT
+heroku run python manage.py migrate
 ```
