@@ -17,3 +17,17 @@ To run web server locally, run the following commands.
 source ../django_env/bin/activate
 python3 manage.py runserver 8080
 ```
+
+To deploy App to Heroku, run the following commands.
+
+1. Connect local repo to Heroku
+
+(For new apps)
+```
+heroku create
+```
+
+(For existing app)
+```
+heroku git:remote -a $YOUR_HEROKU_APP_NAME
+```
