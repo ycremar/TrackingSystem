@@ -15,6 +15,7 @@
     {% for obj in documents %}
       <li>
         <a href="{{ obj.document.url }}">{{ obj.document.name }}</a>
+        Document type: {{obj.document_type}}
         <small>(Uploaded at: {{ obj.uploaded_at }})</small>
       </li>
     {% endfor %}
