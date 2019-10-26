@@ -31,3 +31,13 @@ def form_upload(request):
     return render(request, 'form_upload.html', {
         'form': form
     })
+    
+def degree_plan(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = DocumentForm()
+    return render(request, 'degree_plan.html')
