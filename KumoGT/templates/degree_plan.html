@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script language="javascript">  
+    function getobj(id){  
+        return document.getElementById(id);  
+    }  
+    function list(){  
+        var date=new Date();  
+        var le1=date.getFullYear()-2010;  
+        addlist('year1',2010,le1 + 10);  
+        addlist('month1',1,12);  
+        addlist('day1',1,31);
+        addlist('year2',2010,le1 + 10);  
+        addlist('month2',1,12);  
+        addlist('day2',1,31);
+        addlist('year3',2010,le1 + 10);  
+        addlist('month3',1,12);  
+        addlist('day3',1,31);
+        addlist('year4',2010,le1 + 10);  
+        addlist('month4',1,12);  
+        addlist('day4',1,31);
+    }  
+    function febday(){//判断不同的情况下二月的天数，并更改日的列表项中的内容  
+        var year=getobj('year').value;  
+        var month=getobj('month').value;  
+        var bigm=new Array('1','3','5','7','8','10','12');  
+        var bigstr=bigm.join('-');  
+        var smallm=new Array('4','6','9','10');  
+        var smallstr=smallm.join('-');  
+        if(bigstr.indexOf(month)>-1)  
+            addlist('day',1,31);  
+        if(smallstr.indexOf(month)>-1)  
+            day(30);  
+        if(month=='2'){  
+            if(is_leap_year(year)){  
+                day(29);  
+            }else{  
+                day(28);  
+            }  
+        }  
+    }  
+    function day(num){//改变二月的天数  
+        var list=getobj('day');  
+        var listlen=list.options.length;  
+        for(var i=listlen-1;i>=num;i--){  
+            list.options[i]=null;  
+        }  
+    }  
+    function is_leap_year(year){//是否是闰年  
+        if((year%400==0)||(year%4==0 && year/100!=0))  
+            return true;  
+        return false;  
+    }  
+    function addlist(obj,begin,length){//为列表项中批量添加项目  
+        var list=getobj(obj);  
+        for(var i=0;i<length;i++){  
+            var num=i+begin;  
+            list.options[i]=new Option(num,num);  
+        }  
+    }  
+</script>  
+
+<script type="text/javascript">
+	window.onload=function(){
+	var tfrow = document.getElementById('tfhover').rows.length;
+	var tbRow=[];
+	for (var i=1;i<tfrow;i++) {
+		tbRow[i]=document.getElementById('tfhover').rows[i];
+		tbRow[i].onmouseover = function(){
+		  this.style.backgroundColor = '#f3f8aa';
+		};
+		tbRow[i].onmouseout = function() {
+		  this.style.backgroundColor = '#ffffff';
+		};
+	}
+};
+</script>
+
+<style type="text/css">
+table.tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
+table.tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
+table.tftable tr {background-color:#ffffff;}
+table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+</style>
+
+<h1 style="text-align:center">Degree Plan</h1>
+<table id="tfhover" class="tftable" border="1">
+    <tr>
+        <th width = "15%">GS Document</th>
+        <th width = "15%">File</th>
+        <th width = "10%">Uploaded Date</th>
+        <th width = "15%">Notes</th>
+        <th width = "18%">Approved CS</th>
+        <th width = "18%">Approved OGS</th>
+    </tr>
+        <tr>
+            <td>Degree Plan</td>
+            <td><input type="file" name="degree_plan_file"></button></td>
+            <td> </td>
+            <td><textarea rows="5" cols="35"></textarea></td>
+            <td>
+                <form>
+                    <body onload="list();">
+                        <select id="year1" name="year1" onchange="febday();">  
+                        </select>year
+                        <select id="month1" name="month1" onchange="febday();">  
+                        </select>month  
+                        <select id="day1"name="day1">  
+                        </select>day  
+                    </body>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <body onload="list();">
+                        <select id="year2" name="year2" onchange="febday();">  
+                        </select>year  
+                        <select id="month2" name="month2" onchange="febday();">  
+                        </select>month
+                        <select id="day2"name="day2" >  
+                        </select>day
+                    </body>
+                </form>
+            </td>
+        </tr>
+    <tr>
+        <td>{{ form.doc_type }}</td>
+        <td>{{ form.doc }}</td>
+        <td> </td>
+        <td>{{ form.notes }}</td>
+        <td>{{ form.appr_cs_date }}</td>
+        <td>{{ form.appr_ogs_date }}</td>
+    </tr>
+</table>
+
+<center><button style="text-align:center"; type="submit">Submit</button></center>    
+
+{% endblock %}

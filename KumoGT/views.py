@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.forms import formset_factory
 
-from KumoGT.models import Document
-from KumoGT.forms import DocumentForm
+from .models import Deg_Plan_Doc
+from .forms import create_doc_form
 
 def home(request):
-    documents = Document.objects.all()
-    return render(request, 'home.html', { 'documents': documents })
+    docs = Deg_Plan_Doc.objects.all()
+    return render(request, 'home.html', { 'docs': docs })
 
 def upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
@@ -22,12 +23,25 @@ def upload(request):
     
 def form_upload(request):
     if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
+        form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('home')
     else:
-        form = DocumentForm()
+        form = create_doc_form(Deg_Plan_Doc)
     return render(request, 'form_upload.html', {
+        'form': form
+    })
+    
+def degree_plan(request):
+    if request.method == 'POST':
+        form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    elif request.method == 'GET':
+        
+        form = create_doc_form(Deg_Plan_Doc)()
+    return render(request, 'degree_plan.html', {
         'form': form
     })
