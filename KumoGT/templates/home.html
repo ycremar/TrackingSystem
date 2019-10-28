@@ -12,10 +12,10 @@
 
   <p>Uploaded files:</p>
   <ul>
-    {% for obj in documents %}
+    {% for obj in docs %}
       <li>
-        <a href="{{ obj.document.url }}">{{ obj.document.name }}</a>
-        Document type: {{obj.document_type}}
+        <a href="{{ obj.doc.url }}">{{ obj.doc.name }}</a>
+        Document type: {{obj.doc_type}}
         <small>(Uploaded at: {{ obj.uploaded_at }})</small>
       </li>
     {% endfor %}

@@ -95,65 +95,43 @@ table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: so
         <th width = "18%">Approved CS</th>
         <th width = "18%">Approved OGS</th>
     </tr>
+        <tr>
+            <td>Degree Plan</td>
+            <td><input type="file" name="degree_plan_file"></button></td>
+            <td> </td>
+            <td><textarea rows="5" cols="35"></textarea></td>
+            <td>
+                <form>
+                    <body onload="list();">
+                        <select id="year1" name="year1" onchange="febday();">  
+                        </select>year
+                        <select id="month1" name="month1" onchange="febday();">  
+                        </select>month  
+                        <select id="day1"name="day1">  
+                        </select>day  
+                    </body>
+                </form>
+            </td>
+            <td>
+                <form>
+                    <body onload="list();">
+                        <select id="year2" name="year2" onchange="febday();">  
+                        </select>year  
+                        <select id="month2" name="month2" onchange="febday();">  
+                        </select>month
+                        <select id="day2"name="day2" >  
+                        </select>day
+                    </body>
+                </form>
+            </td>
+        </tr>
     <tr>
-        <td>Degree Plan</td>
-        <td><input type="file" name="degree_plan_file"></button></td>
-        <td>{{ obj.uploaded_at }}</td>
-        <td><textarea rows="5" cols="20"></textarea></td>
-        <td>
-            <form>
-                <body onload="list();">
-                    <select id="year1" name="year1" onchange="febday();">  
-                    </select>year
-                    <select id="month1" name="month1" onchange="febday();">  
-                    </select>month  
-                    <select id="day1"name="day1">  
-                    </select>day  
-                </body>
-            </form>
-        </td>
-        <td>
-            <form>
-                <body onload="list();">
-                    <select id="year2" name="year2" onchange="febday();">  
-                    </select>year  
-                    <select id="month2" name="month2" onchange="febday();">  
-                    </select>month
-                    <select id="day2"name="day2" >  
-                    </select>day
-                </body>
-            </form>
-        </td>
-    </tr>
-    <tr>
-        <td><textarea rows="1" cols="20"></textarea></td>
-        <td><input type="file"></button></td>
-        <td>{{ obj.uploaded_at }}</td>
-        <td><textarea rows="5" cols="20"></textarea></td>
-        <td>
-            <form>
-                <body onload="list();">
-                    <select id="year3" name="year3" onchange="febday();">  
-                    </select>year
-                    <select id="month3" name="month3" onchange="febday();">  
-                    </select>month
-                    <select id="day3"name="day3">  
-                    </select>day
-                </body>
-            </form>
-        </td>
-        <td>
-            <form>
-                <body onload="list();">
-                    <select id="year4" name="year4" onchange="febday();">  
-                    </select>year
-                    <select id="month4" name="month4" onchange="febday();">  
-                    </select>month  
-                    <select id="day4"name="day4">  
-                    </select>day 
-                </body>
-            </form>
-        </td>
+        <td>{{ form.doc_type }}</td>
+        <td>{{ form.doc }}</td>
+        <td> </td>
+        <td>{{ form.notes }}</td>
+        <td>{{ form.appr_cs_date }}</td>
+        <td>{{ form.appr_ogs_date }}</td>
     </tr>
 </table>
 
