@@ -33,15 +33,32 @@ def form_upload(request):
         'form': form
     })
     
-def degree_plan(request):
+def degree_plan(request, option = ''):
     if request.method == 'POST':
-        form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
+        forms = []
+        deg_plans = Deg_Plan_Doc.objects.all()
+        for deg_plan in deg_plans:
+            forms.append(create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES,\
+                instance = deg_plan, prefix = str(deg_plan.id)))
+        for form in forms:
+            if form.is_valid():
+                form.save()
+        if option == 'add' :
+            new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
+            if new_form.is_valid():
+                new_form.save()
+        return redirect('degree_plan')
     elif request.method == 'GET':
-        
-        form = create_doc_form(Deg_Plan_Doc)()
-    return render(request, 'degree_plan.html', {
-        'form': form
-    })
+        forms = []
+        uploaded_ats = []
+        deg_plans = Deg_Plan_Doc.objects.all()
+        if deg_plans.count() == 0 and option != 'add': return redirect('degree_plan', option = 'add')
+        for deg_plan in deg_plans:
+            forms.append(create_doc_form(Deg_Plan_Doc)(instance = deg_plan, prefix = str(deg_plan.id)))
+            uploaded_ats.append(deg_plan.uploaded_at)
+        if option == 'add' :forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
+        table_elements = zip(forms, uploaded_ats)
+        return render(request, 'degree_plan.html', {
+            'table_elements': table_elements,
+            'option': option,
+        })

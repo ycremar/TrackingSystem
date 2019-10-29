@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls import re_path
 from KumoGT import views
 
 from django.conf import settings
@@ -25,7 +26,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
-    path('degree_plan/', views.degree_plan, name = 'degree_plan')
+    #path('degree_plan/', views.degree_plan, name = 'degree_plan'),
+    re_path(r'^degree_plan/(?:(?P<option>\S+)/)?$', views.degree_plan, name = 'degree_plan')
 ]
 
 if settings.DEBUG:
