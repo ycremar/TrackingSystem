@@ -1,10 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.forms import formset_factory
+from django.http import FileResponse, HttpResponse, Http404
+
+from django.contrib.auth.decorators import login_required
+from django.views.static import serve
 
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
+
+import os
 
 def home(request):
     docs = Deg_Plan_Doc.objects.all()
@@ -49,6 +55,7 @@ def degree_plan(request, option = ''):
                 new_form.save()
         return redirect('degree_plan')
     elif request.method == 'GET':
+<<<<<<< HEAD
         forms = []
         uploaded_ats = []
         deg_plans = Deg_Plan_Doc.objects.all()
@@ -62,3 +69,24 @@ def degree_plan(request, option = ''):
             'table_elements': table_elements,
             'option': option,
         })
+=======
+        
+        form = create_doc_form(Deg_Plan_Doc)()
+    return render(request, 'degree_plan.html', {
+        'form': form
+    })
+    
+    
+# @login_required
+def serve_protected_document(request, file):
+
+    file_path = os.path.join(settings.MEDIA_ROOT, 'documents', file)
+    try:
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    except:
+        raise Http404
+    
+>>>>>>> 243e889... serve files through views

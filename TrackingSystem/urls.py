@@ -26,8 +26,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
+<<<<<<< HEAD
     #path('degree_plan/', views.degree_plan, name = 'degree_plan'),
     re_path(r'^degree_plan/(?:(?P<option>\S+)/)?$', views.degree_plan, name = 'degree_plan')
+=======
+    path('degree_plan/', views.degree_plan, name = 'degree_plan'),
+    path('media/documents/<str:file>', views.serve_protected_document, name='serve_protected_document'),
+>>>>>>> 243e889... serve files through views
 ]
 
 if settings.DEBUG:
