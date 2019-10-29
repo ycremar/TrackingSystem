@@ -1,10 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.forms import formset_factory
+from django.http import FileResponse, HttpResponse, Http404
+
+from django.contrib.auth.decorators import login_required
+from django.views.static import serve
 
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
+
+import os
 
 def home(request):
     docs = Deg_Plan_Doc.objects.all()
@@ -56,9 +62,23 @@ def degree_plan(request, option = ''):
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(instance = deg_plan, prefix = str(deg_plan.id)))
             uploaded_ats.append(deg_plan.uploaded_at)
-        if option == 'add' :forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
+        if option == 'add' :
+            forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
+            uploaded_ats.append('')
         table_elements = zip(forms, uploaded_ats)
         return render(request, 'degree_plan.html', {
             'table_elements': table_elements,
             'option': option,
         })
+
+# @login_required
+def serve_protected_document(request, file):
+
+    file_path = os.path.join(settings.MEDIA_ROOT, 'documents', file)
+    try:
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/pdf")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
+    except:
+        raise Http404
