@@ -6,7 +6,7 @@ def create_doc_form(model_in):
     '''Generate Model Form for docs dynamically'''
     class Meta:
         model = model_in        # model input
-        fields = ['notes', 'doc', 'doc_type', 'appr_cs_date', 'appr_ogs_date']
+        fields = ['doc_type', 'doc', 'notes', 'appr_cs_date', 'appr_ogs_date']
         widgets = {
             'notes': forms.Textarea(attrs={'cols': 35, 'rows': 5}),
             'appr_cs_date': forms.SelectDateWidget\
