@@ -25,7 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
-    path('degree_plan/', views.degree_plan, name = 'degree_plan')
+    path('degree_plan/', views.degree_plan, name = 'degree_plan'),
+    path('media/documents/<str:file>', views.serve_protected_document, name='serve_protected_document'),
 ]
 
 if settings.DEBUG:
