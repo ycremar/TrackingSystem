@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.forms import formset_factory
 from django.http import FileResponse, HttpResponse, Http404
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
@@ -43,17 +43,31 @@ def degree_plan(request, option = '', id = 0):
     if request.method == 'POST':
         forms = []
         deg_plans = Deg_Plan_Doc.objects.all()
+        changed, error = False, False
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES,\
                 instance = deg_plan, prefix = str(deg_plan.id)))
         for form in forms:
             if form.has_changed():
+                changed = True
                 if form.is_valid():
                     form.save()
+                else:
+                    error = True
+                    errors = ''
+                    for f, e in form.errors.items():
+                        errors += "{0} - {1}".format(f, e[0])
+                    messages.error(request, "{0}({1}): {2}".format(form.instance.doc, form.instance.doc_type, errors))
         if option == 'add' :
             new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
                 new_form.save()
+        if not changed:
+            messages.info(request, 'Noting is changed.')
+        elif not error:
+            messages.success(request, 'Documents are updated.')
+        else:
+            messages.warning(request, 'Some documents are not updated.')
         return redirect('degree_plan')
     elif request.method == 'GET':
         if option == 'del':
@@ -63,19 +77,16 @@ def degree_plan(request, option = '', id = 0):
             except:
                 raise Http404
             del_doc.delete()
+            return redirect('degree_plan')
         forms = []
-        infos = []
         deg_plans = Deg_Plan_Doc.objects.all()
         if deg_plans.count() == 0 and option != 'add': return redirect('degree_plan', option = 'add')
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(instance = deg_plan, prefix = str(deg_plan.id)))
-            infos.append({'id': deg_plan.id, 'uploaded_at': deg_plan.uploaded_at})
         if option == 'add' :
             forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
-            infos.append({'id': 0, 'uploaded_at': ''})
-        table_elements = zip(forms, infos)
         return render(request, 'degree_plan.html', {
-            'table_elements': table_elements,
+            'forms': forms,
             'option': option,
         })
 
