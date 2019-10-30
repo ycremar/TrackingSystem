@@ -78,44 +78,55 @@
 };
 </script>
 
-<style type="text/css">
-table.tftable {font-size:12px;color:#333333;width:100%;border-width: 1px;border-color: #729ea5;border-collapse: collapse;}
-table.tftable th {font-size:12px;background-color:#acc8cc;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;text-align:left;}
-table.tftable tr {background-color:#ffffff;}
-table.tftable td {font-size:12px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
-</style>
+{% include "messages.html" %}
 
-<h1 style="text-align:center">Degree Plan</h1>
+<header class="w3-container w3-theme-l5 w3-center w3-row w3-card">      
+    <h1>Degree Plan</h1>
+</header>
 <form method="post" id='data_form' enctype="multipart/form-data">{% csrf_token %}
-    <table id="tfhover" class="tftable" border="1">
-        <tr>
-            <th width = "15%">GS Document</th>
-            <th width = "15%">File</th>
-            <th width = "10%">Uploaded Date</th>
-            <th width = "15%">Notes</th>
-            <th width = "18%">Approved CS</th>
-            <th width = "18%">Approved OGS</th>
-        </tr>
-        {% for form, uploaded_at in table_elements %}
-            <tr>
-                <td>{{ form.doc_type }}</td>
-                <td>{{ form.doc }}</td>
-                <td>{{ uploaded_at }} </td>
-                <td>{{ form.notes }}</td>
-                <td>{{ form.appr_cs_date }}</td>
-                <td>{{ form.appr_ogs_date }}</td>
+        <table class="w3-container w3-table-all w3-centered">
+            <tr class="w3-card w3-theme">
+                <th style="width:20%">GS Document</th>
+                <th style="width:15%">File</th>
+                <th style="width:12%">Uploaded at</th>
+                <th style="width:15%">Notes</th>
+                <th style="width:12%">Approved CS</th>
+                <th style="width:12%">Approved OGS</th>
+                <th style="width:10%">Operation</th>
             </tr>
-        {% empty %}
-            </table>
-            <p> Data loading failed. </p>
-        {% endfor %}
-    </table>
+            {% for form in forms %}
+                <tr class="w3-card">
+                    <td class="w3-padding-48">{{ form.doc_type }}</td>
+                    <td class="w3-padding-32">{{ form.doc }}</td>
+                    {% if form.instance.uploaded_at %}
+                        <td class="w3-padding-48">{{ form.instance.uploaded_at }}</td>
+                    {% else %}
+                    <td class="w3-padding-48"></td>
+                    {% endif %}
+                    <td>{{ form.notes }}</td>
+                    <td>{{ form.appr_cs_date }}</td>
+                    <td>{{ form.appr_ogs_date }}</td>
+                    {% if form.instance.id %}
+                        <td class="w3-padding-48">
+                            <a href="{% url 'degree_plan' option='del' id=form.instance.id %}">
+                                <button type="button" class="w3-button w3-theme-d5">Delete</button>
+                            </a>
+                        </td>
+                    {% else %}
+                        <td class="w3-padding-48"></td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <p> Data loading failed. </p>
+            {% endfor %}
+        </table>
 </form>
 {% if option == 'add' %}
-    <a href="{% url 'degree_plan' %}"><button>Cancel</button></a>
+    <a href="{% url 'degree_plan' %}"><button class="w3-button w3-theme-d5">Cancel</button></a>
 {% else %}
-    <a href="{% url 'degree_plan' option='add' %}"><button>Add</button></a>
+    <a href="{% url 'degree_plan' option='add' %}"><button class="w3-button w3-theme-d5">Add</button></a>
 {% endif %}
-<center><button style="text-align:center" form='data_form' type="submit">Submit</button></center>    
-
+<div class="w3-content w3-center" style="max-width:1200px;">
+    <button form='data_form' type="submit" class="w3-button w3-theme-d5 w3-content">Submit</button>
+</div>
 {% endblock %}
