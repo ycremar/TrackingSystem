@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import FileResponse, HttpResponse, Http404
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
@@ -54,13 +55,12 @@ def degree_plan(request, option = '', id = 0):
                     form.save()
                 else:
                     error = True
-                    errors = ''
-                    for f, e in form.errors.items():
-                        errors += "{0} - {1}".format(f, e[0])
-                    messages.error(request, "{0}({1}): {2}".format(form.instance.doc, form.instance.doc_type, errors))
+                    messages.error(request, mark_safe("{0} ({1}) failed to update due to:<br>{2}".format\
+                        (form.instance.doc, form.instance.doc_type, form.errors)))
         if option == 'add' :
             new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
+                changed = True
                 new_form.save()
         if not changed:
             messages.info(request, 'Noting is changed.')
@@ -81,8 +81,12 @@ def degree_plan(request, option = '', id = 0):
                 raise Http404
             del_doc.delete()
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 9b03c5a... Add function of deleting to degree plan and import some css class and style.
 =======
+=======
+            messages.success(request, 'Document is deleted.')
+>>>>>>> 9f356dd... Refine messages in degree plan and small bug fixes.
             return redirect('degree_plan')
 >>>>>>> 1720aaa... Add function of messages and fix a bug which leads to vertical scrollbar missing.
         forms = []
