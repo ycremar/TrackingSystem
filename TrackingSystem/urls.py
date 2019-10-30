@@ -28,9 +28,13 @@ urlpatterns = [
     path('form_upload/', views.form_upload, name='form_upload'),
 <<<<<<< HEAD
     #path('degree_plan/', views.degree_plan, name = 'degree_plan'),
+<<<<<<< HEAD
     re_path(r'^degree_plan/(?:(?P<option>\S+)/)?$', views.degree_plan, name = 'degree_plan')
 =======
     path('degree_plan/', views.degree_plan, name = 'degree_plan'),
+=======
+    re_path(r'^degree_plan/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$', views.degree_plan, name = 'degree_plan'),
+>>>>>>> 9b03c5a... Add function of deleting to degree plan and import some css class and style.
     path('media/documents/<str:file>', views.serve_protected_document, name='serve_protected_document'),
 >>>>>>> 243e889... serve files through views
 ]

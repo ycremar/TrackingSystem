@@ -39,7 +39,7 @@ def form_upload(request):
         'form': form
     })
     
-def degree_plan(request, option = ''):
+def degree_plan(request, option = '', id = 0):
     if request.method == 'POST':
         forms = []
         deg_plans = Deg_Plan_Doc.objects.all()
@@ -47,8 +47,9 @@ def degree_plan(request, option = ''):
             forms.append(create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES,\
                 instance = deg_plan, prefix = str(deg_plan.id)))
         for form in forms:
-            if form.is_valid():
-                form.save()
+            if form.has_changed():
+                if form.is_valid():
+                    form.save()
         if option == 'add' :
             new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
@@ -56,15 +57,33 @@ def degree_plan(request, option = ''):
         return redirect('degree_plan')
     elif request.method == 'GET':
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        if option == 'del':
+            try:
+                del_doc = Deg_Plan_Doc.objects.get(id = id)
+                os.remove(del_doc.doc.path)
+            except:
+                raise Http404
+            del_doc.delete()
+>>>>>>> 9b03c5a... Add function of deleting to degree plan and import some css class and style.
         forms = []
-        uploaded_ats = []
+        infos = []
         deg_plans = Deg_Plan_Doc.objects.all()
         if deg_plans.count() == 0 and option != 'add': return redirect('degree_plan', option = 'add')
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(instance = deg_plan, prefix = str(deg_plan.id)))
+<<<<<<< HEAD
             uploaded_ats.append(deg_plan.uploaded_at)
         if option == 'add' :forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
         table_elements = zip(forms, uploaded_ats)
+=======
+            infos.append({'id': deg_plan.id, 'uploaded_at': deg_plan.uploaded_at})
+        if option == 'add' :
+            forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
+            infos.append({'id': 0, 'uploaded_at': ''})
+        table_elements = zip(forms, infos)
+>>>>>>> 9b03c5a... Add function of deleting to degree plan and import some css class and style.
         return render(request, 'degree_plan.html', {
             'table_elements': table_elements,
             'option': option,
