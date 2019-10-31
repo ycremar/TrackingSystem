@@ -11,6 +11,8 @@ from django.views.static import serve
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
 
+from django.core.exceptions import ObjectDoesNotExist
+
 import os
 
 def home(request):
@@ -77,6 +79,7 @@ def degree_plan(request, option = '', id = 0):
             try:
                 del_doc = Deg_Plan_Doc.objects.get(id = id)
                 os.remove(del_doc.doc.path)
+<<<<<<< HEAD
             except:
                 raise Http404
             del_doc.delete()
@@ -87,6 +90,16 @@ def degree_plan(request, option = '', id = 0):
 =======
             messages.success(request, 'Document is deleted.')
 >>>>>>> 9f356dd... Refine messages in degree plan and small bug fixes.
+=======
+            except ObjectDoesNotExist:
+                messages.error(request, 'Document does not exist.')
+            except OSError as err:
+                err_text = "{0}".format(err)
+                messages.error(request, err_text[err_text.find(']') + 1 : err_text.find(':')])
+            else:
+                del_doc.delete()
+                messages.success(request, 'Document is deleted.')
+>>>>>>> 62292a2... Handling of exceptions of deleting a doc and auto scrolling when adding docs.
             return redirect('degree_plan')
 >>>>>>> 1720aaa... Add function of messages and fix a bug which leads to vertical scrollbar missing.
         forms = []

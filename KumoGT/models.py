@@ -31,6 +31,8 @@ GENDER = [('not seleted', 'Not Selected'), \
           ('male', 'Male'),\
           ('female', 'Female')]
 
+DEGREE_TYPE = [('phd', 'PhdCS'),\
+               ('ms', 'Master')]
 class Student(models.Model):
     first_name = models.CharField(max_length=255, blank=False)
     middle_name = models.CharField(max_length=255, blank=True)
@@ -38,6 +40,7 @@ class Student(models.Model):
     uin = models.CharField(max_length=255, blank=False)
     email = models.EmailField(blank=False)
     gender = models.CharField(max_length=255, choices=GENDER, default='not sel')
+
 
 class Document(models.Model):
     doc = models.FileField(upload_to='documents/')
