@@ -19,6 +19,7 @@ from django.urls import re_path
 from KumoGT import views
 
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -34,10 +35,14 @@ urlpatterns = [
     path('degree_plan/', views.degree_plan, name = 'degree_plan'),
 =======
     re_path(r'^degree_plan/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$', views.degree_plan, name = 'degree_plan'),
+<<<<<<< HEAD
 >>>>>>> 9b03c5a... Add function of deleting to degree plan and import some css class and style.
     path('media/documents/<str:file>', views.serve_protected_document, name='serve_protected_document'),
 >>>>>>> 243e889... serve files through views
+=======
+    url(r"(?P<file_path>.+)", views.serve_protected_document, name='decrypt_and_serve'),
+>>>>>>> 19a31e4... add file encryption
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

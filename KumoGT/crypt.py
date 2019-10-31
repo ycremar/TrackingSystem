@@ -28,9 +28,12 @@ def get_bytes(v):
         "bytes."
     )
 
-
-SALT = get_bytes(_get_setting("SALT"))
-PASSWORD = get_bytes(_get_setting("PASSWORD"))
+try:
+    SALT = get_bytes(_get_setting("SALT"))
+    PASSWORD = get_bytes(_get_setting("PASSWORD"))
+except:
+    SALT = get_bytes('random_salt_fh3d2945hf89')
+    PASSWORD = get_bytes('random_password_v893hdsf785b4v')
 
 class Cryptographer(object):
 

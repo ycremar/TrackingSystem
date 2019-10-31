@@ -1,4 +1,5 @@
 from django.db import models
+from .crypt_fields import EncryptedFileField
 
 DOCUMENT_TYPE = [('not seleted', 'Not Selected'), \
                  ('degree plan', 'Degree Plan'), \
@@ -43,7 +44,7 @@ class Student(models.Model):
 
 
 class Document(models.Model):
-    doc = models.FileField(upload_to='documents/')
+    doc = EncryptedFileField(upload_to='documents/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     appr_cs_date = models.DateField(blank=True, null = True) # Approved CS Date
     appr_ogs_date = models.DateField(blank=True, null = True) # Approved OGS Date

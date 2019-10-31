@@ -31,8 +31,8 @@ class EncryptionMixin(object):
     save.alters_data = True
 
     def _get_url(self):
-        return reverse('documents/', kwargs={
-            "path": super(EncryptionMixin, self).url
+        return reverse('decrypt_and_serve', kwargs={
+            "file_path": super(EncryptionMixin, self).url[1:]
         })
     url = property(_get_url)
 
