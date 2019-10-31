@@ -22,7 +22,7 @@
         addlist('month4',1,12);  
         addlist('day4',1,31);
     }  
-    function febday(){//判断不同的情况下二月的天数，并更改日的列表项中的内容  
+    function febday(){// calculate the number of days in Feb and change the day list  
         var year=getobj('year').value;  
         var month=getobj('month').value;  
         var bigm=new Array('1','3','5','7','8','10','12');  
@@ -41,19 +41,19 @@
             }  
         }  
     }  
-    function day(num){//改变二月的天数  
+    function day(num){// change the number of days in Feb
         var list=getobj('day');  
         var listlen=list.options.length;  
         for(var i=listlen-1;i>=num;i--){  
             list.options[i]=null;  
         }  
     }  
-    function is_leap_year(year){//是否是闰年  
+    function is_leap_year(year){// judge if one year is leap year
         if((year%400==0)||(year%4==0 && year/100!=0))  
             return true;  
         return false;  
     }  
-    function addlist(obj,begin,length){//为列表项中批量添加项目  
+    function addlist(obj,begin,length){// add objects to the list  
         var list=getobj(obj);  
         for(var i=0;i<length;i++){  
             var num=i+begin;  
@@ -62,20 +62,13 @@
     }  
 </script>  
 
+{% comment %} Do not delete! {% endcomment %}
 <script type="text/javascript">
 	window.onload=function(){
-	var tfrow = document.getElementById('tfhover').rows.length;
-	var tbRow=[];
-	for (var i=1;i<tfrow;i++) {
-		tbRow[i]=document.getElementById('tfhover').rows[i];
-		tbRow[i].onmouseover = function(){
-		  this.style.backgroundColor = '#f3f8aa';
-		};
-		tbRow[i].onmouseout = function() {
-		  this.style.backgroundColor = '#ffffff';
-		};
-	}
-};
+        if("{{ option }}" == "add"){ // scroll to bottom when option is "add"
+            window.scrollTo(0, document.body.scrollHeight || document.scrollingElement.scrollHeight);
+        }
+	};
 </script>
 
 {% include "messages.html" %}

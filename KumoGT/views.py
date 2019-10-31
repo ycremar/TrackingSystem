@@ -11,6 +11,8 @@ from django.views.static import serve
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
 
+from django.core.exceptions import ObjectDoesNotExist
+
 import os
 
 def home(request):
@@ -74,10 +76,14 @@ def degree_plan(request, option = '', id = 0):
             try:
                 del_doc = Deg_Plan_Doc.objects.get(id = id)
                 os.remove(del_doc.doc.path)
-            except:
-                raise Http404
-            del_doc.delete()
-            messages.success(request, 'Document is deleted.')
+            except ObjectDoesNotExist:
+                messages.error(request, 'Document does not exist.')
+            except OSError as err:
+                err_text = "{0}".format(err)
+                messages.error(request, err_text[err_text.find(']') + 1 : err_text.find(':')])
+            else:
+                del_doc.delete()
+                messages.success(request, 'Document is deleted.')
             return redirect('degree_plan')
         forms = []
         deg_plans = Deg_Plan_Doc.objects.all()
