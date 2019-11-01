@@ -10,6 +10,7 @@ from django.views.static import serve
 
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
+from .crypt import Cryptographer
 
 from django.core.exceptions import ObjectDoesNotExist
 
