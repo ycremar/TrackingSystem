@@ -85,7 +85,7 @@ class Pre_Exam_Doc(Document):
 class Pre_Exam_Info():
     date = models.DateField(verbose_name='Prelim Date')
     result = models.CharField(max_length=255, choices=EXAM_RESULT_TYPE, default='none')
-    student = models.OneToOneField(Student, models.CASCADE)
+    degree = models.OneToOneField(Degree, models.CASCADE)
 
 class T_D_Prop_Doc(Document): # Thesis/Dissertation Proposal Document
     doc_type = models.CharField(max_length=255, choices=T_D_PROP_DOC_TYPE, default='not sel')
@@ -96,7 +96,7 @@ class T_D_Doc(Document): # Thesis/Dissertation Document
 class T_D_Info():
     title = models.CharField(max_length=255, blank=True)
     url = models.URLField()
-    student = models.OneToOneField(Student, models.CASCADE)
+    degree = models.OneToOneField(Degree, models.CASCADE)
 
 class Fin_Exam_Doc(Document):
     doc_type = models.CharField(max_length=255, choices=FIN_EXAM_DOC_TYPE, default='not sel')
@@ -108,5 +108,5 @@ class Fin_Exam_Info():
     title = models.CharField(max_length=255, blank=True)
     room = models.CharField(max_length=255, blank=True)
     abstract = models.CharField(max_length=1023, blank=True)
-    student = models.OneToOneField(Student, models.CASCADE)
+    degree = models.OneToOneField(Degree, models.CASCADE)
 
