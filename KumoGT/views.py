@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.http import FileResponse, HttpResponse, Http404
+from django.http import FileResponse, HttpResponse, Http404, HttpResponseRedirect
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
 from .models import Deg_Plan_Doc
-from .forms import create_doc_form
+from .forms import create_doc_form, search_form
 from .crypt import Cryptographer
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -111,3 +111,12 @@ def serve_protected_document(request, file_path):
             return response
     except:
         raise Http404
+        
+def search(request):
+    if request.method == 'POST':
+        form = search_form(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('') #needs update
+    else:
+        form = search_form()
+    return render(request, 'search.html', {'form': form})

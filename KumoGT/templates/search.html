@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "messages.html" %}
+
+<header class="w3-container w3-theme-l5 w3-center w3-row w3-card">
+    <h1>Search Students</h1>   
+</header>
+<form class = "w3-card">
+    {% csrf_token %}
+    <table class="w3-table-all w3-centered">
+        {{ form.as_table }}
+    </table>
+</form>
+<br/>
+<div class="w3-content w3-center" style="max-width:1200px;">
+    <button form='search_form' type="submit" class="w3-button w3-theme-d5 w3-content">Search</button>
+</div>
+{% endblock %}
