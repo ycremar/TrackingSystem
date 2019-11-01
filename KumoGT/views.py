@@ -10,8 +10,6 @@ from django.views.static import serve
 
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
-from .crypt import Cryptographer
-
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -74,25 +72,10 @@ def degree_plan(request, option = '', id = 0):
             messages.warning(request, 'Some documents are not updated.')
         return redirect('degree_plan')
     elif request.method == 'GET':
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
         if option == 'del':
             try:
                 del_doc = Deg_Plan_Doc.objects.get(id = id)
                 os.remove(del_doc.doc.path)
-<<<<<<< HEAD
-            except:
-                raise Http404
-            del_doc.delete()
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 9b03c5a... Add function of deleting to degree plan and import some css class and style.
-=======
-=======
-            messages.success(request, 'Document is deleted.')
->>>>>>> 9f356dd... Refine messages in degree plan and small bug fixes.
-=======
             except ObjectDoesNotExist:
                 messages.error(request, 'Document does not exist.')
             except OSError as err:
@@ -101,40 +84,18 @@ def degree_plan(request, option = '', id = 0):
             else:
                 del_doc.delete()
                 messages.success(request, 'Document is deleted.')
->>>>>>> 62292a2... Handling of exceptions of deleting a doc and auto scrolling when adding docs.
             return redirect('degree_plan')
->>>>>>> 1720aaa... Add function of messages and fix a bug which leads to vertical scrollbar missing.
         forms = []
         deg_plans = Deg_Plan_Doc.objects.all()
         if deg_plans.count() == 0 and option != 'add': return redirect('degree_plan', option = 'add')
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(instance = deg_plan, prefix = str(deg_plan.id)))
-<<<<<<< HEAD
-<<<<<<< HEAD
-            uploaded_ats.append(deg_plan.uploaded_at)
-        if option == 'add' :forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
-        table_elements = zip(forms, uploaded_ats)
-=======
-            infos.append({'id': deg_plan.id, 'uploaded_at': deg_plan.uploaded_at})
         if option == 'add' :
             forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
-            infos.append({'id': 0, 'uploaded_at': ''})
-        table_elements = zip(forms, infos)
->>>>>>> 9b03c5a... Add function of deleting to degree plan and import some css class and style.
-=======
-        if option == 'add' :
-            forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
->>>>>>> 1720aaa... Add function of messages and fix a bug which leads to vertical scrollbar missing.
         return render(request, 'degree_plan.html', {
             'forms': forms,
             'option': option,
         })
-=======
-        
-        form = create_doc_form(Deg_Plan_Doc)()
-    return render(request, 'degree_plan.html', {
-        'form': form
-    })
     
     
 # @login_required
@@ -149,5 +110,3 @@ def serve_protected_document(request, file_path):
             return response
     except:
         raise Http404
-    
->>>>>>> 243e889... serve files through views
