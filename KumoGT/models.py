@@ -1,4 +1,5 @@
 from django.db import models
+from .crypt_fields import EncryptedFileField
 
 DOCUMENT_TYPE = [('not seleted', 'Not Selected'), \
                  ('degree plan', 'Degree Plan'), \
@@ -50,7 +51,7 @@ class Student(models.Model):
     uin = models.CharField(max_length=255, blank=False, unique = True)
     email = models.EmailField(blank=False)
     gender = models.CharField(max_length=255, choices=GENDER, default='not sel')
-    cur_degree = models.OneToOneField(Degree, models.SET_NULL, verbose_name='Current Degree', null=True)
+    cur_degree = models.OneToOneField('Degree', models.SET_NULL, verbose_name='Current Degree', null=True)
 
 class Degree(models.Model):
     deg_type = models.CharField(max_length=255, choices=DEGREE_TYPE, default='none')
@@ -63,10 +64,10 @@ class Degree(models.Model):
     deg_recv_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Degree Received Year')
     deg_recv_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='Degree Received Semester')
-    student = models.ForeignKey(Student, models.CASCADE, null=True)
+    stu = models.ForeignKey(Student, models.CASCADE, null=True, verbose_name='Student')
 
 class Document(models.Model):
-    doc = models.FileField(upload_to='documents/', verbose_name='Document')
+    doc = EncryptedFileField(upload_to='documents/', verbose_name='Document')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     appr_cs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved CS') # Approved CS Date
     appr_ogs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved OGS') # Approved OGS Date

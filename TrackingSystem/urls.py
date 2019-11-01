@@ -19,6 +19,7 @@ from django.urls import re_path
 from KumoGT import views
 
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 
 urlpatterns = [
@@ -28,8 +29,8 @@ urlpatterns = [
     path('form_upload/', views.form_upload, name='form_upload'),
     #path('degree_plan/', views.degree_plan, name = 'degree_plan'),
     re_path(r'^degree_plan/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$', views.degree_plan, name = 'degree_plan'),
-    path('media/documents/<str:file>', views.serve_protected_document, name='serve_protected_document'),
+    url(r"(?P<file_path>.+)", views.serve_protected_document, name='decrypt_and_serve'),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -10,6 +10,7 @@ from django.views.static import serve
 
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
+from .crypt import Cryptographer
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -96,14 +97,16 @@ def degree_plan(request, option = '', id = 0):
             'forms': forms,
             'option': option,
         })
-
+    
+    
 # @login_required
-def serve_protected_document(request, file):
+def serve_protected_document(request, file_path):
 
-    file_path = os.path.join(settings.MEDIA_ROOT, 'documents', file)
+    file_path = os.path.join(settings.BASE_DIR, file_path)
     try:
         with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/pdf")
+            content = Cryptographer.decrypted(fh.read())
+            response = HttpResponse(content, content_type="application/pdf")
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
     except:
