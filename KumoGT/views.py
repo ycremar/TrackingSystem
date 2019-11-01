@@ -3,12 +3,16 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.http import FileResponse, HttpResponse, Http404
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
 from .models import Deg_Plan_Doc
 from .forms import create_doc_form
+from .crypt import Cryptographer
+
+from django.core.exceptions import ObjectDoesNotExist
 
 import os
 
@@ -54,13 +58,12 @@ def degree_plan(request, option = '', id = 0):
                     form.save()
                 else:
                     error = True
-                    errors = ''
-                    for f, e in form.errors.items():
-                        errors += "{0} - {1}".format(f, e[0])
-                    messages.error(request, "{0}({1}): {2}".format(form.instance.doc, form.instance.doc_type, errors))
+                    messages.error(request, mark_safe("{0} ({1}) failed to update due to:<br>{2}".format\
+                        (form.instance.doc, form.instance.doc_type, form.errors)))
         if option == 'add' :
             new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
+                changed = True
                 new_form.save()
         if not changed:
             messages.info(request, 'Noting is changed.')
@@ -74,9 +77,14 @@ def degree_plan(request, option = '', id = 0):
             try:
                 del_doc = Deg_Plan_Doc.objects.get(id = id)
                 os.remove(del_doc.doc.path)
-            except:
-                raise Http404
-            del_doc.delete()
+            except ObjectDoesNotExist:
+                messages.error(request, 'Document does not exist.')
+            except OSError as err:
+                err_text = "{0}".format(err)
+                messages.error(request, err_text[err_text.find(']') + 1 : err_text.find(':')])
+            else:
+                del_doc.delete()
+                messages.success(request, 'Document is deleted.')
             return redirect('degree_plan')
         forms = []
         deg_plans = Deg_Plan_Doc.objects.all()
@@ -89,14 +97,16 @@ def degree_plan(request, option = '', id = 0):
             'forms': forms,
             'option': option,
         })
-
+    
+    
 # @login_required
-def serve_protected_document(request, file):
+def serve_protected_document(request, file_path):
 
-    file_path = os.path.join(settings.MEDIA_ROOT, 'documents', file)
+    file_path = os.path.join(settings.BASE_DIR, file_path)
     try:
         with open(file_path, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/pdf")
+            content = Cryptographer.decrypted(fh.read())
+            response = HttpResponse(content, content_type="application/pdf")
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
             return response
     except:

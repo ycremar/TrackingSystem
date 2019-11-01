@@ -1,4 +1,5 @@
 from django.db import models
+from .crypt_fields import EncryptedFileField
 
 DOCUMENT_TYPE = [('not seleted', 'Not Selected'), \
                  ('degree plan', 'Degree Plan'), \
@@ -31,21 +32,47 @@ GENDER = [('not seleted', 'Not Selected'), \
           ('male', 'Male'),\
           ('female', 'Female')]
 
+DEGREE_TYPE = [('none', 'No Degree'),\
+               ('phd', 'PhdCS'),\
+               ('ms', 'MsCS')]
+
+SEMESTER_TYPE = [('fall', 'Fall'),\
+                 ('spring', 'Spring'),\
+                 ('summer', 'Summer')]
+
+EXAM_RESULT_TYPE = [('none', '----'),\
+                 ('pass', 'Pass'),\
+                 ('fail', 'Fail')]
+
 class Student(models.Model):
     first_name = models.CharField(max_length=255, blank=False)
     middle_name = models.CharField(max_length=255, blank=True)
     last_name = models.CharField(max_length=255, blank=False)
-    uin = models.CharField(max_length=255, blank=False)
+    uin = models.CharField(max_length=255, blank=False, unique = True)
     email = models.EmailField(blank=False)
     gender = models.CharField(max_length=255, choices=GENDER, default='not sel')
+    cur_degree = models.OneToOneField('Degree', models.SET_NULL, verbose_name='Current Degree', null=True)
+
+class Degree(models.Model):
+    deg_type = models.CharField(max_length=255, choices=DEGREE_TYPE, default='none')
+    first_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='First Registered Year')
+    first_reg_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
+        default='fall', verbose_name='First Registered Semester')
+    last_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Last Registered Year')
+    last_reg_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
+        default='fall', verbose_name='Last Registered Semester')
+    deg_recv_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Degree Received Year')
+    deg_recv_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
+        default='fall', verbose_name='Degree Received Semester')
+    stu = models.ForeignKey(Student, models.CASCADE, null=True, verbose_name='Student')
 
 class Document(models.Model):
-    doc = models.FileField(upload_to='documents/')
+    doc = EncryptedFileField(upload_to='documents/', verbose_name='Document')
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    appr_cs_date = models.DateField(blank=True, null = True) # Approved CS Date
-    appr_ogs_date = models.DateField(blank=True, null = True) # Approved OGS Date
-    notes = models.CharField(max_length=511, blank=True)
-    student = models.ForeignKey(Student, models.CASCADE, null=True)
+    appr_cs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved CS') # Approved CS Date
+    appr_ogs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved OGS') # Approved OGS Date
+    notes = models.CharField(max_length=511, blank=True, verbose_name='Notes')
+    degree = models.ForeignKey(Degree, models.CASCADE, null=True)
     class Meta:
         abstract = True
 
@@ -56,8 +83,8 @@ class Pre_Exam_Doc(Document):
     doc_type = models.CharField(max_length=255, choices=PRE_EXAM_DOC_TYPE, default='not sel')
 
 class Pre_Exam_Info():
-    date = models.DateField()
-    result = models.BooleanField()
+    date = models.DateField(verbose_name='Prelim Date')
+    result = models.CharField(max_length=255, choices=EXAM_RESULT_TYPE, default='none')
     student = models.OneToOneField(Student, models.CASCADE)
 
 class T_D_Prop_Doc(Document): # Thesis/Dissertation Proposal Document
@@ -77,7 +104,7 @@ class Fin_Exam_Doc(Document):
 class Fin_Exam_Info():
     date = models.DateField()
     time = models.TimeField()
-    result = models.BooleanField()
+    result = models.CharField(max_length=255, choices=EXAM_RESULT_TYPE, default='none')
     title = models.CharField(max_length=255, blank=True)
     room = models.CharField(max_length=255, blank=True)
     abstract = models.CharField(max_length=1023, blank=True)

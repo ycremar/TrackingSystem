@@ -1,0 +1,5 @@
+KumoGT/__pycache__/
+TrackingSystem/__pycache__/
+migrations/__pycache__/
+media/documents/
+db.sqlite3
