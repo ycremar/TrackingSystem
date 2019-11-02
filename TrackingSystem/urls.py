@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('search/', views.search, name = 'search'),
+    path('add_student/', views.add_student, name = 'add_student'),
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
     #path('degree_plan/', views.degree_plan, name = 'degree_plan'),

@@ -44,14 +44,6 @@ EXAM_RESULT_TYPE = [('none', '----'),\
                  ('pass', 'Pass'),\
                  ('fail', 'Fail')]
 
-GENDER = [('not seleted', 'Not Selected'), \
-          ('male', 'Male'),\
-          ('female', 'Female')]
-
-DEGREE = [('not seleted', 'Not Selected'), \
-          ('graduate', 'Graduate'), \
-          ('PhD', 'PhD')]
-          
 class Student(models.Model):
     first_name = models.CharField(max_length=255, blank=False)
     middle_name = models.CharField(max_length=255, blank=True)

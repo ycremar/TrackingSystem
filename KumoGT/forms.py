@@ -1,5 +1,5 @@
 from django import forms
-from .models import Document, GENDER, DEGREE
+from .models import Document, GENDER, DEGREE_TYPE
 from django.utils import timezone
 
 def create_doc_form(model_in):
@@ -30,4 +30,13 @@ class search_form(forms.Form):
     last_name = forms.CharField(label = 'Last Name', max_length = 30)
     first_name = forms.CharField(label = 'First Name', max_length = 30)
     gender = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = GENDER)
-    degree = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = DEGREE)
+    degree = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = DEGREE_TYPE)
+    
+class add_student_form(forms.Form):
+    UIN = forms.CharField(label = 'UIN', max_length = 20)
+    last_name = forms.CharField(label = 'Last Name', max_length = 30)
+    middle_name = forms.CharField(label = 'Middle Name', max_length = 30)
+    first_name = forms.CharField(label = 'First Name', max_length = 30)
+    gender = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = GENDER)
+    email = forms.CharField(max_length = 50)
+    degree = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = DEGREE_TYPE)
