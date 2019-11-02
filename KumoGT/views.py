@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student
-from .forms import create_doc_form, stu_search_form, create_stu_form
+from .forms import create_doc_form, stu_search_form, stu_bio_form
 from .crypt import Cryptographer
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -43,6 +43,24 @@ def form_upload(request):
         'form': form
     })
     
+def delete(request, model, id, obj_text, redirect_url):
+    try:
+        del_obj = model.objects.get(id = id)
+    except ObjectDoesNotExist:
+        messages.error(request, obj_text + "does not exist.")
+    else:
+        if request.method == 'POST':
+            messages.success(request, obj_text + "({0}) is deleted.".format(del_obj.uin))
+            del_obj.delete()
+            return redirect(redirect_url)
+        else:
+            text = "Are you sure to delete this" + obj_text.lower() + "({0})?".format(del_obj.uin)
+            text += "<br><br>This change CANNOT be recovered."
+            return render(request, 'confirmation.html', {
+                'confirm_message': mark_safe(text),
+                'redirect_url': redirect_url,
+                })    
+
 def degree_plan(request, option = '', id = 0):
     if request.method == 'POST':
         forms = []
@@ -127,9 +145,40 @@ def students(request):
     
 def create_stu(request):
     if request.method == 'POST':
-        form = create_stu_form(request.POST)
+        form = stu_bio_form(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('') #needs update
+            form.save()
+            messages.success(request, 'Student is added.')
+        else: 
+            messages.error(request, mark_safe("{0}".format(form.errors)))
+        return redirect('create_stu')
     else:
-        form = create_stu_form()
-    return render(request, 'create_stu.html', {'form': form})
+        form = stu_bio_form()
+        title = 'Add a Student'
+        return render(request, 'stu_bio_info.html', {
+            'form': form,
+            'title': title,
+            })
+
+def edit_stu(request, id):
+    if request.method == 'POST':
+        form = stu_bio_form(request.POST, instance = Student.objects.get(id = id))
+        if form.has_changed():
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Student is updated.')
+            else: 
+                messages.error(request, mark_safe("{0}".format(form.errors)))
+        else:
+            messages.info(request, 'Noting is changed.')
+        return redirect('edit_stu', id = id)
+    else:
+        form = stu_bio_form(instance = Student.objects.get(id = id))
+        title = 'Edit Student Bio Info'
+        return render(request, 'stu_bio_info.html', {
+            'form': form,
+            'title': title,
+            })
+
+def delete_stu(request, id):
+    return delete(request, Student, id, "Student", '/students/')

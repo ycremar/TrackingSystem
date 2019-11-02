@@ -76,7 +76,7 @@
 {% include "messages.html" %}
 <div class=" w3-card">
 <header class="w3-container w3-theme w3-center w3-row">      
-    <h1>Degree Plan</h1>
+    <h2>Degree Plan</h2>
 </header>
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
         <table class="w3-container w3-table w3-bordered w3-centered">
@@ -90,7 +90,7 @@
                 <th style="width:10%">Operation</th>
             </tr>
             {% for form in forms %}
-                <tr class=" w3-hover-light-gray">
+                <tr class="w3-hover-light-gray">
                     <td class="w3-padding-48">{{ form.doc_type }}</td>
                     <td class="w3-padding-32">{{ form.doc }}</td>
                     {% if form.instance.uploaded_at %}
@@ -104,7 +104,7 @@
                     {% if form.instance.id %}
                         <td class="w3-padding-48">
                             <a href="{% url 'degree_plan' option='del' id=form.instance.id %}">
-                                <button type="button" class="w3-button w3-theme-d5">Delete</button>
+                                <button type="button" class="w3-button w3-red">Delete</button>
                             </a>
                         </td>
                     {% else %}
@@ -123,6 +123,6 @@
     <a href="{% url 'degree_plan' option='add' %}"><button class="w3-button w3-theme-d5">Add</button></a>
 {% endif %}
 <div class="w3-content w3-center" style="max-width:1200px;">
-    <button form='data_form' type="submit" class="w3-button w3-theme-d5 w3-content">Submit</button>
+    <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
 </div>
 {% endblock %}

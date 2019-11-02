@@ -9,7 +9,7 @@ class stu_search_form(forms.Form):
     gender = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = GENDER)
     degree = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = DEGREE_TYPE)
     
-class create_stu_form(forms.ModelForm):
+class stu_bio_form(forms.ModelForm):
     class Meta:
         model = Student
         fields = ['uin', 'first_name', 'middle_name', 'last_name', 'email', 'gender']
