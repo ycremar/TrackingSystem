@@ -43,26 +43,56 @@ def form_upload(request):
         'form': form
     })
     
-def delete(request, model, id, obj_text, redirect_url):
+def delete(request, model, id, obj_text, show_field, redirect_url):
     try:
         del_obj = model.objects.get(id = id)
     except ObjectDoesNotExist:
         messages.error(request, obj_text + "does not exist.")
     else:
         if request.method == 'POST':
-            messages.success(request, obj_text + "({0}) is deleted.".format(del_obj.uin))
+            messages.success(request, obj_text + \
+                "({0}: {1}) is deleted.".format(show_field, del_obj.__dict__[show_field]))
             del_obj.delete()
             return redirect(redirect_url)
         else:
-            text = "Are you sure to delete this" + obj_text.lower() + "({0})?".format(del_obj.uin)
+            text = "Are you sure to delete this " + obj_text.lower() + \
+                "({0}: {1})?".format(show_field, del_obj.__dict__[show_field])
             text += "<br><br>This change CANNOT be recovered."
             return render(request, 'confirmation.html', {
                 'confirm_message': mark_safe(text),
                 'redirect_url': redirect_url,
                 })    
 
+def delete_doc(request, model, id, redirect_url):
+    try:
+        del_doc = Deg_Plan_Doc.objects.get(id = id)
+    except ObjectDoesNotExist:
+        messages.error(request, "Document({0}) does not exist.".format(del_doc.doc.name))
+        return redirect(redirect_url)
+    else:
+        if request.method == 'POST':
+            try:
+                os.remove(del_doc.doc.path)
+            except OSError as err:
+                err_text = "{0}".format(err)
+                messages.error(request, err_text[err_text.find(']') + 1 : err_text.find(':')])
+            else:
+                del_doc.delete()
+                messages.success(request, 'Document is deleted.')
+            return redirect(redirect_url)
+        else:
+            text = "Are you sure to delete this document({0})?".format(del_doc.doc.name)
+            text += "<br><br>This change CANNOT be recovered."
+            return render(request, 'confirmation.html', {
+                'confirm_message': mark_safe(text),
+                'redirect_url': redirect_url,
+                })    
+
+
 def degree_plan(request, option = '', id = 0):
     if request.method == 'POST':
+        if option == 'del':
+            return delete_doc(request, Deg_Plan_Doc, id, "/degree_plan/")
         forms = []
         deg_plans = Deg_Plan_Doc.objects.all()
         changed, error = False, False
@@ -92,18 +122,7 @@ def degree_plan(request, option = '', id = 0):
         return redirect('degree_plan')
     elif request.method == 'GET':
         if option == 'del':
-            try:
-                del_doc = Deg_Plan_Doc.objects.get(id = id)
-                os.remove(del_doc.doc.path)
-            except ObjectDoesNotExist:
-                messages.error(request, 'Document does not exist.')
-            except OSError as err:
-                err_text = "{0}".format(err)
-                messages.error(request, err_text[err_text.find(']') + 1 : err_text.find(':')])
-            else:
-                del_doc.delete()
-                messages.success(request, 'Document is deleted.')
-            return redirect('degree_plan')
+            return delete_doc(request, Deg_Plan_Doc, id, "/degree_plan/")
         forms = []
         deg_plans = Deg_Plan_Doc.objects.all()
         if deg_plans.count() == 0 and option != 'add': return redirect('degree_plan', option = 'add')
@@ -181,4 +200,4 @@ def edit_stu(request, id):
             })
 
 def delete_stu(request, id):
-    return delete(request, Student, id, "Student", '/students/')
+    return delete(request, Student, id, "Student", 'uin', '/students/')
