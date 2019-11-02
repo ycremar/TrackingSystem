@@ -96,7 +96,7 @@
                     {% if form.instance.uploaded_at %}
                         <td class="w3-padding-48">{{ form.instance.uploaded_at }}</td>
                     {% else %}
-                    <td class="w3-padding-48"></td>
+                        <td class="w3-padding-48"></td>
                     {% endif %}
                     <td>{{ form.notes }}</td>
                     <td>{{ form.appr_cs_date }}</td>
@@ -122,7 +122,7 @@
 {% else %}
     <a href="{% url 'degree_plan' option='add' %}"><button class="w3-button w3-theme-d5">Add</button></a>
 {% endif %}
-<div class="w3-content w3-center" style="max-width:1200px;">
+<div class="w3-cell-row w3-center" style="max-width:1200px;">
     <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
 </div>
 {% endblock %}

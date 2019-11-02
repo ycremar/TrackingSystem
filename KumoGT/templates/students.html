@@ -24,11 +24,14 @@
     </table>
 </form>
 </div>
-<div class="w3-content w3-center w3-margin-bottom" style="max-width:1200px;">
+<div class="w3-cell-row w3-center w3-margin-bottom">
     <button form='search_form' type="submit" class="w3-button w3-theme-d5 w3-center">Search</button>
 </div>
-<div class="w3-right">
+<div class="w3-cell-row">
+{% include "pagination.html" with this_page=students neigh_pages=neigh_pages %}
+<div class="w3-right w3-cell">
     <a href="{% url 'create_stu' %}"><button class="w3-button w3-theme-d5">Add</button></a>
+</div>
 </div>
 <table class="w3-container w3-table w3-bordered w3-centered w3-card">
     <tr class="w3-theme-l3">
@@ -55,7 +58,7 @@
                 <button type="button" class="w3-button w3-red">Delete</button>
             </a>
         </td>
-        <td class="">
+        <td>
             <select class="w3-select" id="{{ stu.id }}_select" style="width: auto;">
                 <option value ="deg">Degree</option>
                 <option value ="cur_deg_plan">Current Degree Plan</option>
@@ -67,4 +70,7 @@
     <tr><th colspan="5">No eligible students.</th></tr>
     {% endfor %}
 </table>
+<div class="w3-cell-row w3-center w3-padding-16">
+{% include "pagination.html" with this_page=students %}
+</div>
 {% endblock %}

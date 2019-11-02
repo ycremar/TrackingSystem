@@ -9,10 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+
 from .forms import create_doc_form, stu_search_form, stu_bio_form
 from .crypt import Cryptographer
 
-from django.core.exceptions import ObjectDoesNotExist
 
 import os
 
@@ -120,7 +122,7 @@ def degree_plan(request, option = '', id = 0):
         else:
             messages.warning(request, 'Some documents are not updated.')
         return redirect('degree_plan')
-    elif request.method == 'GET':
+    else:
         if option == 'del':
             return delete_doc(request, Deg_Plan_Doc, id, "/degree_plan/")
         forms = []
@@ -134,7 +136,6 @@ def degree_plan(request, option = '', id = 0):
             'forms': forms,
             'option': option,
         })
-    
     
 # @login_required
 def serve_protected_document(request, file_path):
@@ -157,9 +158,22 @@ def students(request):
     else:
         form = stu_search_form()
         students = Student.objects.all()
+        paginator = Paginator(students, 1) # Show 1 students per page, 1 is just for test
+        page = request.GET.get('page')
+        students_page = paginator.get_page(page)
+        if not page: page = 1
+        else: page = int(page)
+        neigh_pages = [n for n in range(max(page - 2, 1), min(page + 3, paginator.num_pages + 1))]
+        if len(neigh_pages) == 0 or neigh_pages[0] > 1:
+            neigh_pages.insert(0, -1)
+            neigh_pages.insert(0, 1)
+        if neigh_pages[-1] < paginator.num_pages:
+            neigh_pages.append(-1)
+            neigh_pages.append(paginator.num_pages)
     return render(request, 'students.html', {
         'form': form,
-        'students': students,
+        'students': students_page,
+        'neigh_pages': neigh_pages,
         })
     
 def create_stu(request):
