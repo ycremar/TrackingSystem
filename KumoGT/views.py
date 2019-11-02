@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc
+from .models import Deg_Plan_Doc, Student
 from .forms import create_doc_form, stu_search_form, create_stu_form
 from .crypt import Cryptographer
 
@@ -119,7 +119,11 @@ def students(request):
             return HttpResponseRedirect('') #needs update
     else:
         form = stu_search_form()
-    return render(request, 'students.html', {'form': form})
+        students = Student.objects.all()
+    return render(request, 'students.html', {
+        'form': form,
+        'students': students,
+        })
     
 def create_stu(request):
     if request.method == 'POST':

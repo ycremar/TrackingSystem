@@ -26,7 +26,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('students/', views.students, name = 'students'),
-    path('add_student/', views.create_stu, name = 'add_student'),
+    path('create_stu/', views.create_stu, name = 'create_stu'),
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
     #path('degree_plan/', views.degree_plan, name = 'degree_plan'),
