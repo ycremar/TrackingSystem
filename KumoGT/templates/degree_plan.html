@@ -62,6 +62,7 @@
         }  
     }  
 </script>  
+-->
 
 {% comment %} Do not delete! {% endcomment %}
 <script type="text/javascript">
@@ -71,16 +72,15 @@
         }
 	};
 </script>
--->
 
 {% include "messages.html" %}
-
-<header class="w3-container w3-theme-l5 w3-center w3-row w3-card">      
+<div class=" w3-card">
+<header class="w3-container w3-theme-l5 w3-center w3-row">      
     <h1>Degree Plan</h1>
 </header>
-<form method="post" id='data_form' enctype="multipart/form-data">{% csrf_token %}
-        <table class="w3-container w3-table-all w3-centered">
-            <tr class="w3-card w3-theme">
+<form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
+        <table class="w3-container w3-table w3-bordered w3-centered">
+            <tr class="w3-theme">
                 <th style="width:20%">GS Document</th>
                 <th style="width:15%">File</th>
                 <th style="width:12%">Uploaded at</th>
@@ -90,7 +90,7 @@
                 <th style="width:10%">Operation</th>
             </tr>
             {% for form in forms %}
-                <tr class="w3-card">
+                <tr class=" w3-hover-light-gray">
                     <td class="w3-padding-48">{{ form.doc_type }}</td>
                     <td class="w3-padding-32">{{ form.doc }}</td>
                     {% if form.instance.uploaded_at %}
@@ -116,6 +116,7 @@
             {% endfor %}
         </table>
 </form>
+</div>
 {% if option == 'add' %}
     <a href="{% url 'degree_plan' %}"><button class="w3-button w3-theme-d5">Cancel</button></a>
 {% else %}

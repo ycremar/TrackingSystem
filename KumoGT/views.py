@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
 from .models import Deg_Plan_Doc
-from .forms import create_doc_form, search_form, add_student_form
+from .forms import create_doc_form, stu_search_form, create_stu_form
 from .crypt import Cryptographer
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -112,20 +112,20 @@ def serve_protected_document(request, file_path):
     except:
         raise Http404
         
-def search(request):
+def students(request):
     if request.method == 'POST':
-        form = search_form(request.POST)
+        form = stu_search_form(request.POST)
         if form.is_valid():
             return HttpResponseRedirect('') #needs update
     else:
-        form = search_form()
-    return render(request, 'search.html', {'form': form})
+        form = stu_search_form()
+    return render(request, 'students.html', {'form': form})
     
-def add_student(request):
+def create_stu(request):
     if request.method == 'POST':
-        form = add_student_form(request.POST)
+        form = create_stu_form(request.POST)
         if form.is_valid():
             return HttpResponseRedirect('') #needs update
     else:
-        form = add_student_form()
-    return render(request, 'add_student.html', {'form': form})
+        form = create_stu_form()
+    return render(request, 'create_stu.html', {'form': form})

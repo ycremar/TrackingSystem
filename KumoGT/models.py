@@ -45,10 +45,10 @@ EXAM_RESULT_TYPE = [('none', '----'),\
                  ('fail', 'Fail')]
 
 class Student(models.Model):
-    first_name = models.CharField(max_length=255, blank=False)
-    middle_name = models.CharField(max_length=255, blank=True)
-    last_name = models.CharField(max_length=255, blank=False)
-    uin = models.CharField(max_length=255, blank=False, unique = True)
+    first_name = models.CharField(max_length=255, blank=False, verbose_name='First Name')
+    middle_name = models.CharField(max_length=255, blank=True, verbose_name='Middle Name')
+    last_name = models.CharField(max_length=255, blank=False, verbose_name='Last Name')
+    uin = models.CharField(max_length=255, blank=False, unique = True, verbose_name='UIN')
     email = models.EmailField(blank=False)
     gender = models.CharField(max_length=255, choices=GENDER, default='not sel')
     cur_degree = models.OneToOneField('Degree', models.SET_NULL, verbose_name='Current Degree', null=True)
