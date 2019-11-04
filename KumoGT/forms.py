@@ -1,7 +1,17 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, DEGREE_TYPE, GENDER
-    
+from .models import Student
+
+SEARCH_DEGREE_TYPE = [('', 'All'),\
+                      ('phd', 'PhdCS'),\
+                      ('ms', 'MsCS'),\
+                      ('meng', 'MengCS'),\
+                      ('none', 'None')]
+
+SEARCH_GENDER = [('', 'All'),\
+                 ('male', 'Male'),\
+                 ('female', 'Female')]
+
 class stu_search_form(forms.Form):
     uin = forms.CharField(label = 'UIN', max_length = 255, required = False,\
         widget = forms.TextInput(attrs = {'class': 'w3-input'}))
@@ -9,8 +19,10 @@ class stu_search_form(forms.Form):
         widget = forms.TextInput(attrs = {'class': 'w3-input'}))
     last_name = forms.CharField(label = 'Last Name', max_length = 255, required = False,\
         widget = forms.TextInput(attrs = {'class': 'w3-input'}))
-    gender = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = GENDER)
-    cur_degree = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = DEGREE_TYPE)
+    gender = forms.ChoiceField(choices = SEARCH_GENDER, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select'}))
+    cur_degree = forms.ChoiceField(choices = SEARCH_DEGREE_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select'}))
     
 class stu_bio_form(forms.ModelForm):
     class Meta:

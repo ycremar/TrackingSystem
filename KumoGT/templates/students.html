@@ -37,16 +37,18 @@
     <tr class="w3-theme-l3">
         <th style="width:15%">UIN</th>
         <th style="width:20%">Name</th>
-        <th style="width:15%">Current Degree</th>
+        <th style="width:10%">Gender</th>
+        <th style="width:10%">Current Degree</th>
         <th style="width:15%">Operation</th>
-        <th style="width:35%">Access</th>
+        <th style="width:30%">Access</th>
     </tr>
     {% for stu in students %}
     <tr class=" w3-hover-light-gray">
         <td class="w3-padding-16">{{ stu.uin }}</td>
         <td class="w3-padding-16">{{ stu.first_name }} {{ stu.middle_name }} {{ stu.last_name }}</td>
+        <td class="w3-padding-16">{{ stu.get_gender_display }}</td>
         {% if stu.cur_degree %}
-            <td class="w3-padding-16">{{ stu.cur_degree.deg_type }}</td>
+            <td class="w3-padding-16">{{ stu.cur_degree.get_deg_type_display }}</td>
         {% else %}
             <td class="w3-padding-16">None</td>
         {% endif %}
@@ -67,7 +69,7 @@
         </td>
     </tr>
     {% empty %}
-    <tr><th colspan="5">No eligible students.</th></tr>
+    <tr><th colspan="6">No eligible student.</th></tr>
     {% endfor %}
 </table>
 <div class="w3-cell-row w3-center w3-padding-16">

@@ -32,10 +32,9 @@ GENDER = [('not sel', 'Not Selected'),\
           ('male', 'Male'),\
           ('female', 'Female')]
 
-DEGREE_TYPE = [('not sel', 'Not Selected'),\
-               ('none', '----'),\
-               ('phd', 'PhdCS'),\
-               ('ms', 'MsCS')]
+DEGREE_TYPE = [('phd', 'PhdCS'),\
+               ('ms', 'MsCS'),\
+               ('meng', 'MengCS')]
 
 SEMESTER_TYPE = [('fall', 'Fall'),\
                  ('spring', 'Spring'),\

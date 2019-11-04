@@ -45,7 +45,7 @@ def form_upload(request):
         'form': form
     })
     
-def delete(request, model, id, obj_text, show_field, redirect_url):
+def delete(request, model, id, obj_text, field_text, show_field, redirect_url):
     try:
         del_obj = model.objects.get(id = id)
     except ObjectDoesNotExist:
@@ -53,12 +53,12 @@ def delete(request, model, id, obj_text, show_field, redirect_url):
     else:
         if request.method == 'POST':
             messages.success(request, obj_text + \
-                "({0}: {1}) is deleted.".format(show_field, del_obj.__dict__[show_field]))
+                "({0}: {1}) is deleted.".format(field_text, del_obj.__dict__[show_field]))
             del_obj.delete()
             return redirect(redirect_url)
         else:
             text = "Are you sure to delete this " + obj_text.lower() + \
-                "({0}: {1})?".format(show_field, del_obj.__dict__[show_field])
+                "({0}: {1})?".format(field_text, del_obj.__dict__[show_field])
             text += "<br><br>This change CANNOT be recovered."
             return render(request, 'confirmation.html', {
                 'confirm_message': mark_safe(text),
@@ -78,6 +78,8 @@ def delete_doc(request, model, id, redirect_url):
             except OSError as err:
                 err_text = "{0}".format(err)
                 messages.error(request, err_text[err_text.find(']') + 1 : err_text.find(':')])
+                del_doc.delete()
+                messages.warning(request, 'Document is deleted but some errors occur.')
             else:
                 del_doc.delete()
                 messages.success(request, 'Document is deleted.')
@@ -157,7 +159,7 @@ def students(request, **kwargs):#, first_name, last_name, gender, cur_degree):
         redirect_url = '/students/'
         search_form_params = {}
         for name, val in form.cleaned_data.items():
-            if val and val != '' and val != 'not sel': 
+            if val and val != '':
                 search_form_params[name] = val
                 redirect_url += "{0}={1}/".format(name, val)
         return redirect(redirect_url, **search_form_params)
@@ -168,7 +170,12 @@ def students(request, **kwargs):#, first_name, last_name, gender, cur_degree):
         for name, val in kwargs.items():
             if val:
                 search_form_params[name] = val
-                if name == 'cur_degree': name += '__deg_type'
+                if name == 'cur_degree': 
+                    if val == 'none':
+                        seach_dict[name] = None
+                        continue
+                    else:
+                        name += '__deg_type'
                 seach_dict[name + "__contains"] = val
         if kwargs: students = students.filter(**seach_dict)
         form = stu_search_form(search_form_params)
@@ -228,4 +235,4 @@ def edit_stu(request, id):
             })
 
 def delete_stu(request, id):
-    return delete(request, Student, id, "Student", 'uin', '/students/')
+    return delete(request, Student, id, "Student", 'UIN', 'uin', '/students/')
