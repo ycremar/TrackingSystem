@@ -18,14 +18,14 @@
         </tr>
         <tr>
             <th class="w3-padding-16">Gender:</th><td>{{ form.gender }}</td>
-            <th class="w3-padding-16">Current Degree:</th><td>{{ form.degree }}</td>
+            <th class="w3-padding-16">Current Degree:</th><td>{{ form.cur_degree }}</td>
             <th></th><td></td>
         </tr>
     </table>
 </form>
 </div>
 <div class="w3-cell-row w3-center w3-margin-bottom">
-    <button form='search_form' type="submit" class="w3-button w3-theme-d5 w3-center">Search</button>
+    <button form='search_stu_form' type="submit" class="w3-button w3-theme-d5 w3-center">Search</button>
 </div>
 <div class="w3-cell-row">
 {% include "pagination.html" with this_page=students neigh_pages=neigh_pages %}

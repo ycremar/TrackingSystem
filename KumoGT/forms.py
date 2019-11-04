@@ -3,11 +3,14 @@ from django.utils import timezone
 from .models import Student, DEGREE_TYPE, GENDER
     
 class stu_search_form(forms.Form):
-    uin = forms.CharField(label = 'UIN', max_length = 255, widget = forms.TextInput(attrs = {'class': 'w3-input'}))
-    last_name = forms.CharField(label = 'Last Name', max_length = 255, widget = forms.TextInput(attrs = {'class': 'w3-input'}))
-    first_name = forms.CharField(label = 'First Name', max_length = 255, widget = forms.TextInput(attrs = {'class': 'w3-input'}))
+    uin = forms.CharField(label = 'UIN', max_length = 255, required = False,\
+        widget = forms.TextInput(attrs = {'class': 'w3-input'}))
+    first_name = forms.CharField(label = 'First Name', max_length = 255, required = False,\
+        widget = forms.TextInput(attrs = {'class': 'w3-input'}))
+    last_name = forms.CharField(label = 'Last Name', max_length = 255, required = False,\
+        widget = forms.TextInput(attrs = {'class': 'w3-input'}))
     gender = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = GENDER)
-    degree = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = DEGREE_TYPE)
+    cur_degree = forms.ChoiceField(widget = forms.Select(attrs = {'class': 'w3-select'}), choices = DEGREE_TYPE)
     
 class stu_bio_form(forms.ModelForm):
     class Meta:

@@ -150,14 +150,28 @@ def serve_protected_document(request, file_path):
     except:
         raise Http404
         
-def students(request):
+def students(request, **kwargs):#, first_name, last_name, gender, cur_degree):
     if request.method == 'POST':
         form = stu_search_form(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('') #needs update
+        form.is_valid()
+        redirect_url = '/students/'
+        search_form_params = {}
+        for name, val in form.cleaned_data.items():
+            if val and val != '' and val != 'not sel': 
+                search_form_params[name] = val
+                redirect_url += "{0}={1}/".format(name, val)
+        return redirect(redirect_url, **search_form_params)
     else:
-        form = stu_search_form()
         students = Student.objects.all()
+        search_form_params = {}
+        seach_dict = {}
+        for name, val in kwargs.items():
+            if val:
+                search_form_params[name] = val
+                if name == 'cur_degree': name += '__deg_type'
+                seach_dict[name + "__contains"] = val
+        if kwargs: students = students.filter(**seach_dict)
+        form = stu_search_form(search_form_params)
         paginator = Paginator(students, 1) # Show 1 students per page, 1 is just for test
         page = request.GET.get('page')
         students_page = paginator.get_page(page)

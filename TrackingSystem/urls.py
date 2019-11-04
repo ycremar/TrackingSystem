@@ -26,7 +26,13 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
 
-    path('students/', views.students, name = 'students'),
+    re_path(r'^students/(?:uin=(?P<uin>[0-9]+)/)?'\
+        r'(?:first_name=(?P<first_name>[a-zA-Z]+)/)?'
+        r'(?:last_name=(?P<last_name>[a-zA-Z]+)/)?'\
+        r'(?:gender=(?P<gender>[a-zA-Z]+)/)?'\
+        r'(?:cur_degree=(?P<cur_degree>[a-zA-Z]+)/)?$',\
+        views.students, name = 'students'),
+    #path('students/', views.students, name = 'students'),
     path('students/edit/<int:id>/', views.edit_stu, name = 'edit_stu'),
     path('students/delete/<int:id>/', views.delete_stu, name = 'delete_stu'),
     path('students/add/', views.create_stu, name = 'create_stu'),

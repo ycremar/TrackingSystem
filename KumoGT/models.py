@@ -1,38 +1,39 @@
 from django.db import models
 from .crypt_fields import EncryptedFileField
 
-DOCUMENT_TYPE = [('not seleted', 'Not Selected'), \
-                 ('degree plan', 'Degree Plan'), \
+DOCUMENT_TYPE = [('not sel', 'Not Selected'),\
+                 ('degree plan', 'Degree Plan'),\
                  ('annual review', 'Annual Review'),\
                  ('other', 'Other')]
 
-DEGREE_PLAN_DOC_TYPE = [('not sel', 'Not Selected'), \
-                        ('deg plan', 'Degree Plan'), \
+DEGREE_PLAN_DOC_TYPE = [('not sel', 'Not Selected'),\
+                        ('deg plan', 'Degree Plan'),\
                         ('other', 'Other')]
 
-PRE_EXAM_DOC_TYPE = [('not sel', 'Not Selected'), \
-                     ('checklist', 'Preliminary Exam Checklist'), \
-                     ('report', 'Preliminary Exam Report'), \
+PRE_EXAM_DOC_TYPE = [('not sel', 'Not Selected'),\
+                     ('checklist', 'Preliminary Exam Checklist'),\
+                     ('report', 'Preliminary Exam Report'),\
                      ('written', 'Preliminary Exam Written')]
 
-T_D_PROP_DOC_TYPE = [('not sel', 'Not Selected'), \
-                     ('title page', 'Thesis/Dissertation Proposal Title Page'), \
+T_D_PROP_DOC_TYPE = [('not sel', 'Not Selected'),\
+                     ('title page', 'Thesis/Dissertation Proposal Title Page'),\
                      ('prop', 'Thesis/Dissertation Proposal')]
 
-T_D_DOC_TYPE = [('not sel', 'Not Selected'), \
-                ('approval', 'Thesis/Dissertation Approval Page'), \
+T_D_DOC_TYPE = [('not sel', 'Not Selected'),\
+                ('approval', 'Thesis/Dissertation Approval Page'),\
                 ('t_d', 'Thesis/Dissertation')]
 
-FIN_EXAM_DOC_TYPE = [('not sel', 'Not Selected'), \
-                     ('request', 'Request for Final Examination'), \
-                     ('req for exemp', 'Request for exemption from Final Examination'), \
+FIN_EXAM_DOC_TYPE = [('not sel', 'Not Selected'),\
+                     ('request', 'Request for Final Examination'),\
+                     ('req for exemp', 'Request for exemption from Final Examination'),\
                      ('report', 'Report of Final Exam')]
 
-GENDER = [('not seleted', 'Not Selected'), \
+GENDER = [('not sel', 'Not Selected'),\
           ('male', 'Male'),\
           ('female', 'Female')]
 
-DEGREE_TYPE = [('none', 'No Degree'),\
+DEGREE_TYPE = [('not sel', 'Not Selected'),\
+               ('none', '----'),\
                ('phd', 'PhdCS'),\
                ('ms', 'MsCS')]
 
