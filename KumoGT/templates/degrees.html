@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% comment %} Do not delete! {% endcomment %}
+<script type="text/javascript">
+	window.onload=function(){
+        if("{{ option }}" == "add"){ // scroll to bottom when option is "add"
+            window.scrollTo(0, document.body.scrollHeight || document.scrollingElement.scrollHeight);
+        }
+	};
+</script>
+
+{% include "messages.html" %}
+<div class=" w3-card">
+<header class="w3-container w3-theme w3-center w3-row">      
+    <h2>Degrees</h2>
+</header>
+<form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
+        <table class="w3-container w3-table w3-bordered w3-centered">
+            <tr class="w3-theme-l3">
+                <th style="width:7%">Current</th>
+                <th style="width:9%">Degree</th>
+                <th style="width:18%">First Registered</th>
+                <th style="width:18%">Last Registered</th>
+                <th style="width:18%">Degree Received</th>
+                <th style="width:10%">Operation</th>
+                <th style="width:20%">Access</th>
+            </tr>
+            {% for form in forms %}
+                <tr class="w3-hover-light-gray">
+                    <td style="width:7%">
+                        {% if form.instance.id %}
+                            <input class="w3-radio" style="margin-top:2px" type="radio"
+                                name="current" value="{{ form.instance.id }}"></td>
+                        {% else %}
+                            <input class="w3-radio" style="margin-top:2px" type="radio" 
+                                name="current" value="0"></td>
+                        {% endif %}
+                    <td style="width:9%">{{ form.deg_type }}</td>
+                    <td class="w3-cell-row" style="width:20%">{{ form.first_reg_sem }} {{ form.first_reg_year }}</td>
+                    <td class="w3-cell-row" style="width:20%">{{ form.last_reg_sem }} {{ form.last_reg_year }}</td>
+                    <td class="w3-cell-row" style="width:20%">{{ form.deg_recv_sem }} {{ form.deg_recv_year }}</td>
+                    {% if form.instance.id %}
+                        <td>
+                            <a href="{% url 'degrees' option='del' id=form.instance.id %}">
+                                <button type="button" class="w3-button w3-red">Delete</button>
+                            </a>
+                        </td>
+                        <td>
+                            <select class="w3-select" id="{{ form.instance.id }}_select" style="width: auto;">
+                                <option value ="cur_deg_plan">Degree Plan</option>
+                            </select>
+                            <button type="button" class="w3-button w3-theme-d5">Edit</button>
+                        </td>
+                    {% else %}
+                        <td></td><td></td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+            {% endfor %}
+            <tr><td style="width:7%">
+                <input class="w3-radio" style="margin-top:2px" type="radio" 
+                    name="current" value="-1"></td>
+                <th class="w3-padding-16" colspan="6">No Degree</th>
+            </tr>
+        </table>
+</form>
+</div>
+{% if option == 'add' %}
+    <a href="{% url 'degrees' %}"><button class="w3-button w3-theme-d5">Cancel</button></a>
+{% else %}
+    <a href="{% url 'degrees' option='add' %}"><button class="w3-button w3-theme-d5">Add</button></a>
+{% endif %}
+<div class="w3-cell-row w3-center">
+    <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+</div>
+{% endblock %}

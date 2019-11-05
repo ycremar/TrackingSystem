@@ -81,7 +81,7 @@
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
         <table class="w3-container w3-table w3-bordered w3-centered">
             <tr class="w3-theme-l3">
-                <th style="width:20%">GS Document</th>
+                <th style="width:20%">Document</th>
                 <th style="width:15%">File</th>
                 <th style="width:12%">Uploaded at</th>
                 <th style="width:15%">Notes</th>
@@ -112,7 +112,7 @@
                     {% endif %}
                 </tr>
             {% empty %}
-                <p> Data loading failed. </p>
+                <tr><th colspan="7">Data loading failed.</th></tr>
             {% endfor %}
         </table>
 </form>
@@ -122,7 +122,7 @@
 {% else %}
     <a href="{% url 'degree_plan' option='add' %}"><button class="w3-button w3-theme-d5">Add</button></a>
 {% endif %}
-<div class="w3-cell-row w3-center" style="max-width:1200px;">
+<div class="w3-cell-row w3-center">
     <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
 </div>
 {% endblock %}

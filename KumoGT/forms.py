@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Student
+from .models import Student, Degree
 
 SEARCH_DEGREE_TYPE = [('', 'All'),\
                       ('phd', 'PhdCS'),\
@@ -35,6 +35,21 @@ class stu_bio_form(forms.ModelForm):
             'last_name': forms.TextInput(attrs = {'class': 'w3-input w3-light-gray'}),
             'email': forms.EmailInput(attrs = {'class': 'w3-input'}),
             'gender': forms.Select(attrs = {'class': 'w3-select w3-light-gray'}),
+        }
+
+class deg_form(forms.ModelForm):
+    class Meta:
+        model = Degree
+        fields = ['deg_type', 'first_reg_year', 'first_reg_sem',\
+            'last_reg_year', 'last_reg_sem', 'deg_recv_year', 'deg_recv_sem']
+        widgets = {
+            'deg_type': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width: auto;'}),
+            'first_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:32%'}),
+            'first_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:36%'}),
+            'last_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:32%'}),
+            'last_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:36%'}),
+            'deg_recv_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:32%'}),
+            'deg_recv_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:36%'}),
         }
 
 def create_doc_form(model_in):

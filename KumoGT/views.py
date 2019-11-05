@@ -12,7 +12,7 @@ from .models import Deg_Plan_Doc, Student
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 
-from .forms import create_doc_form, stu_search_form, stu_bio_form
+from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form
 from .crypt import Cryptographer
 
 
@@ -111,7 +111,7 @@ def degree_plan(request, option = '', id = 0):
                 else:
                     error = True
                     messages.error(request, mark_safe("{0} ({1}) failed to update due to:<br>{2}".format\
-                        (form.instance.doc, form.instance.doc_type, form.errors)))
+                        (form.instance.doc, form.instance.get_doc_type_display, form.errors)))
         if option == 'add' :
             new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
@@ -236,3 +236,14 @@ def edit_stu(request, id):
 
 def delete_stu(request, id):
     return delete(request, Student, id, "Student", 'UIN', 'uin', '/students/')
+
+def degrees(request, option = '', id = 0):
+    if request.method == 'POST':
+        return redirect('degrees')
+    else:
+        form = deg_form()
+        forms = [form]
+        return render(request, 'degrees.html', {
+            'forms': forms,
+            'option': option,
+            })

@@ -37,11 +37,14 @@ urlpatterns = [
     path('students/delete/<int:id>/', views.delete_stu, name = 'delete_stu'),
     path('students/add/', views.create_stu, name = 'create_stu'),
 
+    re_path(r'degrees/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$',\
+        views.degrees, name = 'degrees'),
+
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
-    #path('degree_plan/', views.degree_plan, name = 'degree_plan'),
 
-    re_path(r'^degree_plan/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$', views.degree_plan, name = 'degree_plan'),
+    re_path(r'^degree_plan/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$',\
+        views.degree_plan, name = 'degree_plan'),
 
     url(r"(?P<file_path>.+)", views.serve_protected_document, name='decrypt_and_serve'),
 ]
