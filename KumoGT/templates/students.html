@@ -2,6 +2,24 @@
 
 {% block content %}
 
+{% comment %} Do not delete! {% endcomment %}
+<script type="text/javascript">
+	function to_edit_page(obj){//redirect to selected edit page
+        var myselect = document.getElementById(obj.getAttribute("stu_id") + "_select");
+        var sel_val = myselect.options[myselect.selectedIndex].value;
+        switch(sel_val){
+            case "deg":
+                window.open("{% url 'degrees' %}");
+                break;
+            case "cur_deg_plan":
+                window.open("{% url 'degree_plan' %}");
+                break;
+            default:
+                break;
+        }
+	};
+</script>
+
 {% include "messages.html" %}
 <style>a{TEXT-DECORATION:none}</style> 
 <header class="w3-container w3-theme w3-center w3-row w3-card">
@@ -65,7 +83,8 @@
                 <option value ="deg">Degree</option>
                 <option value ="cur_deg_plan">Current Degree Plan</option>
             </select>
-            <button type="button" class="w3-button w3-theme-d5">Edit</button>
+            <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
+                stu_id="{{ stu.id }}" onclick="to_edit_page(this)">Edit</button>
         </td>
     </tr>
     {% empty %}
