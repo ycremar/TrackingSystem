@@ -16,7 +16,7 @@ from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form
 from .crypt import Cryptographer
 
 
-import os
+import os, re
 
 def home(request):
     docs = Deg_Plan_Doc.objects.all()
@@ -45,61 +45,45 @@ def form_upload(request):
         'form': form
     })
     
-def delete(request, model, id, obj_text, field_text, show_field, redirect_url):
+def delete(request, model, id, obj_text, field_text, show_field, redirect_url, has_choices = False):
     try:
         del_obj = model.objects.get(id = id)
     except ObjectDoesNotExist:
         messages.error(request, obj_text + "does not exist.")
     else:
+        attr = re.match( r'^@(.+)$', field_text)
+        if attr: field_text = "{0}".format(del_obj.__dict__[attr.group()[1:]])
+        if field_text != "": field_text += ": "
         if request.method == 'POST':
-            messages.success(request, obj_text + \
-                "({0}: {1}) is deleted.".format(field_text, del_obj.__dict__[show_field]))
-            del_obj.delete()
-            return redirect(redirect_url)
-        else:
-            text = "Are you sure to delete this " + obj_text.lower() + \
-                "({0}: {1})?".format(field_text, del_obj.__dict__[show_field])
-            text += "<br><br>This change CANNOT be recovered."
-            return render(request, 'confirmation.html', {
-                'confirm_message': mark_safe(text),
-                'redirect_url': redirect_url,
-                })    
-
-def delete_doc(request, model, id, redirect_url):
-    try:
-        del_doc = Deg_Plan_Doc.objects.get(id = id)
-    except ObjectDoesNotExist:
-        messages.error(request, "Document({0}) does not exist.".format(del_doc.doc.name))
-        return redirect(redirect_url)
-    else:
-        if request.method == 'POST':
-            try:
-                os.remove(del_doc.doc.path)
-            except OSError as err:
-                err_text = "{0}".format(err)
-                messages.error(request, err_text[err_text.find(']') + 1 : err_text.find(':')])
-                del_doc.delete()
-                messages.warning(request, 'Document is deleted but some errors occur.')
+            if has_choices:
+                show_field_text = getattr(del_obj, "get_{0}_display".format(show_field))
+                msg_text = "({0}{1}) is deleted.".format(field_text, show_field_text())
             else:
-                del_doc.delete()
-                messages.success(request, 'Document is deleted.')
+                msg_text = "({0}{1}) is deleted.".format(field_text, del_obj.__dict__[show_field])
+            del_obj.delete()
+            messages.success(request, obj_text + msg_text)
             return redirect(redirect_url)
         else:
-            text = "Are you sure to delete this document({0})?".format(del_doc.doc.name)
+            if has_choices:
+                show_field_text = getattr(del_obj, "get_{0}_display".format(show_field))
+                text = "Are you sure to delete this " + obj_text.lower() + \
+                    "({0}{1})?".format(field_text, show_field_text())
+            else:
+                text = "Are you sure to delete this " + obj_text.lower() + \
+                    "({0}{1})?".format(field_text, del_obj.__dict__[show_field])
             text += "<br><br>This change CANNOT be recovered."
             return render(request, 'confirmation.html', {
                 'confirm_message': mark_safe(text),
                 'redirect_url': redirect_url,
                 })    
-
 
 def degree_plan(request, option = '', id = 0):
     if request.method == 'POST':
         if option == 'del':
-            return delete_doc(request, Deg_Plan_Doc, id, "/degree_plan/")
+            return delete(request, Deg_Plan_Doc, id, "Document", "@doc", "doc_type", "/degree_plan/", True)
         forms = []
-        deg_plans = Deg_Plan_Doc.objects.all()
         changed, error = False, False
+        deg_plans = Deg_Plan_Doc.objects.all()
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES,\
                 instance = deg_plan, prefix = str(deg_plan.id)))
@@ -110,8 +94,8 @@ def degree_plan(request, option = '', id = 0):
                     form.save()
                 else:
                     error = True
-                    messages.error(request, mark_safe("{0} ({1}) failed to update due to:<br>{2}".format\
-                        (form.instance.doc, form.instance.get_doc_type_display, form.errors)))
+                    messages.error(request, mark_safe("{0}({1}) failed to update due to:<br>{2}".format\
+                        (form.instance.doc, form.instance.get_doc_type_display(), form.errors)))
         if option == 'add' :
             new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
@@ -126,10 +110,10 @@ def degree_plan(request, option = '', id = 0):
         return redirect('degree_plan')
     else:
         if option == 'del':
-            return delete_doc(request, Deg_Plan_Doc, id, "/degree_plan/")
-        forms = []
+            return delete(request, Deg_Plan_Doc, id, "Document", "@doc", "doc_type", "/degree_plan/", True)
         deg_plans = Deg_Plan_Doc.objects.all()
         if deg_plans.count() == 0 and option != 'add': return redirect('degree_plan', option = 'add')
+        forms = []
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(instance = deg_plan, prefix = str(deg_plan.id)))
         if option == 'add' :

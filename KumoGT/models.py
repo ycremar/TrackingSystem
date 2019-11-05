@@ -1,5 +1,7 @@
 from django.db import models
 from .crypt_fields import EncryptedFileField
+from django.dispatch import receiver
+import os
 
 DOCUMENT_TYPE = [('not sel', 'Not Selected'),\
                  ('degree plan', 'Degree Plan'),\
@@ -110,3 +112,40 @@ class Fin_Exam_Info():
     abstract = models.CharField(max_length=1023, blank=True)
     degree = models.OneToOneField(Degree, models.CASCADE)
 
+@receiver(models.signals.post_delete, sender=Deg_Plan_Doc)
+@receiver(models.signals.post_delete, sender=Pre_Exam_Doc)
+@receiver(models.signals.post_delete, sender=T_D_Prop_Doc)
+@receiver(models.signals.post_delete, sender=T_D_Doc)
+@receiver(models.signals.post_delete, sender=Fin_Exam_Doc)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `Document` object is deleted.
+    """
+    if instance.doc:
+        if os.path.isfile(instance.doc.path):
+            os.remove(instance.doc.path)
+
+@receiver(models.signals.pre_save, sender=Deg_Plan_Doc)
+@receiver(models.signals.pre_save, sender=Pre_Exam_Doc)
+@receiver(models.signals.pre_save, sender=T_D_Prop_Doc)
+@receiver(models.signals.pre_save, sender=T_D_Doc)
+@receiver(models.signals.pre_save, sender=Fin_Exam_Doc)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem
+    when corresponding `Document` object is updated
+    with new file.
+    """
+    if not instance.id:
+        return False
+
+    try:
+        old_file = sender.objects.get(id=instance.id).doc
+    except Document.DoesNotExist:
+        return False
+
+    new_file = instance.doc
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
