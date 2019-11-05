@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student
+from .models import Deg_Plan_Doc, Student, Degree
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 
@@ -223,11 +223,46 @@ def delete_stu(request, id):
 
 def degrees(request, option = '', id = 0):
     if request.method == 'POST':
+        if option == 'del':
+            return delete(request, Degree, id, "Document", "@doc", "doc_type", "/degrees/", True)
+        forms = []
+        degree = Degree.objects.all()
+        changed, error = False, False
+        for degre in degree:
+            forms.append(deg_form(request.POST, request.FILES,\
+                instance = degre, prefix = str(degre.id)))
+        for form in forms:
+            if form.has_changed():
+                changed = True
+                if form.is_valid():
+                    form.save()
+                else:
+                    error = True
+                    messages.error(request, mark_safe("{0} ({1}) failed to update due to:<br>{2}".format\
+                        (form.instance.doc, form.instance.doc_type, form.errors)))
+        if option == 'add' :
+            new_form = deg_form(request.POST, request.FILES, prefix = 'new')
+            if new_form.is_valid():
+                changed = True
+                new_form.save()
+        if not changed:
+            messages.info(request, 'Noting is changed.')
+        elif not error:
+            messages.success(request, 'Documents are updated.')
+        else:
+            messages.warning(request, 'Some documents are not updated.')
         return redirect('degrees')
     else:
-        form = deg_form()
-        forms = [form]
+        if option == 'del':
+            return delete(request, Degree, id, "Document", "@doc", "doc_type", "/degrees/", True)
+        degree = Degree.objects.all()
+        if degree.count() == 0 and option != 'add': return redirect('degrees', option = 'add')
+        forms = []
+        for degre in degree:
+            forms.append(deg_form(instance = degre, prefix = str(degre.id)))
+        if option == 'add' :
+            forms.append(deg_form(prefix = 'new'))
         return render(request, 'degrees.html', {
             'forms': forms,
             'option': option,
-            })
+        })
