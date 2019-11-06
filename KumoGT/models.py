@@ -11,6 +11,11 @@ DOCUMENT_TYPE = [('not sel', 'Not Selected'),\
 
 DEGREE_PLAN_DOC_TYPE = [('not sel', 'Not Selected'),\
                         ('deg plan', 'Degree Plan'),\
+                        ('P. change commitee', 'Petition for change of committee'),\
+                        ('P. course change', 'Petition for course change'),\
+                        ('P. extension of time limits', 'Petition for extension of time limits'),\
+                        ('P. waivers of exceptions', 'Petition for waivers of exceptions'),\
+                        ('mdd', 'MDD'),\
                         ('other', 'Other')]
 
 PRE_EXAM_DOC_TYPE = [('not sel', 'Not Selected'),\
