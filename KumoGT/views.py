@@ -96,7 +96,7 @@ def degree_plan(request, option = '', id = 0):
                     error = True
                     messages.error(request, mark_safe("{0}({1}) failed to update due to:<br>{2}".format\
                         (form.instance.doc, form.instance.get_doc_type_display(), form.errors)))
-        if option == 'add' :
+        if option == 'add':
             new_form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
                 changed = True
@@ -116,7 +116,7 @@ def degree_plan(request, option = '', id = 0):
         forms = []
         for deg_plan in deg_plans:
             forms.append(create_doc_form(Deg_Plan_Doc)(instance = deg_plan, prefix = str(deg_plan.id)))
-        if option == 'add' :
+        if option == 'add':
             forms.append(create_doc_form(Deg_Plan_Doc)(prefix = 'new'))
         return render(request, 'degree_plan.html', {
             'forms': forms,
@@ -166,8 +166,7 @@ def students(request, **kwargs):#, first_name, last_name, gender, cur_degree):
         paginator = Paginator(students, 1) # Show 1 students per page, 1 is just for test
         page = request.GET.get('page')
         students_page = paginator.get_page(page)
-        if not page: page = 1
-        else: page = int(page)
+        page = 1 if not page else int(page)
         neigh_pages = [n for n in range(max(page - 2, 1), min(page + 3, paginator.num_pages + 1))]
         if len(neigh_pages) == 0 or neigh_pages[0] > 1:
             neigh_pages.insert(0, -1)
@@ -221,16 +220,17 @@ def edit_stu(request, id):
 def delete_stu(request, id):
     return delete(request, Student, id, "Student", 'UIN', 'uin', '/students/')
 
-def degrees(request, option = '', id = 0):
+def degrees(request, stu_id, option = '', id = 0):
     if request.method == 'POST':
         if option == 'del':
-            return delete(request, Degree, id, "Document", "@doc", "doc_type", "/degrees/", True)
+            return delete(request, Degree, id, "Degree", "",\
+                "deg_type", "/student/" + str(stu_id) + "/degrees/", True)
         forms = []
-        degree = Degree.objects.all()
+        degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)
         changed, error = False, False
-        for degre in degree:
+        for degree in degrees:
             forms.append(deg_form(request.POST, request.FILES,\
-                instance = degre, prefix = str(degre.id)))
+                instance = degree, prefix = str(degree.id)))
         for form in forms:
             if form.has_changed():
                 changed = True
@@ -240,29 +240,47 @@ def degrees(request, option = '', id = 0):
                     error = True
                     messages.error(request, mark_safe("{0} ({1}) failed to update due to:<br>{2}".format\
                         (form.instance.doc, form.instance.doc_type, form.errors)))
+        student = Student.objects.get(id = stu_id)
+        current = int(request.POST['current'])
         if option == 'add' :
             new_form = deg_form(request.POST, request.FILES, prefix = 'new')
             if new_form.is_valid():
                 changed = True
-                new_form.save()
+                degree = new_form.save(commit = False)
+                degree.stu = student
+                degree.save()
+                if current == 0: current = degree.id
+        if current > 0 and (not student.cur_degree or student.cur_degree.id != current):
+            student.cur_degree = Degree.objects.get(id = current)
+            student.save()
+            changed = True
+        elif current == -1 and student.cur_degree:
+            student.cur_degree = None
+            student.save()
+            changed = True
         if not changed:
             messages.info(request, 'Noting is changed.')
         elif not error:
             messages.success(request, 'Documents are updated.')
         else:
             messages.warning(request, 'Some documents are not updated.')
-        return redirect('degrees')
+        return redirect('degrees', stu_id = stu_id)
     else:
         if option == 'del':
-            return delete(request, Degree, id, "Document", "@doc", "doc_type", "/degrees/", True)
-        degree = Degree.objects.all()
-        if degree.count() == 0 and option != 'add': return redirect('degrees', option = 'add')
+            return delete(request, Degree, id, "Degree", "",\
+                "deg_type", "/student/" + str(stu_id) + "/degrees/", True)
+        degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)
+        if degrees.count() == 0 and option != 'add': return redirect('degrees', stu_id = stu_id, option = 'add')
         forms = []
-        for degre in degree:
-            forms.append(deg_form(instance = degre, prefix = str(degre.id)))
+        for degree in degrees:
+            forms.append(deg_form(instance = degree, prefix = str(degree.id)))
         if option == 'add' :
             forms.append(deg_form(prefix = 'new'))
+        student = Student.objects.get(id = stu_id)
+        cur_deg_id = student.cur_degree.id if student.cur_degree else -1
         return render(request, 'degrees.html', {
+            'stu_id': stu_id,
+            'cur_deg_id': cur_deg_id,
             'forms': forms,
             'option': option,
         })

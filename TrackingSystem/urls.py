@@ -37,7 +37,7 @@ urlpatterns = [
     path('students/delete/<int:id>/', views.delete_stu, name = 'delete_stu'),
     path('students/add/', views.create_stu, name = 'create_stu'),
 
-    re_path(r'degrees/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$',\
+    re_path(r'student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name = 'degrees'),
 
     path('upload/', views.upload, name='upload'),

@@ -34,9 +34,9 @@ GENDER = [('not sel', 'Not Selected'),\
           ('male', 'Male'),\
           ('female', 'Female')]
 
-DEGREE_TYPE = [('phd', 'PhdCS'),\
-               ('ms', 'MsCS'),\
-               ('meng', 'MengCS')]
+DEGREE_TYPE = [('phd', 'PhDCS'),\
+               ('ms', 'MSCS'),\
+               ('meng', 'MEngCS')]
 
 SEMESTER_TYPE = [('fall', 'Fall'),\
                  ('spring', 'Spring'),\
@@ -66,7 +66,7 @@ class Degree(models.Model):
     deg_recv_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Degree Received Year')
     deg_recv_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='Degree Received Semester')
-    stu = models.ForeignKey(Student, models.CASCADE, null=True, verbose_name='Student')
+    stu = models.ForeignKey(Student, models.CASCADE, verbose_name='Student')
 
 class Document(models.Model):
     doc = EncryptedFileField(upload_to='documents/', verbose_name='Document')

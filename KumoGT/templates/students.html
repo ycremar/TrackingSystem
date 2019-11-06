@@ -5,11 +5,12 @@
 {% comment %} Do not delete! {% endcomment %}
 <script type="text/javascript">
 	function to_edit_page(obj){//redirect to selected edit page
-        var myselect = document.getElementById(obj.getAttribute("stu_id") + "_select");
+        var stu_id = obj.getAttribute("stu_id")
+        var myselect = document.getElementById(stu_id + "_select");
         var sel_val = myselect.options[myselect.selectedIndex].value;
         switch(sel_val){
             case "deg":
-                window.open("{% url 'degrees' %}");
+                window.open("/student/" + stu_id + "/degrees/");
                 break;
             case "cur_deg_plan":
                 window.open("{% url 'degree_plan' %}");
@@ -80,8 +81,10 @@
         </td>
         <td>
             <select class="w3-select" id="{{ stu.id }}_select" style="width: auto;">
-                <option value ="deg">Degree</option>
-                <option value ="cur_deg_plan">Current Degree Plan</option>
+                <option value ="deg">Degrees</option>
+                {% if stu.cur_degree %}
+                    <option value ="cur_deg_plan">Current Degree Plan</option>
+                {% endif %}
             </select>
             <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
                 stu_id="{{ stu.id }}" onclick="to_edit_page(this)">Edit</button>

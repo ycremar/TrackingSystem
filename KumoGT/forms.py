@@ -44,12 +44,12 @@ class deg_form(forms.ModelForm):
             'last_reg_year', 'last_reg_sem', 'deg_recv_year', 'deg_recv_sem']
         widgets = {
             'deg_type': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width: auto;'}),
-            'first_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:32%'}),
-            'first_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:36%'}),
-            'last_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:32%'}),
-            'last_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:36%'}),
-            'deg_recv_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:32%'}),
-            'deg_recv_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:36%'}),
+            'first_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),
+            'first_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:44%'}),
+            'last_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),
+            'last_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:44%'}),
+            'deg_recv_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),
+            'deg_recv_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:44%'}),
         }
 
 def create_doc_form(model_in):
