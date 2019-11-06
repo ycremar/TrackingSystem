@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from .crypt_fields import EncryptedFileField
 from django.dispatch import receiver
 import os
@@ -57,13 +58,16 @@ class Student(models.Model):
 
 class Degree(models.Model):
     deg_type = models.CharField(max_length=255, choices=DEGREE_TYPE, default='none')
-    first_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='First Registered Year')
+    first_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='First Registered Year',\
+        validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
     first_reg_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='First Registered Semester')
-    last_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Last Registered Year')
+    last_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Last Registered Year',\
+        validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
     last_reg_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='Last Registered Semester')
-    deg_recv_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Degree Received Year')
+    deg_recv_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Degree Received Year',\
+        validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
     deg_recv_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='Degree Received Semester')
     stu = models.ForeignKey(Student, models.CASCADE, verbose_name='Student')
@@ -74,7 +78,7 @@ class Document(models.Model):
     appr_cs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved CS') # Approved CS Date
     appr_ogs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved OGS') # Approved OGS Date
     notes = models.CharField(max_length=511, blank=True, verbose_name='Notes')
-    degree = models.ForeignKey(Degree, models.CASCADE, null=True)
+    degree = models.ForeignKey(Degree, models.CASCADE)
     class Meta:
         abstract = True
 

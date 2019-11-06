@@ -6,6 +6,7 @@
 <script type="text/javascript">
 	function to_edit_page(obj){//redirect to selected edit page
         var stu_id = obj.getAttribute("stu_id")
+        var deg_id = obj.getAttribute("deg_id")
         var myselect = document.getElementById(stu_id + "_select");
         var sel_val = myselect.options[myselect.selectedIndex].value;
         switch(sel_val){
@@ -13,7 +14,7 @@
                 window.open("/student/" + stu_id + "/degrees/");
                 break;
             case "cur_deg_plan":
-                window.open("{% url 'degree_plan' %}");
+                window.open("/degree/" + deg_id + "/degree_plan/");
                 break;
             default:
                 break;
@@ -86,8 +87,13 @@
                     <option value ="cur_deg_plan">Current Degree Plan</option>
                 {% endif %}
             </select>
-            <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
-                stu_id="{{ stu.id }}" onclick="to_edit_page(this)">Edit</button>
+            {% if stu.cur_degree %}
+                <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
+                    stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">Edit</button>
+            {% else %}
+                <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
+                    stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">Edit</button>
+            {% endif %}
         </td>
     </tr>
     {% empty %}

@@ -3,9 +3,9 @@ from django.utils import timezone
 from .models import Student, Degree
 
 SEARCH_DEGREE_TYPE = [('', 'All'),\
-                      ('phd', 'PhdCS'),\
-                      ('ms', 'MsCS'),\
-                      ('meng', 'MengCS'),\
+                      ('phd', 'PhDCS'),\
+                      ('ms', 'MSCS'),\
+                      ('meng', 'MEngCS'),\
                       ('none', 'None')]
 
 SEARCH_GENDER = [('', 'All'),\
