@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 
-from .models import Deg_Plan_Doc, Student, Degree
+from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import create_doc_form

@@ -8,10 +8,10 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student, Degree
+from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc
 from django.core.paginator import Paginator
 
-from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form
+from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form
 from .crypt import Cryptographer
 from .functions import delete, deg_doc
 
@@ -58,6 +58,25 @@ def degree_plan(request, deg_id, option = '', id = 0):
                 'option': option,
             })
     
+def preliminary_exam(request, deg_id, option = '', id = 0):
+    if request.method == 'POST':
+        info_form = pre_exam_info_form(request.POST)
+        if info_form.is_valid():
+            pass
+        return deg_doc(request, Pre_Exam_Doc, "/preliminary_exam/", deg_id, option, id)
+    else:
+        method, data = deg_doc(request, Pre_Exam_Doc, "/preliminary_exam/", deg_id, option, id)
+        if method != 'show': return data
+        else:
+            info_form = pre_exam_info_form()
+            deg, forms = data
+            return render(request, 'preliminary_exam.html', {
+                'deg': deg,
+                'forms': forms,
+                'option': option,
+                'info_form': info_form,
+            })
+            
 # @login_required
 def serve_protected_document(request, file_path):
 

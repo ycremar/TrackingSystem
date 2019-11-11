@@ -16,6 +16,9 @@
             case "cur_deg_plan":
                 window.open("/degree/" + deg_id + "/degree_plan/");
                 break;
+            case "pre_exam":
+                window.open("/degree/" + deg_id + "/preliminary_exam/");
+                break;
             default:
                 break;
         }
@@ -84,7 +87,8 @@
             <select class="w3-select" id="{{ stu.id }}_select" style="width: auto;">
                 <option value ="deg">Degrees</option>
                 {% if stu.cur_degree %}
-                    <option value ="cur_deg_plan">Current Degree Plan</option>
+                    <option value = "cur_deg_plan">Current Degree Plan</option>
+                    <option value = "pre_exam">Current Preliminary Exam</option>
                 {% endif %}
             </select>
             {% if stu.cur_degree %}

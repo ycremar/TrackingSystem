@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree
+from .models import Student, Degree, Pre_Exam_Info
 
 SEARCH_DEGREE_TYPE = [('', 'All'),\
                       ('phd', 'PhDCS'),\
@@ -74,3 +74,14 @@ def create_doc_form(model_in):
         # Parameters: object name, tuple(input father)，dict of meta
     
     return _model_form_class    # return a class
+
+class pre_exam_info_form(forms.ModelForm):
+    class Meta:
+        model = Pre_Exam_Info
+        fields = ['date', 'result']
+        widgets = {
+            'date': forms.SelectDateWidget\
+                (attrs={'class': 'w3-select w3-light-gray', 'style': 'width:20%'},\
+                    years = [y for y in range(timezone.now().year - 7, timezone.now().year + 8)]),
+            'result': forms.Select(attrs = {'class': 'w3-select w3-light-gray'})
+        }
