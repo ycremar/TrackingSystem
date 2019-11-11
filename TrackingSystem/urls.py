@@ -37,16 +37,16 @@ urlpatterns = [
     path('students/delete/<int:id>/', views.delete_stu, name = 'delete_stu'),
     path('students/add/', views.create_stu, name = 'create_stu'),
 
-    re_path(r'student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$',\
+    re_path(r'student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name = 'degrees'),
 
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
     
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$',\
+    re_path(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degree_plan, name = 'degree_plan'),
         
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z]+)/)?(?:(?P<id>\d+)/)?$',\
+    re_path(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.preliminary_exam, name = 'preliminary_exam'),
 
     url(r"(?P<file_path>.+)", views.serve_protected_document, name='decrypt_and_serve'),

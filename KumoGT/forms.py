@@ -81,7 +81,7 @@ class pre_exam_info_form(forms.ModelForm):
         fields = ['date', 'result']
         widgets = {
             'date': forms.SelectDateWidget\
-                (attrs={'class': 'w3-select w3-light-gray', 'style': 'width:20%'},\
+                (attrs={'class': 'w3-select', 'style': 'width:auto'},\
                     years = [y for y in range(timezone.now().year - 7, timezone.now().year + 8)]),
-            'result': forms.Select(attrs = {'class': 'w3-select w3-light-gray'})
+            'result': forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'})
         }

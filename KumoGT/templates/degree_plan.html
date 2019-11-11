@@ -2,14 +2,7 @@
 
 {% block content %}
 
-{% comment %} Do not delete! {% endcomment %}
-<script type="text/javascript">
-	window.onload=function(){
-        if("{{ option }}" == "add"){ // scroll to bottom when option is "add"
-            window.scrollTo(0, document.body.scrollHeight || document.scrollingElement.scrollHeight);
-        }
-	};
-</script>
+{% include "add_doc_js.html" %}
 
 {% include "messages.html" %}
 <div class=" w3-card  w3-margin-bottom">
@@ -24,4 +17,5 @@
 <div class="w3-cell-row w3-center">
     <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
 </div>
+{% include "delete_record.html" with doc_url_name='degree_plan' %}
 {% endblock %}

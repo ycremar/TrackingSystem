@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc
+from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info
 from django.core.paginator import Paginator
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form
@@ -46,9 +46,9 @@ def form_upload(request):
     
 def degree_plan(request, deg_id, option = '', id = 0):
     if request.method == 'POST':
-        return deg_doc(request, Deg_Plan_Doc, "/degree_plan/", deg_id, option, id)
+        return deg_doc(request, "Degree Plan", Deg_Plan_Doc, "/degree_plan/", deg_id, option, id)[1]
     else:
-        method, data = deg_doc(request, Deg_Plan_Doc, "/degree_plan/", deg_id, option, id)
+        method, data = deg_doc(request, "Degree Plan", Deg_Plan_Doc, "/degree_plan/", deg_id, option, id)
         if method != 'show': return data
         else:
             deg, forms = data
@@ -59,16 +59,24 @@ def degree_plan(request, deg_id, option = '', id = 0):
             })
     
 def preliminary_exam(request, deg_id, option = '', id = 0):
+    if deg_id != '0':
+        info = Pre_Exam_Info.objects.filter(degree__id = deg_id)
+        if info.exists(): 
+            info = info.get()
+            if request.method == 'POST': info_form = pre_exam_info_form(request.POST, instance = info, prefix = "info")
+            else: info_form = pre_exam_info_form(instance = info, prefix = "info")
+        else:
+            if request.method == 'POST': info_form = pre_exam_info_form(request.POST, prefix = "info")
+            else: info_form = pre_exam_info_form(prefix = "info")
+    else: info_form = None
     if request.method == 'POST':
-        info_form = pre_exam_info_form(request.POST)
-        if info_form.is_valid():
-            pass
-        return deg_doc(request, Pre_Exam_Doc, "/preliminary_exam/", deg_id, option, id)
+        return deg_doc(request, "Preliminary Exam", Pre_Exam_Doc, "/preliminary_exam/",\
+            deg_id, option, id, Pre_Exam_Info, info_form)[1]
     else:
-        method, data = deg_doc(request, Pre_Exam_Doc, "/preliminary_exam/", deg_id, option, id)
+        method, data = deg_doc(request, "Preliminary Exam", Pre_Exam_Doc, "/preliminary_exam/",\
+            deg_id, option, id, Pre_Exam_Info)
         if method != 'show': return data
         else:
-            info_form = pre_exam_info_form()
             deg, forms = data
             return render(request, 'preliminary_exam.html', {
                 'deg': deg,

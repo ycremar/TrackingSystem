@@ -2,14 +2,7 @@
 
 {% block content %}
 
-{% comment %} Do not delete! {% endcomment %}
-<script type="text/javascript">
-	window.onload=function(){
-        if("{{ option }}" == "add"){ // scroll to bottom when option is "add"
-            window.scrollTo(0, document.body.scrollHeight || document.scrollingElement.scrollHeight);
-        }
-	};
-</script>
+{% include "add_doc_js.html" %}
 
 {% include "messages.html" %}
 <div class=" w3-card  w3-margin-bottom">
@@ -19,21 +12,23 @@
 {% include "degree_info_line.html" %}
 </div>
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
+{% if info_form %}
 <div class="w3-card">
     <table class="w3-container w3-table">
-        <tr class="w3-theme-l5">
-            <th class="w3-padding-16" style="width:10%">Prelim Date</th>
-            <td style="width:44%">{{ info_form.date }}</td>
-            <td style="width:18%"></td>
-            <th class="w3-padding-16" style="width:11%">Prelim Result</th>
-            <td style="width:17%">{{ info_form.result }}</td>
+        <tr>
+            <th class="w3-padding-16 w3-right-align" style="width:9%">Prelim Date</th>
+            <td style="width:20%">{{ info_form.date }}</td>
+            <td style="width:52.6%"></td>
+            <th class="w3-padding-16 w3-right-align" style="width:11%">Prelim Result</th>
+            <td style="width:7.4%">{{ info_form.result }}</td>
         </tr>
     </table>
 </div>
+{% endif %}
 {% include "doc_table.html" with doc_url_name='preliminary_exam' %}
-<button type="button" class="w3-button w3-red w3-right">Delete Record</button>
 </form>
 <div class="w3-cell-row w3-center">
     <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
 </div>
+{% include "delete_record.html" with doc_url_name='preliminary_exam' %}
 {% endblock %}
