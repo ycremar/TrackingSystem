@@ -51,9 +51,6 @@ urlpatterns = [
         
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation_proposal/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.thesis_dissertation_proposal, name = 'thesis_dissertation_proposal'),
-        
-    re_path(r'^degree/(?:(?P<deg_id>\d+)/)final_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.final_exam, name = 'final_exam'),
 
     url(r"(?P<file_path>.+)", views.serve_protected_document, name='decrypt_and_serve'),
     
