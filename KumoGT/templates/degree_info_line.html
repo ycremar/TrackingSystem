@@ -1,0 +1,17 @@
+{% if deg %}
+    <div class="w3-container w3-center">
+        <p>
+            <b>UIN:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ deg.stu.uin }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ deg.stu.first_name }} {{ deg.stu.middle_name }} {{ deg.stu.last_name }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>Degree:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ deg.get_deg_type_display }}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <b>First Registered:</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ deg.get_first_reg_sem_display }} {{ deg.first_reg_year }}
+        </p>
+    </div>
+{% endif %}

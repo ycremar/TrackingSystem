@@ -7,15 +7,15 @@
 {% include "messages.html" %}
 <div class=" w3-card  w3-margin-bottom">
 <header class="w3-container w3-theme w3-center w3-row">      
-    <h2>Degree Plan</h2>
+    <h2>Thesis/Dissertation Proposal</h2>
 </header>
 {% include "degree_info_line.html" %}
 </div>
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
-{% include "doc_table.html" with doc_url_name='degree_plan' %}
+{% include "doc_table.html" with doc_url_name='thesis_dissertation_proposal' %}
 </form>
 <div class="w3-cell-row w3-center">
     <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
 </div>
-{% include "delete_record.html" with doc_url_name='degree_plan' %}
+{% include "delete_record.html" with doc_url_name='thesis_dissertation_proposal' %}
 {% endblock %}

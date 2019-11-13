@@ -2,28 +2,28 @@
 <div class='messages'>
     {% for message in messages %}
         {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-        <div class="w3-panel w3-green w3-display-container w3-card-4">
+        <div class="w3-panel w3-pale-green w3-display-container w3-card-4">
             <span onclick="this.parentElement.style.display='none'"
             class="w3-button w3-display-topright">X</span>
             <h3>Success!</h3>
             <p>{{ message }}</p>
         </div> 
         {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-        <div class="w3-panel w3-yellow w3-display-container w3-card-4">
+        <div class="w3-panel w3-pale-yellow w3-display-container w3-card-4">
             <span onclick="this.parentElement.style.display='none'"
             class="w3-button w3-display-topright">X</span>
             <h3>Warning!</h3>
             <p>{{ message }}</p>
         </div> 
         {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        <div class="w3-panel w3-red w3-display-container w3-card-4">
+        <div class="w3-panel w3-pale-red w3-display-container w3-card-4">
             <span onclick="this.parentElement.style.display='none'"
             class="w3-button w3-display-topright">X</span>
             <h3>Error!</h3>
             <p>{{ message }}</p>
         </div> 
         {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-        <div class="w3-panel w3-blue w3-display-container w3-card-4">
+        <div class="w3-panel w3-pale-blue w3-display-container w3-card-4">
             <span onclick="this.parentElement.style.display='none'"
             class="w3-button w3-display-topright">X</span>
             <h3>Info</h3>
