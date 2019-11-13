@@ -8,10 +8,10 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc
+from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc
 from django.core.paginator import Paginator
 
-from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form
+from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form
 from .crypt import Cryptographer
 from .functions import delete, deg_doc
 
@@ -101,6 +101,33 @@ def thesis_dissertation_proposal(request, deg_id, option = '', id = 0):
                 'option': option,
             })
 
+def final_exam(request, deg_id, option = '', id = 0):
+    if deg_id != '0':
+        info = Fin_Exam_Info.objects.filter(degree__id = deg_id)
+        if info.exists(): 
+            info = info.get()
+            if request.method == 'POST': info_form = final_exam_info_form(request.POST, instance = info, prefix = "info")
+            else: info_form = final_exam_info_form(instance = info, prefix = "info")
+        else:
+            if request.method == 'POST': info_form = final_exam_info_form(request.POST, prefix = "info")
+            else: info_form = final_exam_info_form(prefix = "info")
+    else: info_form = None
+    if request.method == 'POST':
+        return deg_doc(request, "Final Exam", Fin_Exam_Doc, "/final_exam/",\
+            deg_id, option, id, Fin_Exam_Info)[1]
+    else:
+        method, data = deg_doc(request, "Final Exam", Fin_Exam_Doc, "/final_exam/",\
+            deg_id, option, id, Fin_Exam_Info)
+        if method != 'show': return data
+        else:
+            deg, forms = data
+            return render(request, 'final_exam.html', {
+                'deg': deg,
+                'forms': forms,
+                'option': option,
+                'info_form': info_form,
+            })
+            
 # @login_required
 def serve_protected_document(request, file_path):
 

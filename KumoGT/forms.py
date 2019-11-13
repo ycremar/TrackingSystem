@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Pre_Exam_Info
+from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info
 
 SEARCH_DEGREE_TYPE = [('', 'All'),\
                       ('phd', 'PhDCS'),\
@@ -84,4 +84,19 @@ class pre_exam_info_form(forms.ModelForm):
                 (attrs={'class': 'w3-select', 'style': 'width:auto'},\
                     years = [y for y in range(timezone.now().year - 7, timezone.now().year + 8)]),
             'result': forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'})
+        }
+
+class final_exam_info_form(forms.ModelForm):
+    class Meta:
+        model = Fin_Exam_Info
+        fields = ['date', 'time', 'result', 'title', 'room', 'abstract']
+        widgets = {
+            'date': forms.SelectDateWidget\
+                (attrs={'class': 'w3-select', 'style': 'width:auto'},\
+                    years = [y for y in range(timezone.now().year - 7, timezone.now().year + 8)]),
+            'result': forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'}),
+            'abstract': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
+            'room': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
+            'time': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
+            'title': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
         }

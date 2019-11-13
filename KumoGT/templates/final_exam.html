@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "add_doc_js.html" %}
+
+{% include "messages.html" %}
+<div class=" w3-card  w3-margin-bottom">
+<header class="w3-container w3-theme w3-center w3-row">      
+    <h2>Final Exam (Defense)</h2>
+</header>
+{% include "degree_info_line.html" %}
+</div>
+<form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
+{% if info_form %}
+<div class="w3-card">
+    <table class="w3-container w3-table">
+        <tr>
+            <th class="w3-padding-16 w3-right-align" style="width:9%">Final Date</th>
+            <td style="width:20%">{{ info_form.date }}</td>
+            <td style="width:52.6%"></td>
+            <th class="w3-padding-16 w3-right-align" style="width:11%">Final Result</th>
+            <td style="width:7.4%">{{ info_form.result }}</td>
+        </tr>
+    </table>
+</div>
+{% endif %}
+{% include "doc_table.html" with doc_url_name='final_exam' %}
+<br/>
+<br/>
+{% if info_form %}
+<div class="w3-card">
+    <table class="w3-table-all w3-centered">
+        <tr>
+            <th class="w3-padding-16">Final Exam Room</th>
+            <td>{{ info_form.room }}</td>
+        </tr>
+        <tr>
+            <th class="w3-padding-16">Time</th>
+            <td>{{ info_form.time }}</td>
+        </tr>
+        <tr>
+            <th class="w3-padding-16">Title</th>
+            <td>{{ info_form.title }}</td>
+        </tr>
+        <tr>
+            <th class="w3-padding-16">Abstract</th>
+            <td>{{ info_form.abstract }}</td>
+        </tr>
+    </table>
+</div>
+{% endif %}
+</form>
+<div class="w3-cell-row w3-center">
+    <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+</div>
+{% include "delete_record.html" with doc_url_name='final_exam' %}
+{% endblock %}
