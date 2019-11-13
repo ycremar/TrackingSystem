@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "messages.html" %}
+
+<div class="w3-card">
+<header class="w3-container w3-theme w3-center w3-row">
+    <h2>{{ title }}</h2>   
+</header>
+
+<form method="post" id="create_stu_form">
+    {% csrf_token %}
+    <table class="w3-table-all w3-centered">
+            <tr><th class="w3-padding-16">UIN:</th><td>{{ form.uin }}</td></tr>
+            <tr><th class="w3-padding-16">First Name:</th><td>{{ form.first_name }}</td></tr>
+            <tr><th class="w3-padding-16">Middle Name:</th><td>{{ form.middle_name }}</td></tr>
+            <tr><th class="w3-padding-16">Last Name:</th><td>{{ form.last_name }}</td></tr>
+            <tr><th class="w3-padding-16">Email:</th><td>{{ form.email }}</td></tr>
+            <tr><th class="w3-padding-16">Gender:</th><td>{{ form.gender }}</td></tr>
+    </table>
+</form>
+</div>
+<div class="w3-cell-row w3-padding-16 w3-center">
+    <button form='create_stu_form' type="submit" class="w3-cell w3-button w3-theme-d5">Submit</button>
+    <a href="{% url 'students' %}"><button class="w3-cell w3-button w3-theme-d5 w3-right">Back</button></a>
+</div>
+
+{% endblock %}

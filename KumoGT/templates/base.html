@@ -21,16 +21,20 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
     <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
     <a href="{% url 'home' %}" class="w3-bar-item w3-button w3-theme-l1">Home</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Search</a>
+    <a href="{% url 'students' %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Students</a>
+    <!-- These links is for debug
     <a href="{% url 'form_upload' %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Upload</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Logout</a>
-    <a href="{% url 'degree_plan' %}" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Degree Plan</a>
+    <a href="{% url 'preliminary_exam' deg_id=0 %}" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Preliminary Exam(Dubug)</a>
+    -->
+    <a href="{% url 'degrees' stu_id=0 %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Degrees(Debug)</a>
+    <a href="{% url 'degree_plan' deg_id=0 %}" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Degree Plan(Debug)</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-right w3-hover-white">Logout</a>
   </div>
   
 <div class="w3-main" style="margin-left:0px;margin-bottom:32px;" id="main">
 
   <div class="w3-row">
-    <div class="w3-container w3-content" style="max-width:1200px;margin-top:100px;">
+    <div class="w3-container w3-content" style="max-width:1200px;margin-top:80px;">
       {% block content %}{% endblock %}
     </div>
   </div>
