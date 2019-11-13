@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info
+from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc
 from django.core.paginator import Paginator
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form
@@ -85,6 +85,22 @@ def preliminary_exam(request, deg_id, option = '', id = 0):
                 'info_form': info_form,
             })
             
+def thesis_dissertation_proposal(request, deg_id, option = '', id = 0):
+    if request.method == 'POST':
+        return deg_doc(request, "Thesis/Dissertation Proposal", T_D_Prop_Doc, "/thesis_dissertation_proposal/",\
+            deg_id, option, id)[1]
+    else:
+        method, data = deg_doc(request, "Thesis/Dissertation Proposal", T_D_Prop_Doc, "/thesis_dissertation_proposal/",\
+            deg_id, option, id)
+        if method != 'show': return data
+        else:
+            deg, forms = data
+            return render(request, 'thesis_dissertation_proposal.html', {
+                'deg': deg,
+                'forms': forms,
+                'option': option,
+            })
+
 # @login_required
 def serve_protected_document(request, file_path):
 

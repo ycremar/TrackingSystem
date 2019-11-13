@@ -17,8 +17,11 @@
             case "deg_plan":
                 window.open("/degree/" + deg_id + "/degree_plan/");
                 break;
-            case "_pre_exam":
+            case "pre_exam":
                 window.open("/degree/" + deg_id + "/preliminary_exam/");
+                break;
+            case "t_d_proposal":
+                window.open("/degree/" + deg_id + "/thesis_dissertation_proposal/");
                 break;
             default:
                 break;
@@ -91,8 +94,9 @@
                         {% endif %}
                         <td style="width:23%">
                             <select class="w3-select" id="{{ form.instance.id }}_select" style="width: auto;">
-                                <option value ="deg_plan">Degree Plan</option>
+                                <option value = "deg_plan">Degree Plan</option>
                                 <option value = "pre_exam">Preliminary Exam</option>
+                                <option value = "t_d_proposal">Thesis/Dissertation Proposal</option>
                             </select>
                             <button type="button" class="w3-button w3-theme-d5" id="{{ form.instance.id }}_edit"
                                 deg_id="{{ form.instance.id }}" onclick="to_edit_page(this)">Edit</button>

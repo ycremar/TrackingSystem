@@ -19,6 +19,9 @@
             case "cur_pre_exam":
                 window.open("/degree/" + deg_id + "/preliminary_exam/");
                 break;
+            case "cur_t_d_proposal":
+                window.open("/degree/" + deg_id + "/thesis_dissertation_proposal/");
+                break;
             default:
                 break;
         }
@@ -89,6 +92,7 @@
                 {% if stu.cur_degree %}
                     <option value = "cur_deg_plan">Current Degree Plan</option>
                     <option value = "cur_pre_exam">Current Preliminary Exam</option>
+                    <option value = "cur_t_d_proposal">Current Thesis/Dissertation Proposal</option>
                 {% endif %}
             </select>
             {% if stu.cur_degree %}
