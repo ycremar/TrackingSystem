@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from ..crypt import Cryptographer
 
-class CryptographerTestCase(TestCase):
+
+class Cryptographer_TestCase(TestCase):
     
     def test_encryption(self):
         data = b"this is test data 1"
@@ -14,3 +15,4 @@ class CryptographerTestCase(TestCase):
             Cryptographer.decrypted(Cryptographer.encrypted(data)),
             data
         )
+        
