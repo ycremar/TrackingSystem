@@ -114,7 +114,7 @@ def final_exam(request, deg_id, option = '', id = 0):
     else: info_form = None
     if request.method == 'POST':
         return deg_doc(request, "Final Exam", Fin_Exam_Doc, "/final_exam/",\
-            deg_id, option, id, Fin_Exam_Info)[1]
+            deg_id, option, id, Fin_Exam_Info, info_form)[1]
     else:
         method, data = deg_doc(request, "Final Exam", Fin_Exam_Doc, "/final_exam/",\
             deg_id, option, id, Fin_Exam_Info)

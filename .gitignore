@@ -3,4 +3,4 @@ KumoGT/migrations/__pycache__/
 KumoGT/tests/__pycache__/
 TrackingSystem/__pycache__/
 media/documents/
-db.sqlite3
+*.sqlite3

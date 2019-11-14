@@ -95,8 +95,8 @@ class final_exam_info_form(forms.ModelForm):
                 (attrs={'class': 'w3-select', 'style': 'width:auto'},\
                     years = [y for y in range(timezone.now().year - 7, timezone.now().year + 8)]),
             'result': forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'}),
-            'abstract': forms.Textarea(attrs={'cols': 50, 'rows': 5}),
-            'room': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
-            'time': forms.TimeInput(attrs={'style':"width:44.5%"}),
-            'title': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
+            'abstract': forms.Textarea(attrs={'cols': 50, 'rows': 5, 'style':"width:80%"}),
+            'room': forms.Textarea(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
+            'time': forms.TimeInput(attrs={'style':"width:80%"}),
+            'title': forms.Textarea(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
         }
