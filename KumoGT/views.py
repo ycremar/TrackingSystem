@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form
 from .crypt import Cryptographer
-from .functions import delete, deg_doc
+from .functions import delete, deg_doc, get_info_form
 
 import os
 
@@ -59,16 +59,7 @@ def degree_plan(request, deg_id, option = '', id = 0):
             })
     
 def preliminary_exam(request, deg_id, option = '', id = 0):
-    if deg_id != '0':
-        info = Pre_Exam_Info.objects.filter(degree__id = deg_id)
-        if info.exists(): 
-            info = info.get()
-            if request.method == 'POST': info_form = pre_exam_info_form(request.POST, instance = info, prefix = "info")
-            else: info_form = pre_exam_info_form(instance = info, prefix = "info")
-        else:
-            if request.method == 'POST': info_form = pre_exam_info_form(request.POST, prefix = "info")
-            else: info_form = pre_exam_info_form(prefix = "info")
-    else: info_form = None
+    info_form = get_info_form(request, deg_id, Pre_Exam_Info, pre_exam_info_form)
     if request.method == 'POST':
         return deg_doc(request, "Preliminary Exam", Pre_Exam_Doc, "/preliminary_exam/",\
             deg_id, option, id, Pre_Exam_Info, info_form)[1]
@@ -102,16 +93,7 @@ def thesis_dissertation_proposal(request, deg_id, option = '', id = 0):
             })
 
 def final_exam(request, deg_id, option = '', id = 0):
-    if deg_id != '0':
-        info = Fin_Exam_Info.objects.filter(degree__id = deg_id)
-        if info.exists(): 
-            info = info.get()
-            if request.method == 'POST': info_form = final_exam_info_form(request.POST, instance = info, prefix = "info")
-            else: info_form = final_exam_info_form(instance = info, prefix = "info")
-        else:
-            if request.method == 'POST': info_form = final_exam_info_form(request.POST, prefix = "info")
-            else: info_form = final_exam_info_form(prefix = "info")
-    else: info_form = None
+    info_form = get_info_form(request, deg_id, Fin_Exam_Info, final_exam_info_form)
     if request.method == 'POST':
         return deg_doc(request, "Final Exam", Fin_Exam_Doc, "/final_exam/",\
             deg_id, option, id, Fin_Exam_Info, info_form)[1]

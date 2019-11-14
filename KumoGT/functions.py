@@ -140,3 +140,16 @@ def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, i
             forms.append(create_doc_form(doc_model)(prefix = 'new'))
         deg = Degree.objects.get(id = deg_id) if deg_id != '0' else None
         return ['show', [deg, forms]]
+
+def get_info_form(request, deg_id, info_model, info_form_class):
+    if deg_id != '0':
+        info = info_model.objects.filter(degree__id = deg_id)
+        if info.exists(): 
+            info = info.get()
+            if request.method == 'POST': info_form = info_form_class(request.POST, instance = info, prefix = "info")
+            else: info_form = info_form_class(instance = info, prefix = "info")
+        else:
+            if request.method == 'POST': info_form = info_form_class(request.POST, prefix = "info")
+            else: info_form = info_form_class(prefix = "info")
+    else: info_form = None
+    return info_form
