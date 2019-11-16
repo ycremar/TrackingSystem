@@ -1,16 +1,7 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info
-
-SEARCH_DEGREE_TYPE = [('', 'All'),\
-                      ('phd', 'PhDCS'),\
-                      ('ms', 'MSCS'),\
-                      ('meng', 'MEngCS'),\
-                      ('none', 'None')]
-
-SEARCH_GENDER = [('', 'All'),\
-                 ('male', 'Male'),\
-                 ('female', 'Female')]
+from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info,\
+    DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER
 
 class stu_search_form(forms.Form):
     uin = forms.CharField(label = 'UIN', max_length = 255, required = False,\
@@ -19,15 +10,17 @@ class stu_search_form(forms.Form):
         widget = forms.TextInput(attrs = {'class': 'w3-input'}))
     last_name = forms.CharField(label = 'Last Name', max_length = 255, required = False,\
         widget = forms.TextInput(attrs = {'class': 'w3-input'}))
-    gender = forms.ChoiceField(choices = SEARCH_GENDER, required = False,\
+    gender = forms.ChoiceField(choices = [('', 'All')] + GENDER, required = False,\
         widget = forms.Select(attrs = {'class': 'w3-select'}))
-    cur_degree = forms.ChoiceField(choices = SEARCH_DEGREE_TYPE, required = False,\
+    status = forms.ChoiceField(choices = [('', 'All')] + STUDENT_STATUS_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select'}))
+    cur_degree = forms.ChoiceField(choices = [('', 'All')] + DEGREE_TYPE + [('none', 'None')], required = False,\
         widget = forms.Select(attrs = {'class': 'w3-select'}))
     
 class stu_bio_form(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['uin', 'first_name', 'middle_name', 'last_name', 'email', 'gender']
+        fields = ['uin', 'first_name', 'middle_name', 'last_name', 'email', 'gender', 'status']
         widgets = {
             'uin': forms.TextInput(attrs = {'class': 'w3-input'}),
             'first_name': forms.TextInput(attrs = {'class': 'w3-input w3-light-gray'}),
@@ -35,6 +28,7 @@ class stu_bio_form(forms.ModelForm):
             'last_name': forms.TextInput(attrs = {'class': 'w3-input w3-light-gray'}),
             'email': forms.EmailInput(attrs = {'class': 'w3-input'}),
             'gender': forms.Select(attrs = {'class': 'w3-select w3-light-gray'}),
+            'status': forms.Select(attrs = {'class': 'w3-select'}),
         }
 
 class deg_form(forms.ModelForm):

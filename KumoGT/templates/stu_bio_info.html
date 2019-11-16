@@ -18,12 +18,12 @@
             <tr><th class="w3-padding-16">Last Name:</th><td>{{ form.last_name }}</td></tr>
             <tr><th class="w3-padding-16">Email:</th><td>{{ form.email }}</td></tr>
             <tr><th class="w3-padding-16">Gender:</th><td>{{ form.gender }}</td></tr>
+            <tr><th class="w3-padding-16">Status:</th><td>{{ form.status }}</td></tr>
     </table>
 </form>
 </div>
 <div class="w3-cell-row w3-padding-16 w3-center">
     <button form='create_stu_form' type="submit" class="w3-cell w3-button w3-theme-d5">Submit</button>
-    <a href="{% url 'students' %}"><button class="w3-cell w3-button w3-theme-d5 w3-right">Back</button></a>
 </div>
 
 {% endblock %}

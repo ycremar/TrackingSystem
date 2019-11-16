@@ -47,6 +47,7 @@
         </tr>
         <tr>
             <th class="w3-padding-16">Gender:</th><td>{{ form.gender }}</td>
+            <th class="w3-padding-16">Status:</th><td>{{ form.status }}</td>
             <th class="w3-padding-16">Current Degree:</th><td>{{ form.cur_degree }}</td>
             <th></th><td></td>
         </tr>
@@ -64,11 +65,12 @@
 </div>
 <table class="w3-container w3-table w3-bordered w3-centered w3-card">
     <tr class="w3-theme-l3">
-        <th style="width:15%">UIN</th>
-        <th style="width:20%">Name</th>
-        <th style="width:10%">Gender</th>
-        <th style="width:10%">Current Degree</th>
-        <th style="width:15%">Operation</th>
+        <th style="width:10%">UIN</th>
+        <th style="width:16%">Name</th>
+        <th style="width:9%">Gender</th>
+        <th style="width:8%">Status</th>
+        <th style="width:14%">Current Degree</th>
+        <th style="width:13%">Operation</th>
         <th style="width:30%">Access</th>
     </tr>
     {% for stu in students %}
@@ -76,13 +78,14 @@
         <td class="w3-padding-16">{{ stu.uin }}</td>
         <td class="w3-padding-16">{{ stu.first_name }} {{ stu.middle_name }} {{ stu.last_name }}</td>
         <td class="w3-padding-16">{{ stu.get_gender_display }}</td>
+        <td class="w3-padding-16">{{ stu.get_status_display }}</td>
         {% if stu.cur_degree %}
             <td class="w3-padding-16">{{ stu.cur_degree.get_deg_type_display }}</td>
         {% else %}
             <td class="w3-padding-16">None</td>
         {% endif %}
         <td>
-            <a href="{% url 'edit_stu' id=stu.id %}">
+            <a href="{% url 'edit_stu' id=stu.id %}" target="_blank">
                 <button type="button" class="w3-button w3-theme-d5">Edit</button>
             </a>
             <a href="{% url 'delete_stu' id=stu.id %}">
@@ -109,7 +112,7 @@
         </td>
     </tr>
     {% empty %}
-    <tr><th colspan="6">No eligible student.</th></tr>
+    <tr><th colspan="7">No eligible student.</th></tr>
     {% endfor %}
 </table>
 <div class="w3-cell-row w3-center w3-padding-16">

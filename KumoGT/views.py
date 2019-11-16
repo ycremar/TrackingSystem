@@ -123,7 +123,7 @@ def serve_protected_document(request, file_path):
     except:
         raise Http404
         
-def students(request, **kwargs):# uin, first_name, last_name, gender, cur_degree):
+def students(request, **kwargs):# uin, first_name, last_name, gender, status, cur_degree):
     if request.method == 'POST':
         form = stu_search_form(request.POST)
         form.is_valid()
@@ -167,7 +167,7 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, cur_degree
         'neigh_pages': neigh_pages,
         })
     
-def create_stu(request):
+def create_stu(request, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST)
         if form.is_valid():
@@ -184,7 +184,7 @@ def create_stu(request):
             'title': title,
             })
 
-def edit_stu(request, id):
+def edit_stu(request, id, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST, instance = Student.objects.get(id = id))
         if form.has_changed():

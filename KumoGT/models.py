@@ -40,8 +40,13 @@ GENDER = [('not sel', 'Not Selected'),\
           ('male', 'Male'),\
           ('female', 'Female')]
 
+STUDENT_STATUS_TYPE = [('current', 'Current'),\
+                       ('graduated', 'Gradudated'),\
+                       ('invalid', 'Invalid')]
+
 DEGREE_TYPE = [('phd', 'PhDCS'),\
-               ('ms', 'MSCS'),\
+               ('ms_thesis', 'MSCS(Thesis)'),\
+               ('ms_non_thesis', 'MSCS(Non-Thesis)'),\
                ('meng', 'MEngCS')]
 
 SEMESTER_TYPE = [('fall', 'Fall'),\
@@ -60,6 +65,7 @@ class Student(models.Model):
     email = models.EmailField(blank=False)
     gender = models.CharField(max_length=255, choices=GENDER, default='not sel')
     cur_degree = models.OneToOneField('Degree', models.SET_NULL, verbose_name='Current Degree', null=True)
+    status = models.CharField(max_length=255, choices=STUDENT_STATUS_TYPE, default='current')
 
 class Degree(models.Model):
     deg_type = models.CharField(max_length=255, choices=DEGREE_TYPE, default='none')
@@ -120,6 +126,10 @@ class Fin_Exam_Info(models.Model):
     room = models.CharField(max_length=255, blank=True)
     abstract = models.CharField(max_length=1023, blank=True)
     degree = models.OneToOneField(Degree, models.CASCADE)
+
+class Session_Notes(models.Model):
+    date = models.DateField()
+    note = models.CharField(max_length=4096, blank=True)
 
 @receiver(models.signals.post_delete, sender=Deg_Plan_Doc)
 @receiver(models.signals.post_delete, sender=Pre_Exam_Doc)
