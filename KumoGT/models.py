@@ -130,6 +130,7 @@ class Fin_Exam_Info(models.Model):
 class Session_Notes(models.Model):
     date = models.DateField()
     note = models.CharField(max_length=4096, blank=True)
+    stu = models.ForeignKey(Student, models.CASCADE, verbose_name='Student')
 
 @receiver(models.signals.post_delete, sender=Deg_Plan_Doc)
 @receiver(models.signals.post_delete, sender=Pre_Exam_Doc)
