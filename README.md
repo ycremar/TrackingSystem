@@ -15,6 +15,7 @@ To run web server locally, run the following commands.
 
 ```
 source ../django_env/bin/activate
+python3 manage.py createsuperuser
 python3 manage.py runserver 8080
 ```
 
