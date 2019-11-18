@@ -5,7 +5,7 @@ from django.http import FileResponse, HttpResponse, Http404, HttpResponseRedirec
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc
@@ -13,7 +13,7 @@ from django.core.paginator import Paginator
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form
 from .crypt import Cryptographer
-from .functions import delete, deg_doc, get_info_form
+from .functions import delete, deg_doc, get_info_form, post_degrees
 
 import os
 
@@ -183,6 +183,7 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
         })
         
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+@user_passes_test(lambda u: u.is_superuser)
 def create_stu(request, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST)
@@ -201,6 +202,7 @@ def create_stu(request, back_url = None):
             })
             
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+@user_passes_test(lambda u: u.is_superuser)
 def edit_stu(request, id, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST, instance = Student.objects.get(id = id))
@@ -227,63 +229,12 @@ def delete_stu(request, id):
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def degrees(request, stu_id, option = '', id = 0):
+    if option == 'del':
+        return delete(request, Degree, id, "Degree", "",\
+            "deg_type", "/student/" + stu_id + "/degrees/", True)
     if request.method == 'POST':
-        if option == 'del':
-            return delete(request, Degree, id, "Degree", "",\
-                "deg_type", "/student/" + stu_id + "/degrees/", True)
-        forms = []
-        degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)
-        changed, error = False, False
-        for degree in degrees:
-            forms.append(deg_form(request.POST, request.FILES,\
-                instance = degree, prefix = str(degree.id)))
-        for form in forms:
-            if form.has_changed():
-                changed = True
-                if form.is_valid():
-                    form.save()
-                else:
-                    error = True
-                    messages.error(request,\
-                        mark_safe("Degree({0} first registered at {1} {2}) failed to update due to:<br>{3}".format\
-                            (form.instance.get_deg_type_display(), form.instance.get_first_reg_sem_display(),\
-                                form.instance.first_reg_year, form.errors)))
-        if stu_id != '0':
-            student = Student.objects.get(id = stu_id)
-            current = int(request.POST['current'])
-            if option == 'add':
-                changed = True
-                new_form = deg_form(request.POST, request.FILES, prefix = 'new')
-                if new_form.is_valid():
-                    degree = new_form.save(commit = False)
-                    degree.stu = student
-                    degree.save()
-                    if current == 0: current = degree.id
-                else:
-                    error = True
-                    messages.error(request,\
-                        mark_safe("Degree({0} first registered at {1} {2}) failed to update due to:<br>{3}".format\
-                            (new_form.instance.get_deg_type_display(), new_form.instance.get_first_reg_sem_display(),\
-                                new_form.instance.first_reg_year, new_form.errors)))
-            if current > 0 and (not student.cur_degree or student.cur_degree.id != current):
-                student.cur_degree = Degree.objects.get(id = current)
-                student.save()
-                changed = True
-            elif current == -1 and student.cur_degree:
-                student.cur_degree = None
-                student.save()
-                changed = True
-        if not changed:
-            messages.info(request, 'Noting is changed.')
-        elif not error:
-            messages.success(request, 'Documents are updated.')
-        else:
-            messages.warning(request, 'Some documents are not updated.')
-        return redirect('degrees', stu_id = stu_id)
+        return post_degrees(request, stu_id, option, id)
     else:
-        if option == 'del':
-            return delete(request, Degree, id, "Degree", "",\
-                "deg_type", "/student/" + stu_id + "/degrees/", True)
         degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)
         if degrees.count() == 0 and option != 'add': return redirect('degrees', stu_id = stu_id, option = 'add')
         forms = []
