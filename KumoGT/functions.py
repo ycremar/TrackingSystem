@@ -10,6 +10,9 @@ from .forms import create_doc_form
 
 import re
 
+from django.contrib.auth.decorators import user_passes_test
+
+@user_passes_test(lambda u: u.is_superuser)
 def delete(request, model, id, obj_text, field_text, show_field, redirect_url, has_choices = False):
     try:
         del_obj = model.objects.get(id = id)
@@ -43,6 +46,7 @@ def delete(request, model, id, obj_text, field_text, show_field, redirect_url, h
                 'redirect_url': redirect_url,
                 })
 
+@user_passes_test(lambda u: u.is_superuser)
 def delete_record(request, degree_id, info_model, doc_model, record_text, redirect_url):
     if info_model: info = info_model.objects.filter(degree__id = degree_id)
     else: info = None
