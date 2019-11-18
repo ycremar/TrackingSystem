@@ -17,10 +17,19 @@ from .functions import delete, deg_doc, get_info_form
 
 import os
 
+def conditional_decorator(dec, condition):
+    def decorator(func):
+        if not condition:
+            return func
+        return dec(func)
+    return decorator
+
+@conditional_decorator(login_required, not settings.DEBUG)
 def home(request):
     docs = Deg_Plan_Doc.objects.all()
     return render(request, 'home.html', { 'docs': docs })
 
+@conditional_decorator(login_required, not settings.DEBUG)
 def upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
@@ -32,6 +41,7 @@ def upload(request):
         })
     return render(request, 'upload.html')
     
+@conditional_decorator(login_required, not settings.DEBUG)
 def form_upload(request):
     if request.method == 'POST':
         form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES)
@@ -43,7 +53,8 @@ def form_upload(request):
     return render(request, 'form_upload.html', {
         'form': form
     })
-    
+
+@conditional_decorator(login_required, not settings.DEBUG)
 def degree_plan(request, deg_id, option = '', id = 0):
     if request.method == 'POST':
         return deg_doc(request, "Degree Plan", Deg_Plan_Doc, "/degree_plan/", deg_id, option, id)[1]
@@ -57,7 +68,8 @@ def degree_plan(request, deg_id, option = '', id = 0):
                 'forms': forms,
                 'option': option,
             })
-    
+
+@conditional_decorator(login_required, not settings.DEBUG)
 def preliminary_exam(request, deg_id, option = '', id = 0):
     info_form = get_info_form(request, deg_id, Pre_Exam_Info, pre_exam_info_form)
     if request.method == 'POST':
@@ -75,7 +87,8 @@ def preliminary_exam(request, deg_id, option = '', id = 0):
                 'option': option,
                 'info_form': info_form,
             })
-            
+
+@conditional_decorator(login_required, not settings.DEBUG)
 def thesis_dissertation_proposal(request, deg_id, option = '', id = 0):
     if request.method == 'POST':
         return deg_doc(request, "Thesis/Dissertation Proposal", T_D_Prop_Doc, "/thesis_dissertation_proposal/",\
@@ -92,6 +105,7 @@ def thesis_dissertation_proposal(request, deg_id, option = '', id = 0):
                 'option': option,
             })
 
+@conditional_decorator(login_required, not settings.DEBUG)
 def final_exam(request, deg_id, option = '', id = 0):
     info_form = get_info_form(request, deg_id, Fin_Exam_Info, final_exam_info_form)
     if request.method == 'POST':
@@ -110,7 +124,7 @@ def final_exam(request, deg_id, option = '', id = 0):
                 'info_form': info_form,
             })
             
-# @login_required
+@conditional_decorator(login_required, not settings.DEBUG)
 def serve_protected_document(request, file_path):
 
     file_path = os.path.join(settings.BASE_DIR, file_path)
@@ -123,6 +137,7 @@ def serve_protected_document(request, file_path):
     except:
         raise Http404
         
+@conditional_decorator(login_required, not settings.DEBUG)
 def students(request, **kwargs):# uin, first_name, last_name, gender, status, cur_degree):
     if request.method == 'POST':
         form = stu_search_form(request.POST)
@@ -166,7 +181,8 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
         'students': students_page,
         'neigh_pages': neigh_pages,
         })
-    
+        
+@conditional_decorator(login_required, not settings.DEBUG)
 def create_stu(request, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST)
@@ -183,7 +199,8 @@ def create_stu(request, back_url = None):
             'form': form,
             'title': title,
             })
-
+            
+@conditional_decorator(login_required, not settings.DEBUG)
 def edit_stu(request, id, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST, instance = Student.objects.get(id = id))
@@ -203,10 +220,12 @@ def edit_stu(request, id, back_url = None):
             'form': form,
             'title': title,
             })
-
+            
+@conditional_decorator(login_required, not settings.DEBUG)
 def delete_stu(request, id):
     return delete(request, Student, id, "Student", 'UIN', 'uin', '/students/')
 
+@conditional_decorator(login_required, not settings.DEBUG)
 def degrees(request, stu_id, option = '', id = 0):
     if request.method == 'POST':
         if option == 'del':

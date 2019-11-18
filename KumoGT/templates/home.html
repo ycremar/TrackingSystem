@@ -3,21 +3,14 @@
 {% block content %}
   <ul>
     <li>
-      <a href="{% url 'upload' %}">Single File Upload</a>
+      <a href="{% url 'form_upload' %}">Single File Upload</a>
     </li>
     <li>
-      <a href="{% url 'form_upload' %}">Detailed File Upload</a>
+      <a href="{% url 'signup' %}">Authorize New Users (Admin only)</a>
+    </li>
+    <li>
+      <a href="{% url 'students' %}">Search Students</a>
     </li>
   </ul>
 
-  <p>Uploaded files:</p>
-  <ul>
-    {% for obj in docs %}
-      <li>
-        <a href="{{ obj.doc.url }}">{{ obj.doc.name }}</a>
-        Document type: {{obj.doc_type}}
-        <small>(Uploaded at: {{ obj.uploaded_at }})</small>
-      </li>
-    {% endfor %}
-  </ul>
 {% endblock %}
