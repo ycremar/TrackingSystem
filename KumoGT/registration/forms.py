@@ -24,7 +24,8 @@ class SignUpForm(UserCreationForm):
         strip=False,
         help_text=_("Enter the same password as before, for verification."),
     )
-    group = forms.ModelChoiceField(queryset=Group.objects.all(), empty_label=None)
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), empty_label=None,\
+        widget=forms.Select(attrs = {'class': 'w3-select w3-center'}))
 
     class Meta:
         model = User
