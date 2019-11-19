@@ -8,10 +8,10 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc
+from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info
 from django.core.paginator import Paginator
 
-from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form
+from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form
 from .crypt import Cryptographer
 from .functions import delete, deg_doc, get_info_form, post_degrees
 
@@ -118,6 +118,25 @@ def final_exam(request, deg_id, option = '', id = 0):
         else:
             deg, forms = data
             return render(request, 'final_exam.html', {
+                'deg': deg,
+                'forms': forms,
+                'option': option,
+                'info_form': info_form,
+            })
+            
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def thesis_dissertation(request, deg_id, option = '', id = 0):
+    info_form = get_info_form(request, deg_id, T_D_Info, thesis_dissertation_info_form)
+    if request.method == 'POST':
+        return deg_doc(request, "Thesis/Dissertation", T_D_Doc, "/thesis_dissertation/",\
+            deg_id, option, id, T_D_Info, info_form)[1]
+    else:
+        method, data = deg_doc(request, "Thesis/Dissertation", T_D_Doc, "/thesis_dissertation/",\
+            deg_id, option, id, T_D_Info)
+        if method != 'show': return data
+        else:
+            deg, forms = data
+            return render(request, 'thesis_dissertation.html', {
                 'deg': deg,
                 'forms': forms,
                 'option': option,

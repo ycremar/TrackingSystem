@@ -26,6 +26,9 @@
             case "fin_exam":
                 window.open("/degree/" + deg_id + "/final_exam/");
                 break;
+            case "t_d":
+                window.open("/degree/" + deg_id + "/thesis_dissertation/");
+                break;
             default:
                 break;
         }
@@ -101,6 +104,7 @@
                                 <option value = "pre_exam">Preliminary Exam</option>
                                 <option value = "t_d_proposal">Thesis/Dissertation Proposal</option>
                                 <option value = "fin_exam">Final Exam (Defense)</option>
+                                <option value = "t_d">Thesis/Dissertation</option>
                             </select>
                             <button type="button" class="w3-button w3-theme-d5" id="{{ form.instance.id }}_edit"
                                 deg_id="{{ form.instance.id }}" onclick="to_edit_page(this)">Edit</button>

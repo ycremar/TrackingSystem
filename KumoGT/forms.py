@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info,\
+from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info,\
     DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER
 
 class stu_search_form(forms.Form):
@@ -93,4 +93,13 @@ class final_exam_info_form(forms.ModelForm):
             'room': forms.Textarea(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
             'time': forms.TimeInput(attrs={'style':"width:80%"}),
             'title': forms.Textarea(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
+        }
+        
+class thesis_dissertation_info_form(forms.ModelForm):
+    class Meta:
+        model = T_D_Info
+        fields = ['title', 'url']
+        widgets = {
+            'title': forms.Textarea(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
+            'url': forms.URLInput(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
         }
