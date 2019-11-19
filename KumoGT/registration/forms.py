@@ -1,6 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
+from django.contrib.auth.models import User, Group
 from django.contrib.auth import password_validation
 from django.utils.translation import gettext, gettext_lazy as _
 
@@ -24,10 +24,34 @@ class SignUpForm(UserCreationForm):
         strip=False,
         help_text=_("Enter the same password as before, for verification."),
     )
+    group = forms.ModelChoiceField(queryset=Group.objects.all(), empty_label=None)
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'group',)
         widgets = {
             'username': forms.TextInput(attrs = {'class': 'w3-input w3-center'}),
         }
+        
+        
+class ChangePasswordForm(UserCreationForm):
+    password1 = forms.CharField(
+        label=_("New password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs = {'class': 'w3-input w3-center'}),
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    password2 = forms.CharField(
+        label=_("Comfirm new password"),
+        widget=forms.PasswordInput(attrs = {'class': 'w3-input w3-center'}),
+        strip=False,
+        help_text=_("Enter the same password as before, for verification."),
+    )
+    
+    class Meta:
+        model = User
+        fields = ('password1', 'password2',)
+        widgets = {
+            'username': forms.TextInput(attrs = {'class': 'w3-input w3-center'}),
+        }
+        
