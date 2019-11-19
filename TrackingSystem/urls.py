@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import re_path
 from KumoGT import views
-from KumoGT.registration import signup
+from KumoGT.registration import signup, manageusers, all_users
+from KumoGT.registration import changepwd, reset_admin_pwd, delete_user, activate_user, deactivate_user
 from django.contrib.auth import views as auth_views
 
 from django.conf import settings
@@ -26,9 +27,18 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),
+    
+    # Admin and users authentication
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
-    path('signup/', signup, name='signup'),
+    path('manageusers/', manageusers, name='manageusers'),
+    path('manageusers/signup/', signup, name='signup'),
+    path('manageusers/userlist/', all_users, name='userlist'),
+    path('manageusers/userlist/resetpwd/<str:usrname>/', reset_admin_pwd, name='reset_pwd'),
+    path('manageusers/userlist/changepwd/<str:usrname>/', changepwd, name='change_pwd'),
+    path('manageusers/userlist/deleteuser/<str:usrname>/', delete_user, name='delete_user'),
+    path('manageusers/userlist/activate/<str:usrname>/', activate_user, name='activate_user'),
+    path('manageusers/userlist/deactivate/<str:usrname>/', deactivate_user, name='deactivate_user'),
     path('admin/', admin.site.urls, name='admin'),
 
     re_path(r'^students/(?:uin=(?P<uin>[0-9]+)/)?'\

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="w3-container w3-table w3-bordered w3-centered w3-card">
+    <tr class="w3-theme-l3">
+        <th style="width:10%">User ID</th>
+        <th style="width:15%">Name</th>
+        <th style="width:15%">Email</th>
+        <th style="width:10%">Group</th>
+        <th style="width:8%">Active</th>
+        <th style="width:8%">Superuser</th>
+        <th style="width:40%">Actions</th>
+    </tr>
+    {% for user in users %}
+    <tr class=" w3-hover-light-gray">
+        <td class="w3-padding-16">{{ user.username }}</td>
+        <td class="w3-padding-16">{{ user.first_name }} {{ user.last_name }}</td>
+        <td class="w3-padding-16">{{ user.email }}</td>
+        <td class="w3-padding-16">{{ user.groups.all.first }}</td>
+        {% if user.is_active %}
+        <td class="w3-padding-16">&#10004;</td>
+        {% else %}
+        <td class="w3-padding-16">&#10006;</td>
+        {% endif %}
+        {% if user.is_superuser %}
+        <td class="w3-padding-16">&#10004;</td>
+        <td>
+            <a href="#" target="_blank">
+                <button type="button" class="w3-button w3-theme-d5">Reset Password</button>
+            </a>
+        </td>
+        {% else %}
+        <td class="w3-padding-16">&#10006;</td>
+        <td>
+            <a href="{% url 'change_pwd' usrname=user.username %}" target="_blank">
+                <button type="button" class="w3-button w3-theme-d5">Change Password</button>
+            </a>
+            {% if user.is_active %}
+            <a href="{% url 'deactivate_user' usrname=user.username %}">
+                <button type="button" class="w3-button w3-grey">Deactivate</button>
+            </a>
+            {% else %}
+            <a href="{% url 'activate_user' usrname=user.username %}">
+                <button type="button" class="w3-button w3-blue">Activate</button>
+            </a>
+            {% endif %}
+            <a href="{% url 'delete_user' usrname=user.username %}">
+                <button type="button" class="w3-button w3-red">Delete</button>
+            </a>
+        </td>
+        {% endif %}
+
+    {% endfor %}
+</table>
+{% endblock %}

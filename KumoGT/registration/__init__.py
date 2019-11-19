@@ -1,1 +1,1 @@
-from .views import signup
+from .views import *

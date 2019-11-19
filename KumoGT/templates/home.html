@@ -6,11 +6,11 @@
       <a href="{% url 'form_upload' %}">Single File Upload</a>
     </li>
     <li>
-      <a href="{% url 'signup' %}">Authorize New Users (Admin only)</a>
-    </li>
-    <li>
       <a href="{% url 'students' %}">Search Students</a>
     </li>
+    {% if request.user.is_superuser %}
+    <a href="{% url 'manageusers' %}">Manage Users (admin only)</a>
+    {% endif %}
   </ul>
 
 {% endblock %}
