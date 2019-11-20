@@ -1,10 +1,11 @@
-from django.contrib.auth import login, authenticate
+from django.contrib import messages
+from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User, Group
 
-from .forms import SignUpForm, ChangePasswordForm
-from KumoGT.functions import _delete_user
+from .forms import SignUpForm, SetPasswordForm
+from KumoGT.functions import delete
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -33,39 +34,41 @@ def all_users(request):
     return render(request, 'userlist.html', { 'users': users })
     
 @user_passes_test(lambda u: u.is_superuser)
-def changepwd(request, usrname):
-    user = User.objects.get(username=usrname)
+def changepwd(request, id):
+    user = User.objects.get(id=id)
     if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
+        form = SetPasswordForm(user, data=request.POST)
         if form.is_valid():
-            raw_password = form.cleaned_data.get('password1')
-            user.set_password(raw_password)
-            user.save()
-            return redirect('manageusers')
+            form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('userlist')
+        else:
+            messages.error(request, 'Please correct the error below.')
     else:
-        form = ChangePasswordForm()
+        form = SetPasswordForm(user)
     return render(request, 'changepwd.html', {'form': form, 'username': user.username})
     
 @user_passes_test(lambda u: u.is_superuser)
-def reset_admin_pwd(request, usrname):
+def reset_admin_pwd(request, id):
     users = User.objects.all()
     return render(request, 'userlist.html', { 'users': users })
     
 @user_passes_test(lambda u: u.is_superuser)
-def deactivate_user(request, usrname):
-    user = User.objects.get(username=usrname)
+def deactivate_user(request, id):
+    user = User.objects.get(id=id)
     user.is_active = False
     user.save()
     return redirect('userlist')
     
 @user_passes_test(lambda u: u.is_superuser)
-def activate_user(request, usrname):
-    user = User.objects.get(username=usrname)
+def activate_user(request, id):
+    user = User.objects.get(id=id)
     user.is_active = True
     user.save()
     return redirect('userlist')
     
 @user_passes_test(lambda u: u.is_superuser)
-def delete_user(request, usrname):
-    return _delete_user(request, User, usrname, "User", 'Username', 'username', 'userlist')
+def delete_user(request, id):
+    return delete(request, User, id, "User", 'Username', 'username', 'userlist')
     

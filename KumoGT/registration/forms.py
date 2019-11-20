@@ -34,25 +34,3 @@ class SignUpForm(UserCreationForm):
             'username': forms.TextInput(attrs = {'class': 'w3-input w3-center'}),
         }
         
-        
-class ChangePasswordForm(UserCreationForm):
-    password1 = forms.CharField(
-        label=_("New password"),
-        strip=False,
-        widget=forms.PasswordInput(attrs = {'class': 'w3-input w3-center'}),
-        help_text=password_validation.password_validators_help_text_html(),
-    )
-    password2 = forms.CharField(
-        label=_("Comfirm new password"),
-        widget=forms.PasswordInput(attrs = {'class': 'w3-input w3-center'}),
-        strip=False,
-        help_text=_("Enter the same password as before, for verification."),
-    )
-    
-    class Meta:
-        model = User
-        fields = ('password1', 'password2',)
-        widgets = {
-            'username': forms.TextInput(attrs = {'class': 'w3-input w3-center'}),
-        }
-        

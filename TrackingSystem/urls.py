@@ -34,11 +34,11 @@ urlpatterns = [
     path('manageusers/', manageusers, name='manageusers'),
     path('manageusers/signup/', signup, name='signup'),
     path('manageusers/userlist/', all_users, name='userlist'),
-    path('manageusers/userlist/resetpwd/<str:usrname>/', reset_admin_pwd, name='reset_pwd'),
-    path('manageusers/userlist/changepwd/<str:usrname>/', changepwd, name='change_pwd'),
-    path('manageusers/userlist/deleteuser/<str:usrname>/', delete_user, name='delete_user'),
-    path('manageusers/userlist/activate/<str:usrname>/', activate_user, name='activate_user'),
-    path('manageusers/userlist/deactivate/<str:usrname>/', deactivate_user, name='deactivate_user'),
+    path('manageusers/userlist/resetpwd/<int:id>/', reset_admin_pwd, name='reset_pwd'),
+    path('manageusers/userlist/changepwd/<int:id>/', changepwd, name='change_pwd'),
+    path('manageusers/userlist/deleteuser/<int:id>/', delete_user, name='delete_user'),
+    path('manageusers/userlist/activate/<int:id>/', activate_user, name='activate_user'),
+    path('manageusers/userlist/deactivate/<int:id>/', deactivate_user, name='deactivate_user'),
     path('admin/', admin.site.urls, name='admin'),
 
     re_path(r'^students/(?:uin=(?P<uin>[0-9]+)/)?'\

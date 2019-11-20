@@ -8,7 +8,7 @@
   </header>
   <div class="w3-container w3-card w3-padding">
     Username: {{username}}
-    <form method="post" id="changepwd">
+    <form method="post" id="change_pwd_form">
       {% csrf_token %}
       {% for field in form %}
         <p>

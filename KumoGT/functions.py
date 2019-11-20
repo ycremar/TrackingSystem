@@ -45,40 +45,6 @@ def delete(request, model, id, obj_text, field_text, show_field, redirect_url, h
                 'confirm_message': mark_safe(text),
                 'redirect_url': redirect_url,
                 })
-                
-@user_passes_test(lambda u: u.is_superuser)
-def _delete_user(request, model, username, obj_text, field_text, show_field, redirect_url, has_choices = False):
-    try:
-        del_obj = model.objects.get(username = username)
-    except ObjectDoesNotExist:
-        messages.error(request, obj_text + "does not exist.")
-        return redirect(redirect_url)
-    else:
-        attr = re.match( r'^@(.+)$', field_text)
-        if attr: field_text = "{0}".format(del_obj.__dict__[attr.group()[1:]])
-        if field_text != "": field_text += ": "
-        if request.method == 'POST':
-            if has_choices:
-                show_field_text = getattr(del_obj, "get_{0}_display".format(show_field))
-                msg_text = "({0}{1}) is deleted.".format(field_text, show_field_text())
-            else:
-                msg_text = "({0}{1}) is deleted.".format(field_text, del_obj.__dict__[show_field])
-            del_obj.delete()
-            messages.success(request, obj_text + msg_text)
-            return redirect(redirect_url)
-        else:
-            if has_choices:
-                show_field_text = getattr(del_obj, "get_{0}_display".format(show_field))
-                text = "Are you sure to delete this " + obj_text.lower() + \
-                    "({0}{1})?".format(field_text, show_field_text())
-            else:
-                text = "Are you sure to delete this " + obj_text.lower() + \
-                    "({0}{1})?".format(field_text, del_obj.__dict__[show_field])
-            text += "<br><br>This change CANNOT be recovered."
-            return render(request, 'confirmation.html', {
-                'confirm_message': mark_safe(text),
-                'redirect_url': redirect_url,
-                })
 
 @user_passes_test(lambda u: u.is_superuser)
 def delete_record(request, degree_id, info_model, doc_model, record_text, redirect_url):
