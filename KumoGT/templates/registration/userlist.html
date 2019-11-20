@@ -32,19 +32,19 @@
         {% else %}
         <td class="w3-padding-16">&#10006;</td>
         <td>
-            <a href="{% url 'change_pwd' usrname=user.username %}" target="_blank">
+            <a href="{% url 'change_pwd' id=user.id %}" target="_blank">
                 <button type="button" class="w3-button w3-theme-d5">Change Password</button>
             </a>
             {% if user.is_active %}
-            <a href="{% url 'deactivate_user' usrname=user.username %}">
+            <a href="{% url 'deactivate_user' id=user.id %}">
                 <button type="button" class="w3-button w3-grey">Deactivate</button>
             </a>
             {% else %}
-            <a href="{% url 'activate_user' usrname=user.username %}">
+            <a href="{% url 'activate_user' id=user.id %}">
                 <button type="button" class="w3-button w3-blue">Activate</button>
             </a>
             {% endif %}
-            <a href="{% url 'delete_user' usrname=user.username %}">
+            <a href="{% url 'delete_user' id=user.id %}">
                 <button type="button" class="w3-button w3-red">Delete</button>
             </a>
         </td>
