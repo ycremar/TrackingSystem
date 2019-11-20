@@ -12,7 +12,6 @@ import re
 
 from django.contrib.auth.decorators import user_passes_test
 
-@user_passes_test(lambda u: u.is_superuser)
 def delete(request, model, id, obj_text, field_text, show_field, redirect_url, has_choices = False):
     try:
         del_obj = model.objects.get(id = id)
@@ -46,7 +45,6 @@ def delete(request, model, id, obj_text, field_text, show_field, redirect_url, h
                 'redirect_url': redirect_url,
                 })
 
-@user_passes_test(lambda u: u.is_superuser)
 def delete_record(request, degree_id, info_model, doc_model, record_text, redirect_url):
     if info_model: info = info_model.objects.filter(degree__id = degree_id)
     else: info = None
@@ -74,7 +72,6 @@ def delete_record(request, degree_id, info_model, doc_model, record_text, redire
                 'redirect_url': redirect_url,
                 })
 
-@user_passes_test(lambda u: u.is_superuser)
 def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, info_model = None, info_form = None):
     forms = []
     changed, error = False, False
@@ -162,7 +159,6 @@ def get_info_form(request, deg_id, info_model, info_form_class):
     else: info_form = None
     return info_form
 
-@user_passes_test(lambda u: u.is_superuser)
 def post_degrees(request, stu_id, option = '', id = 0):
     forms = []
     degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)

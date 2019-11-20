@@ -34,3 +34,15 @@ class SignUpForm(UserCreationForm):
             'username': forms.TextInput(attrs = {'class': 'w3-input w3-center'}),
         }
         
+class ChangePasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label=_("New password"),
+        widget=forms.PasswordInput(attrs = {'class': 'w3-input w3-center'}),
+        strip=False,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+    new_password2 = forms.CharField(
+        label=_("New password confirmation"),
+        strip=False,
+        widget=forms.PasswordInput(attrs = {'class': 'w3-input w3-center'}),
+    )

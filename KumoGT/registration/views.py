@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User, Group
 
-from .forms import SignUpForm, SetPasswordForm
+from .forms import SignUpForm, ChangePasswordForm
 from KumoGT.functions import delete
 
 
@@ -37,16 +37,14 @@ def all_users(request):
 def changepwd(request, id):
     user = User.objects.get(id=id)
     if request.method == 'POST':
-        form = SetPasswordForm(user, data=request.POST)
+        form = ChangePasswordForm(user, data=request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Your password was successfully updated!')
             return redirect('userlist')
-        else:
-            messages.error(request, 'Please correct the error below.')
     else:
-        form = SetPasswordForm(user)
+        form = ChangePasswordForm(user)
     return render(request, 'changepwd.html', {'form': form, 'username': user.username})
     
 @user_passes_test(lambda u: u.is_superuser)

@@ -202,7 +202,6 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
         })
         
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
-@user_passes_test(lambda u: u.is_superuser)
 def create_stu(request, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST)
@@ -221,7 +220,6 @@ def create_stu(request, back_url = None):
             })
             
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
-@user_passes_test(lambda u: u.is_superuser)
 def edit_stu(request, id, back_url = None):
     if request.method == 'POST':
         form = stu_bio_form(request.POST, instance = Student.objects.get(id = id))

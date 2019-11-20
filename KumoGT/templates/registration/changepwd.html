@@ -7,7 +7,8 @@
     <h1>Change Password</h1>   
   </header>
   <div class="w3-container w3-card w3-padding">
-    Username: {{username}}
+    <label class="w3-cell-row">Username:</label>
+    <label class="w3-cell-row w3-center">{{ username }}</label>
     <form method="post" id="change_pwd_form">
       {% csrf_token %}
       {% for field in form %}
