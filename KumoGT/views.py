@@ -8,12 +8,14 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.static import serve
 
-from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info
+from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info,\
+    T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Notes
 from django.core.paginator import Paginator
 
-from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form, session_notes_form
+from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
+    pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form, session_notes_form
 from .crypt import Cryptographer
-from .functions import delete, deg_doc, get_info_form, post_degrees
+from .functions import delete, deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_notes
 
 import os
 
@@ -144,13 +146,20 @@ def thesis_dissertation(request, deg_id, option = '', id = 0):
             })
             
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
-def session_notes(request):
+def session_notes(request, stu_id, option = '', id = 0):
+    if option == 'del':
+        return delete(request, Session_Notes, id, "Session Note", "advised at",\
+            "date", "/student/" + stu_id + "/session_notes/")
     if request.method == 'POST':
-        forms = session_notes_form(request.POST)
+        return post_session_notes(request, stu_id, option, id)
     else:
-        forms = []
-        forms.append(session_notes_form())
-    return render(request, 'session_notes.html', {'forms': forms})
+        notes, student, new_form = get_stu_objs(Session_Notes, session_notes_form, stu_id, option, False)
+        return render(request, 'session_notes.html', {
+            'stu': student,
+            'notes': notes,
+            'new_form': new_form,
+            'option': option,
+        })
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def serve_protected_document(request, file_path):
@@ -261,14 +270,7 @@ def degrees(request, stu_id, option = '', id = 0):
     if request.method == 'POST':
         return post_degrees(request, stu_id, option, id)
     else:
-        degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)
-        if degrees.count() == 0 and option != 'add': return redirect('degrees', stu_id = stu_id, option = 'add')
-        forms = []
-        for degree in degrees:
-            forms.append(deg_form(instance = degree, prefix = str(degree.id)))
-        if option == 'add' and stu_id != '0':
-            forms.append(deg_form(prefix = 'new'))
-        student = Student.objects.get(id = stu_id) if stu_id != '0' else None
+        forms, student = get_stu_objs(Degree, deg_form, stu_id, option)
         cur_deg_id = student.cur_degree.id if student and student.cur_degree else -1
         return render(request, 'degrees.html', {
             'stu': student,

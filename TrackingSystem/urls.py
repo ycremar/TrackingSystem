@@ -57,24 +57,20 @@ urlpatterns = [
 
     re_path(r'student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name = 'degrees'),
+    re_path(r'student/(?:(?P<stu_id>\d+)/)session_notes/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+        views.session_notes, name = 'session_notes'),
 
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
-    
-    path('session_notes/', views.session_notes, name = 'session_notes'),
-    
+    # degree docs    
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)degree_plan/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degree_plan, name = 'degree_plan'),
-        
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.preliminary_exam, name = 'preliminary_exam'),
-        
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation_proposal/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.thesis_dissertation_proposal, name = 'thesis_dissertation_proposal'),
-        
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)final_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.final_exam, name = 'final_exam'),
-        
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.thesis_dissertation, name = 'thesis_dissertation'),
 

@@ -13,6 +13,9 @@
             case "deg":
                 window.open("/student/" + stu_id + "/degrees/");
                 break;
+            case "ses_note":
+                window.open("/student/" + stu_id + "/session_notes/");
+                break;
             case "cur_deg_plan":
                 window.open("/degree/" + deg_id + "/degree_plan/");
                 break;
@@ -106,6 +109,7 @@
                     <option value = "cur_fin_exam">Current Final Exam (Defense)</option>
                     <option value = "cur_t_d">Current Thesis/Dissertation</option>
                 {% endif %}
+                <option value ="ses_note">Session Notes</option>
             </select>
             {% if stu.cur_degree %}
                 <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"

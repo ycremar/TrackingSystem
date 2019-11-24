@@ -4,35 +4,69 @@
 
 {% include "add_doc_js.html" %}
 
-<div class="w3-card  w3-margin-bottom">
-<header class="w3-container w3-theme w3-center w3-row">      
-    <h2>Session Notes</h2>
-</header>
+<div class=" w3-card w3-margin-bottom">
+    <header class="w3-container w3-theme w3-center w3-row">      
+        <h2>Session Notes</h2>
+    </header>
+    {% include 'stu_info_line.html' %}
 </div>
-<form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
-{% for form in forms %}
-    <div class="w3-card">
-        <table class="w3-centered">
-            <tr>
-                <th class="w3-padding-16" style="width:10%">Date Adviced</th>
-                <td style="width:20%">{{ form.date }}</td>
-                <td style="width:60%"></td>
-                <td style="width:10%"><button type="button" class="w3-button w3-red w3-right">Delete Record</button></td>
-            </tr>
-            <tr>
-                <td colspan="3">{{ form.note }}</td>
-            </tr>
+<div>
+    {% for note in notes %}
+    <table class="w3-container w3-table w3-bordered w3-centered w3-card w3-margin-bottom">
+        <tr class="w3-theme-l3">
+            <th class="w3-padding-16" style="width:10%">Date Adviced</th>
+            <td class="w3-padding-16" style="width:10%">{{ note.date }}</td>
+            <td style="width:70%"></td>
+            <td style="width:10%">
+                {% if stu %}
+                    <a href="{% url 'session_notes' stu_id=stu.id option='del' id=note.id %}">
+                        <button type="button" class="w3-button w3-red w3-right">Delete</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'session_notes' stu_id=0 option='del' id=note.id %}">
+                        <button type="button" class="w3-button w3-red w3-right">Delete</button>
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr class="w3-padding">
+            <td colspan="4">{{ note.note|linebreaks }}</td>
+        </tr>
+    </table>
+    {% empty %}
+        <table class="w3-container w3-table w3-bordered w3-centered w3-card w3-margin-bottom">
+            <tr><th colspan="4">No Data.</th></tr>
         </table>
-    </div>
-{% endfor %}
-</form>
-{% if option == 'add' %}
-    <button type="button" class="w3-button w3-theme-d5">Cancel</button>
-{% else %}
-    <button type="button" class="w3-button w3-theme-d5">Add</button>
-{% endif %}
-<div class="w3-cell-row w3-center">
-    <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+    {% endfor %}
+    {% if new_form %}
+        <table class="w3-container w3-table w3-bordered w3-centered w3-card">
+            <form method="post" id="new_form">{% csrf_token %}
+                <tr class="w3-theme-l3 w3-hover-light-gray">
+                    <th class="w3-padding-16" style="width:10%">Date Adviced</th>
+                    <td style="width:20%">{{ new_form.date }}</td>
+                    <td style="width:60%"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="4">{{ new_form.note }}</td>
+                </tr>
+            </form>
+        </table>
+    {% endif %}
 </div>
+{% if stu %}
+    {% if option == 'add' %}
+        <a href="{% url 'session_notes' stu_id=stu.id %}">
+            <button type="button" class="w3-button w3-theme-d5">Cancel</button>
+        </a>
+        <div class="w3-cell-row w3-center">
+            <button form='new_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+        </div>
+    {% else %}
+        <a href="{% url 'session_notes' stu_id=stu.id option='add' %}">
+            <button type="button" class="w3-button w3-theme-d5">Add</button>
+        </a>
+    {% endif %}
+{% endif %}
 
 {% endblock %}

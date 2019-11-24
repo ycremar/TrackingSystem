@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 
-from .models import Deg_Plan_Doc, Student, Degree
+from .models import Deg_Plan_Doc, Student, Degree, Session_Notes
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import create_doc_form, deg_form
+from .forms import create_doc_form, deg_form, session_notes_form
 
 import re
 
@@ -116,14 +116,13 @@ def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, 
             messages.error(request, mark_safe("{0}({1}) fail to update due to:<br>{2}".format\
                 (new_form.instance.doc, new_form.instance.get_doc_type_display(), new_form.errors)))
     # deal with msgs
-    if not changed:
-        messages.info(request, "Noting is changed.")
+    if not changed: messages.info(request, "Noting is changed.")
     elif not error:
-        info_msg = "and information " if info_form else ""
-        messages.success(request, "Documents " + info_msg + "are updated.")
+        info_msg = " and information " if info_form else ""
+        messages.success(request, "Documents" + info_msg + "are updated.")
     else:
-        info_msg = "or information " if info_form else ""
-        messages.warning(request, "Some documents " + info_msg + "are not updated.")
+        info_msg = " or information " if info_form else ""
+        messages.warning(request, "Some documents" + info_msg + "are not updated.")
     return ['submit', redirect("/degree/" + deg_id + redirect_url)]
 
 def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, info_model = None, info_form = None):
@@ -159,13 +158,26 @@ def get_info_form(request, deg_id, info_model, info_form_class):
     else: info_form = None
     return info_form
 
+def get_stu_objs(model, form, stu_id, option = '', form_needed = True):
+    objs = model.objects.all() if stu_id == '0' else model.objects.filter(stu_id = stu_id)
+    student = Student.objects.get(id = stu_id) if stu_id != '0' else None
+    if form_needed:
+        forms = []
+        for obj in objs:
+            forms.append(form(instance = obj, prefix = str(obj.id)))
+        if option == 'add' and stu_id != '0':
+            forms.append(form(prefix = 'new'))
+        return [forms, student]
+    else:
+        new_form = form(prefix = 'new') if option == 'add' and stu_id != '0' else None
+        return [objs, student, new_form]
+
 def post_degrees(request, stu_id, option = '', id = 0):
     forms = []
     degrees = Degree.objects.all() if stu_id == '0' else Degree.objects.filter(stu_id = stu_id)
     changed, error = False, False
     for degree in degrees:
-        forms.append(deg_form(request.POST, request.FILES,\
-            instance = degree, prefix = str(degree.id)))
+        forms.append(deg_form(request.POST, instance = degree, prefix = str(degree.id)))
     for form in forms:
         if form.has_changed():
             changed = True
@@ -182,7 +194,7 @@ def post_degrees(request, stu_id, option = '', id = 0):
         current = int(request.POST['current'])
         if option == 'add':
             changed = True
-            new_form = deg_form(request.POST, request.FILES, prefix = 'new')
+            new_form = deg_form(request.POST, prefix = 'new')
             if new_form.is_valid():
                 degree = new_form.save(commit = False)
                 degree.stu = student
@@ -202,10 +214,29 @@ def post_degrees(request, stu_id, option = '', id = 0):
             student.cur_degree = None
             student.save()
             changed = True
-    if not changed:
-        messages.info(request, 'Noting is changed.')
-    elif not error:
-        messages.success(request, 'Documents are updated.')
-    else:
-        messages.warning(request, 'Some documents are not updated.')
+    if not changed: messages.info(request, 'Noting is changed.')
+    elif not error: messages.success(request, 'Degrees are updated.')
+    else: messages.warning(request, 'Some degrees are not updated.')
     return redirect('degrees', stu_id = stu_id)
+
+def post_session_notes(request, stu_id, option = '', id = 0):
+    changed, error = False, False
+    if stu_id != '0':
+        student = Student.objects.get(id = stu_id)
+        if option == 'add':
+            changed = True
+            new_form = session_notes_form(request.POST, prefix = 'new')
+            if new_form.is_valid():
+                note = new_form.save(commit = False)
+                note.stu = student
+                note.save()
+            else:
+                error = True
+                messages.error(request,\
+                    mark_safe("Session note({0} first registered at {1} {2}) failed to update due to:<br>{3}".format\
+                        (new_form.instance.get_deg_type_display(), new_form.instance.get_first_reg_sem_display(),\
+                            new_form.instance.first_reg_year, new_form.errors)))
+    if not changed: messages.info(request, 'Noting is changed.')
+    elif not error: messages.success(request, 'Session notes are updated.')
+    else: messages.warning(request, 'Some session notes are not updated.')
+    return redirect('session_notes', stu_id = stu_id)
