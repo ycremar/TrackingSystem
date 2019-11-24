@@ -11,7 +11,7 @@ from django.views.static import serve
 from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info, T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info
 from django.core.paginator import Paginator
 
-from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form
+from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form, pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form, session_notes_form
 from .crypt import Cryptographer
 from .functions import delete, deg_doc, get_info_form, post_degrees
 
@@ -144,6 +144,15 @@ def thesis_dissertation(request, deg_id, option = '', id = 0):
             })
             
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def session_notes(request):
+    if request.method == 'POST':
+        forms = session_notes_form(request.POST)
+    else:
+        forms = []
+        forms.append(session_notes_form())
+    return render(request, 'session_notes.html', {'forms': forms})
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def serve_protected_document(request, file_path):
 
     file_path = os.path.join(settings.BASE_DIR, file_path)
@@ -155,7 +164,7 @@ def serve_protected_document(request, file_path):
             return response
     except:
         raise Http404
-        
+
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def students(request, **kwargs):# uin, first_name, last_name, gender, status, cur_degree):
     if request.method == 'POST':

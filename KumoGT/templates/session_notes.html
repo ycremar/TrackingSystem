@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% include "add_doc_js.html" %}
+
+<div class="w3-card  w3-margin-bottom">
+<header class="w3-container w3-theme w3-center w3-row">      
+    <h2>Session Notes</h2>
+</header>
+</div>
+<form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
+{% for form in forms %}
+    <div class="w3-card">
+        <table class="w3-centered">
+            <tr>
+                <th class="w3-padding-16" style="width:10%">Date Adviced</th>
+                <td style="width:20%">{{ form.date }}</td>
+                <td style="width:60%"></td>
+                <td style="width:10%"><button type="button" class="w3-button w3-red w3-right">Delete Record</button></td>
+            </tr>
+            <tr>
+                <td colspan="3">{{ form.note }}</td>
+            </tr>
+        </table>
+    </div>
+{% endfor %}
+</form>
+{% if option == 'add' %}
+    <button type="button" class="w3-button w3-theme-d5">Cancel</button>
+{% else %}
+    <button type="button" class="w3-button w3-theme-d5">Add</button>
+{% endif %}
+<div class="w3-cell-row w3-center">
+    <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info,\
+from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info, Session_Notes,\
     DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER, SEMESTER_TYPE
 
 class stu_search_form(forms.Form):
@@ -106,4 +106,15 @@ class thesis_dissertation_info_form(forms.ModelForm):
         widgets = {
             'title': forms.Textarea(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
             'url': forms.URLInput(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
+        }
+        
+class session_notes_form(forms.ModelForm):
+    class Meta:
+        model = Session_Notes
+        fields = ['date', 'note']
+        widgets = {
+            'date': forms.SelectDateWidget\
+                (attrs={'class': 'w3-select', 'style': 'width:auto'},\
+                    years = [y for y in range(timezone.now().year - 7, timezone.now().year + 8)]),
+            'note': forms.Textarea(attrs={'cols': 50, 'rows': 10, 'style':"width:80%"}),
         }
