@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info,\
-    DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER
+    DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER, SEMESTER_TYPE
 
 class stu_search_form(forms.Form):
     uin = forms.CharField(label = 'UIN', max_length = 255, required = False,\
@@ -16,6 +16,10 @@ class stu_search_form(forms.Form):
         widget = forms.Select(attrs = {'class': 'w3-select'}))
     cur_degree = forms.ChoiceField(choices = [('', 'All')] + DEGREE_TYPE + [('none', 'None')], required = False,\
         widget = forms.Select(attrs = {'class': 'w3-select'}))
+    cur_degree__first_reg_year = forms.IntegerField(max_value = 32767, min_value = -32768, required = False,\
+        widget = forms.NumberInput(attrs = {'class': 'w3-input w3-cell w3-center', 'style': 'width:50%'}))
+    cur_degree__first_reg_sem = forms.ChoiceField(choices = [('', 'All')] + SEMESTER_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:50%'}))
     
 class stu_bio_form(forms.ModelForm):
     class Meta:
@@ -39,11 +43,11 @@ class deg_form(forms.ModelForm):
         widgets = {
             'deg_type': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width: auto;'}),
             'first_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),
-            'first_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:44%'}),
+            'first_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:47%'}),
             'last_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),
-            'last_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:44%'}),
+            'last_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:47%'}),
             'deg_recv_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),
-            'deg_recv_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:44%'}),
+            'deg_recv_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:47%'}),
         }
 
 def create_doc_form(model_in):
