@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info, Session_Notes,\
-    DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER, SEMESTER_TYPE
+    DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER, SEMESTER_TYPE, ETHNICITY_TYPE
 
 class stu_search_form(forms.Form):
     uin = forms.CharField(label = 'UIN', max_length = 255, required = False,\
@@ -11,6 +11,8 @@ class stu_search_form(forms.Form):
     last_name = forms.CharField(label = 'Last Name', max_length = 255, required = False,\
         widget = forms.TextInput(attrs = {'class': 'w3-input'}))
     gender = forms.ChoiceField(choices = [('', 'All')] + GENDER, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select'}))
+    ethnicity = forms.ChoiceField(choices = [('', 'All')] + ETHNICITY_TYPE, required = False,\
         widget = forms.Select(attrs = {'class': 'w3-select'}))
     status = forms.ChoiceField(choices = [('', 'All')] + STUDENT_STATUS_TYPE, required = False,\
         widget = forms.Select(attrs = {'class': 'w3-select'}))
@@ -24,7 +26,7 @@ class stu_search_form(forms.Form):
 class stu_bio_form(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['uin', 'first_name', 'middle_name', 'last_name', 'email', 'gender', 'status']
+        fields = ['uin', 'first_name', 'middle_name', 'last_name', 'email', 'gender', 'ethnicity', 'status']
         widgets = {
             'uin': forms.TextInput(attrs = {'class': 'w3-input'}),
             'first_name': forms.TextInput(attrs = {'class': 'w3-input w3-light-gray'}),
@@ -32,7 +34,8 @@ class stu_bio_form(forms.ModelForm):
             'last_name': forms.TextInput(attrs = {'class': 'w3-input w3-light-gray'}),
             'email': forms.EmailInput(attrs = {'class': 'w3-input'}),
             'gender': forms.Select(attrs = {'class': 'w3-select w3-light-gray'}),
-            'status': forms.Select(attrs = {'class': 'w3-select'}),
+            'ethnicity': forms.Select(attrs = {'class': 'w3-select'}),
+            'status': forms.Select(attrs = {'class': 'w3-select w3-light-gray'}),
         }
 
 class deg_form(forms.ModelForm):

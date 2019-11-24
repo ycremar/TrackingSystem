@@ -50,13 +50,14 @@
             <th class="w3-padding-16">First Name:</th><td>{{ form.first_name }}</td>
             <th class="w3-padding-16">Last Name:</th><td>{{ form.last_name }}</td>
             <th class="w3-padding-16">Gender:</th><td>{{ form.gender }}</td>
+            <th class="w3-padding-16">Ethnicity:</th><td>{{ form.ethnicity }}</td>
         </tr>
         <tr>
             <th class="w3-padding-16">Status:</th><td>{{ form.status }}</td>
             <th class="w3-padding-16">Current Degree:</th><td>{{ form.cur_degree }}</td>
             <th class="w3-padding-16">First Registered at:</th>
                 <td>{{ form.cur_degree__first_reg_sem }}{{ form.cur_degree__first_reg_year }}</td>
-            <th></th><td></td>
+            <td colspan="4"></td>
         </tr>
     </table>
 </form>

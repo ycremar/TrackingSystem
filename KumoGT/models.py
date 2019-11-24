@@ -4,41 +4,45 @@ from .crypt_fields import EncryptedFileField
 from django.dispatch import receiver
 import os
 
-DOCUMENT_TYPE = [('not sel', 'Not Selected'),\
-                 ('degree plan', 'Degree Plan'),\
-                 ('annual review', 'Annual Review'),\
+DOCUMENT_TYPE = [('not_sel', 'Not Selected'),\
+                 ('degree_plan', 'Degree Plan'),\
+                 ('annual_review', 'Annual Review'),\
                  ('other', 'Other')]
 
-DEGREE_PLAN_DOC_TYPE = [('not sel', 'Not Selected'),\
-                        ('deg plan', 'Degree Plan'),\
-                        ('P. change commitee', 'Petition for change of committee'),\
-                        ('P. course change', 'Petition for course change'),\
-                        ('P. extension of time limits', 'Petition for extension of time limits'),\
-                        ('P. waivers of exceptions', 'Petition for waivers of exceptions'),\
+DEGREE_PLAN_DOC_TYPE = [('not_sel', 'Not Selected'),\
+                        ('deg_plan', 'Degree Plan'),\
+                        ('P_change_commitee', 'Petition for change of committee'),\
+                        ('P_course_change', 'Petition for course change'),\
+                        ('P_extension_of_time_limits', 'Petition for extension of time limits'),\
+                        ('P_waivers_of_exceptions', 'Petition for waivers of exceptions'),\
                         ('mdd', 'MDD'),\
                         ('other', 'Other')]
 
-PRE_EXAM_DOC_TYPE = [('not sel', 'Not Selected'),\
+PRE_EXAM_DOC_TYPE = [('not_sel', 'Not Selected'),\
                      ('checklist', 'Preliminary Exam Checklist'),\
                      ('report', 'Preliminary Exam Report'),\
                      ('written', 'Preliminary Exam Written')]
 
-T_D_PROP_DOC_TYPE = [('not sel', 'Not Selected'),\
-                     ('title page', 'Thesis/Dissertation Proposal Title Page'),\
+T_D_PROP_DOC_TYPE = [('not_sel', 'Not Selected'),\
+                     ('title_page', 'Thesis/Dissertation Proposal Title Page'),\
                      ('prop', 'Thesis/Dissertation Proposal')]
 
-T_D_DOC_TYPE = [('not sel', 'Not Selected'),\
+T_D_DOC_TYPE = [('not_sel', 'Not Selected'),\
                 ('approval', 'Thesis/Dissertation Approval Page'),\
                 ('t_d', 'Thesis/Dissertation')]
 
-FIN_EXAM_DOC_TYPE = [('not sel', 'Not Selected'),\
+FIN_EXAM_DOC_TYPE = [('not_sel', 'Not Selected'),\
                      ('request', 'Request for Final Examination'),\
-                     ('req for exemp', 'Request for exemption from Final Examination'),\
+                     ('req_for_exemp', 'Request for exemption from Final Examination'),\
                      ('report', 'Report of Final Exam')]
 
-GENDER = [('not sel', 'Not Selected'),\
+GENDER = [('not_sel', 'Not Selected'),\
           ('male', 'Male'),\
           ('female', 'Female')]
+
+ETHNICITY_TYPE = [('not_sel', 'Not Selected'),\
+                  ('his_or_la', 'Hispanic or Latino'),\
+                  ('not_his_or_la', 'Not Hispanic or Latino')]
 
 STUDENT_STATUS_TYPE = [('current', 'Current'),\
                        ('graduated', 'Gradudated'),\
@@ -63,7 +67,8 @@ class Student(models.Model):
     last_name = models.CharField(max_length=255, blank=False, verbose_name='Last Name')
     uin = models.CharField(max_length=255, blank=False, unique = True, verbose_name='UIN')
     email = models.EmailField(blank=False)
-    gender = models.CharField(max_length=255, choices=GENDER, default='not sel')
+    gender = models.CharField(max_length=255, choices=GENDER, default='not_sel')
+    ethnicity = models.CharField(max_length=255, choices=ETHNICITY_TYPE, default='not_sel')
     cur_degree = models.OneToOneField('Degree', models.SET_NULL, verbose_name='Current Degree', null=True)
     status = models.CharField(max_length=255, choices=STUDENT_STATUS_TYPE, default='current')
 
@@ -94,10 +99,10 @@ class Document(models.Model):
         abstract = True
 
 class Deg_Plan_Doc(Document):
-    doc_type = models.CharField(max_length=255, choices=DEGREE_PLAN_DOC_TYPE, default='not sel')
+    doc_type = models.CharField(max_length=255, choices=DEGREE_PLAN_DOC_TYPE, default='not_sel')
 
 class Pre_Exam_Doc(Document):
-    doc_type = models.CharField(max_length=255, choices=PRE_EXAM_DOC_TYPE, default='not sel')
+    doc_type = models.CharField(max_length=255, choices=PRE_EXAM_DOC_TYPE, default='not_sel')
 
 class Pre_Exam_Info(models.Model):
     date = models.DateField(verbose_name='Prelim Date')
@@ -105,10 +110,10 @@ class Pre_Exam_Info(models.Model):
     degree = models.OneToOneField(Degree, models.CASCADE)
 
 class T_D_Prop_Doc(Document): # Thesis/Dissertation Proposal Document
-    doc_type = models.CharField(max_length=255, choices=T_D_PROP_DOC_TYPE, default='not sel')
+    doc_type = models.CharField(max_length=255, choices=T_D_PROP_DOC_TYPE, default='not_sel')
 
 class T_D_Doc(Document): # Thesis/Dissertation Document
-    doc_type = models.CharField(max_length=255, choices=T_D_DOC_TYPE, default='not sel')
+    doc_type = models.CharField(max_length=255, choices=T_D_DOC_TYPE, default='not_sel')
 
 class T_D_Info(models.Model):
     title = models.CharField(max_length=255, blank=True)
@@ -116,7 +121,7 @@ class T_D_Info(models.Model):
     degree = models.OneToOneField(Degree, models.CASCADE)
 
 class Fin_Exam_Doc(Document):
-    doc_type = models.CharField(max_length=255, choices=FIN_EXAM_DOC_TYPE, default='not sel')
+    doc_type = models.CharField(max_length=255, choices=FIN_EXAM_DOC_TYPE, default='not_sel')
 
 class Fin_Exam_Info(models.Model):
     date = models.DateField()
