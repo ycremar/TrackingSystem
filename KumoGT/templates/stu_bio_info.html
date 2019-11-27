@@ -9,15 +9,12 @@
 
 <form method="post" id="create_stu_form">
     {% csrf_token %}
-    <table class="w3-table-all w3-centered">
-            <tr><th class="w3-padding-16">UIN:</th><td>{{ form.uin }}</td></tr>
-            <tr><th class="w3-padding-16">First Name:</th><td>{{ form.first_name }}</td></tr>
-            <tr><th class="w3-padding-16">Middle Name:</th><td>{{ form.middle_name }}</td></tr>
-            <tr><th class="w3-padding-16">Last Name:</th><td>{{ form.last_name }}</td></tr>
-            <tr><th class="w3-padding-16">Email:</th><td>{{ form.email }}</td></tr>
-            <tr><th class="w3-padding-16">Gender:</th><td>{{ form.gender }}</td></tr>
-            <tr><th class="w3-padding-16">Ethnicity:</th><td>{{ form.ethnicity }}</td></tr>
-            <tr><th class="w3-padding-16">Status:</th><td>{{ form.status }}</td></tr>
+    <table class="w3-table w3-bordered w3-centered">
+        {% for field in form %}
+            <tr class="w3-hover-light-gray">
+                <th class="w3-padding-16">{{ field.label_tag }}</th><td>{{ field }}</td>
+            </tr>
+        {% endfor %}
     </table>
 </form>
 </div>

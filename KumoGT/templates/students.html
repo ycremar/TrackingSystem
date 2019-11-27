@@ -41,29 +41,39 @@
 <header class="w3-container w3-theme w3-center w3-row w3-card">
     <h2>Students</h2>   
 </header>
-<div class="w3-card w3-margin-top w3-small">
 <form method="post" id="search_stu_form">
+<div class="w3-card w3-margin-top w3-small w3-container w3-center w3-cell-middle">
     {% csrf_token %}
-    <table class="w3-table w3-centered">
-        <tr>
-            <th class="w3-padding-16">UIN:</th><td>{{ form.uin }}</td>
-            <th class="w3-padding-16">First Name:</th><td>{{ form.first_name }}</td>
-            <th class="w3-padding-16">Last Name:</th><td>{{ form.last_name }}</td>
-            <th class="w3-padding-16">Gender:</th><td>{{ form.gender }}</td>
-            <th class="w3-padding-16">Ethnicity:</th><td>{{ form.ethnicity }}</td>
-        </tr>
-        <tr>
-            <th class="w3-padding-16">Status:</th><td>{{ form.status }}</td>
-            <th class="w3-padding-16">Current Degree:</th><td>{{ form.cur_degree }}</td>
-            <th class="w3-padding-16">First Registered at:</th>
-                <td>{{ form.cur_degree__first_reg_sem }}{{ form.cur_degree__first_reg_year }}</td>
-            <td colspan="4"></td>
-        </tr>
-    </table>
-</form>
+    <div class="w3-cell-row w3-padding-small">
+        <div class="w3-cell"><b>UIN:&nbsp;&nbsp;</b>{{ form.uin }}</div>
+        <div class="w3-cell"><b>First Name:&nbsp;&nbsp;</b>{{ form.first_name }}</div>
+        <div class="w3-cell"><b>Last Name:&nbsp;&nbsp;</b>{{ form.last_name }}</div>
+        <div class="w3-cell"><b>Gender:&nbsp;&nbsp;</b>{{ form.gender }}</div>
+        <div class="w3-cell"><b>Ethnicity:&nbsp;&nbsp;</b>{{ form.ethnicity }}</div>
+    </div>
+    <div class="w3-cell-row w3-padding-small">
+        <div class="w3-cell"><b>US Residency:&nbsp;&nbsp;</b>{{ form.us_residency }}</div>
+        <div class="w3-cell"><b>Texas Residency:&nbsp;&nbsp;</b>{{ form.texas_residency }}</div>
+        <div class="w3-cell"><b>Citizenship:&nbsp;&nbsp;</b>{{ form.citizenship }}</div>
+    </div>
+    <div class="w3-cell-row w3-padding-small">
+        <div class="w3-cell"><b>Status:&nbsp;&nbsp;</b>{{ form.status }}</div>
+        <div class="w3-cell"><b>Start Semester:&nbsp;&nbsp;</b>
+            {{ form.start_sem }}{{ form.start_year }}</div>
+        <div class="w3-cell"><b>Current Degree:&nbsp;&nbsp;</b>{{ form.cur_degree }}</div>
+        <div class="w3-cell"><b>Current Major:&nbsp;&nbsp;</b>{{ form.cur_degree__major }}</div>
+    </div>
+    <div class="w3-cell-row w3-padding-small">
+        <div class="w3-cell"><b>Advisor:&nbsp;&nbsp;</b>{{ form.advisor }}</div>
+        <div class="w3-cell"><b>UPE:&nbsp;&nbsp;</b>{{ form.upe }}</div>
+        <div class="w3-cell"><b>ACE:&nbsp;&nbsp;</b>{{ form.ace }}</div>
+        <div class="w3-cell"><b>IGA:&nbsp;&nbsp;</b>{{ form.iga }}</div>
+    </div>
 </div>
+</form>
 <div class="w3-cell-row w3-center w3-margin-bottom">
-    <button form='search_stu_form' type="submit" class="w3-button w3-theme-d5 w3-center">Search</button>
+    <button form='search_stu_form' type="submit" class="w3-button w3-theme-d5 w3-margin-right">Search</button>
+    <a href="{% url 'students' %}"><button class="w3-button w3-theme-d5">Reset</button></a>
 </div>
 <div class="w3-cell-row">
 {% include "pagination.html" with this_page=students neigh_pages=neigh_pages %}
@@ -76,10 +86,10 @@
         <th style="width:10%">UIN</th>
         <th style="width:16%">Name</th>
         <th style="width:9%">Gender</th>
-        <th style="width:8%">Status</th>
-        <th style="width:14%">Current Degree</th>
+        <th style="width:7%">Status</th>
+        <th style="width:16%">Current Degree, Major</th>
         <th style="width:13%">Operation</th>
-        <th style="width:30%">Access</th>
+        <th style="width:29%">Access</th>
     </tr>
     {% for stu in students %}
     <tr class=" w3-hover-light-gray">
@@ -88,7 +98,8 @@
         <td class="w3-padding-16">{{ stu.get_gender_display }}</td>
         <td class="w3-padding-16">{{ stu.get_status_display }}</td>
         {% if stu.cur_degree %}
-            <td class="w3-padding-16">{{ stu.cur_degree.get_deg_type_display }}</td>
+            <td class="w3-padding-16">{{ stu.cur_degree.get_deg_type_display }},
+                {{ stu.cur_degree.get_major_display }}</td>
         {% else %}
             <td class="w3-padding-16">None</td>
         {% endif %}

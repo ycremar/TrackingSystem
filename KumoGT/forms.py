@@ -1,50 +1,77 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info, Session_Notes,\
-    DEGREE_TYPE, STUDENT_STATUS_TYPE, GENDER, SEMESTER_TYPE, ETHNICITY_TYPE
+from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info, Session_Notes
+from .sel_options import STUDENT_STATUS_TYPE, GENDER, ETHNICITY_TYPE,\
+    US_RESIDENCY_TYPE, TEXAS_RESIDENCY_TYPE, CITIZENSHIP,\
+    SEMESTER_TYPE, DEGREE_TYPE, MAJOR_TYPE, YES_NO_TYPE
 
 class stu_search_form(forms.Form):
-    uin = forms.CharField(label = 'UIN', max_length = 255, required = False,\
-        widget = forms.TextInput(attrs = {'class': 'w3-input'}))
-    first_name = forms.CharField(label = 'First Name', max_length = 255, required = False,\
-        widget = forms.TextInput(attrs = {'class': 'w3-input'}))
-    last_name = forms.CharField(label = 'Last Name', max_length = 255, required = False,\
-        widget = forms.TextInput(attrs = {'class': 'w3-input'}))
+    uin = forms.CharField(label = 'UIN', max_length = 63, required = False,\
+        widget = forms.TextInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:auto'}))
+    first_name = forms.CharField(label = 'First Name', max_length = 127, required = False,\
+        widget = forms.TextInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:auto'}))
+    last_name = forms.CharField(label = 'Last Name', max_length = 127, required = False,\
+        widget = forms.TextInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:auto'}))
     gender = forms.ChoiceField(choices = [('', 'All')] + GENDER, required = False,\
-        widget = forms.Select(attrs = {'class': 'w3-select'}))
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
     ethnicity = forms.ChoiceField(choices = [('', 'All')] + ETHNICITY_TYPE, required = False,\
-        widget = forms.Select(attrs = {'class': 'w3-select'}))
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
+    us_residency = forms.ChoiceField(choices = [('', 'All')] + US_RESIDENCY_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:72%'}))
+    texas_residency = forms.ChoiceField(choices = [('', 'All')] + TEXAS_RESIDENCY_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:70%'}))
+    citizenship = forms.ChoiceField(choices = [('', 'All')] + CITIZENSHIP, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:80%'}))
     status = forms.ChoiceField(choices = [('', 'All')] + STUDENT_STATUS_TYPE, required = False,\
-        widget = forms.Select(attrs = {'class': 'w3-select'}))
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
+    start_year = forms.IntegerField(max_value = 32767, min_value = -32768, required = False,\
+        widget = forms.NumberInput(attrs = {'class': 'w3-input w3-cell w3-center', 'style': 'width:auto'}))
+    start_sem = forms.ChoiceField(choices = [('', 'All')] + SEMESTER_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
     cur_degree = forms.ChoiceField(choices = [('', 'All')] + DEGREE_TYPE + [('none', 'None')], required = False,\
-        widget = forms.Select(attrs = {'class': 'w3-select'}))
-    cur_degree__first_reg_year = forms.IntegerField(max_value = 32767, min_value = -32768, required = False,\
-        widget = forms.NumberInput(attrs = {'class': 'w3-input w3-cell w3-center', 'style': 'width:50%'}))
-    cur_degree__first_reg_sem = forms.ChoiceField(choices = [('', 'All')] + SEMESTER_TYPE, required = False,\
-        widget = forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:50%'}))
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
+    cur_degree__major = forms.ChoiceField(choices = [('', 'All')] + MAJOR_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
+    advisor = forms.CharField(label = 'Advisor', max_length = 511, required = False,\
+        widget = forms.TextInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:auto'}))
+    upe = forms.ChoiceField(choices = [('', 'All')] + YES_NO_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
+    ace = forms.ChoiceField(choices = [('', 'All')] + YES_NO_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
+    iga = forms.ChoiceField(choices = [('', 'All')] + YES_NO_TYPE, required = False,\
+        widget = forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto'}))
     
 class stu_bio_form(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['uin', 'first_name', 'middle_name', 'last_name', 'email', 'gender', 'ethnicity', 'status']
+        exclude = ['cur_degree']
         widgets = {
             'uin': forms.TextInput(attrs = {'class': 'w3-input'}),
-            'first_name': forms.TextInput(attrs = {'class': 'w3-input w3-light-gray'}),
+            'first_name': forms.TextInput(attrs = {'class': 'w3-input'}),
             'middle_name': forms.TextInput(attrs = {'class': 'w3-input'}),
-            'last_name': forms.TextInput(attrs = {'class': 'w3-input w3-light-gray'}),
+            'last_name': forms.TextInput(attrs = {'class': 'w3-input'}),
             'email': forms.EmailInput(attrs = {'class': 'w3-input'}),
-            'gender': forms.Select(attrs = {'class': 'w3-select w3-light-gray'}),
+            'gender': forms.Select(attrs = {'class': 'w3-select'}),
             'ethnicity': forms.Select(attrs = {'class': 'w3-select'}),
-            'status': forms.Select(attrs = {'class': 'w3-select w3-light-gray'}),
+            'us_residency': forms.Select(attrs = {'class': 'w3-select'}),
+            'texas_residency': forms.Select(attrs = {'class': 'w3-select'}),
+            'citizenship': forms.Select(attrs = {'class': 'w3-select'}),
+            'status': forms.Select(attrs = {'class': 'w3-select'}),
+            'start_year': forms.NumberInput(attrs = {'class': 'w3-input'}),
+            'start_sem': forms.Select(attrs = {'class': 'w3-select'}),
+            'advisor': forms.TextInput(attrs = {'class': 'w3-input'}),
+            'upe': forms.Select(attrs = {'class': 'w3-select'}),
+            'ace': forms.Select(attrs = {'class': 'w3-select'}),
+            'iga': forms.Select(attrs = {'class': 'w3-select'}),
         }
 
 class deg_form(forms.ModelForm):
     class Meta:
         model = Degree
-        fields = ['deg_type', 'first_reg_year', 'first_reg_sem',\
-            'last_reg_year', 'last_reg_sem', 'deg_recv_year', 'deg_recv_sem']
+        exclude = ['stu']
         widgets = {
             'deg_type': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width: auto;'}),
+            'major': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width: auto;'}),
             'first_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),
             'first_reg_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:47%'}),
             'last_reg_year': forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:38%'}),

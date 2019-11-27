@@ -2,89 +2,49 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from .crypt_fields import EncryptedFileField
 from django.dispatch import receiver
+from .sel_options import GENDER, ETHNICITY_TYPE, US_RESIDENCY_TYPE,\
+    TEXAS_RESIDENCY_TYPE, CITIZENSHIP, STUDENT_STATUS_TYPE, SEMESTER_TYPE,\
+    YES_NO_TYPE, DEGREE_TYPE, MAJOR_TYPE,\
+    DEGREE_PLAN_DOC_TYPE, PRE_EXAM_DOC_TYPE, EXAM_RESULT_TYPE,\
+    T_D_DOC_TYPE, T_D_PROP_DOC_TYPE, FIN_EXAM_DOC_TYPE
 import os
 
-DOCUMENT_TYPE = [('not_sel', 'Not Selected'),\
-                 ('degree_plan', 'Degree Plan'),\
-                 ('annual_review', 'Annual Review'),\
-                 ('other', 'Other')]
-
-DEGREE_PLAN_DOC_TYPE = [('not_sel', 'Not Selected'),\
-                        ('deg_plan', 'Degree Plan'),\
-                        ('P_change_commitee', 'Petition for change of committee'),\
-                        ('P_course_change', 'Petition for course change'),\
-                        ('P_extension_of_time_limits', 'Petition for extension of time limits'),\
-                        ('P_waivers_of_exceptions', 'Petition for waivers of exceptions'),\
-                        ('mdd', 'MDD'),\
-                        ('other', 'Other')]
-
-PRE_EXAM_DOC_TYPE = [('not_sel', 'Not Selected'),\
-                     ('checklist', 'Preliminary Exam Checklist'),\
-                     ('report', 'Preliminary Exam Report'),\
-                     ('written', 'Preliminary Exam Written')]
-
-T_D_PROP_DOC_TYPE = [('not_sel', 'Not Selected'),\
-                     ('title_page', 'Thesis/Dissertation Proposal Title Page'),\
-                     ('prop', 'Thesis/Dissertation Proposal')]
-
-T_D_DOC_TYPE = [('not_sel', 'Not Selected'),\
-                ('approval', 'Thesis/Dissertation Approval Page'),\
-                ('t_d', 'Thesis/Dissertation')]
-
-FIN_EXAM_DOC_TYPE = [('not_sel', 'Not Selected'),\
-                     ('request', 'Request for Final Examination'),\
-                     ('req_for_exemp', 'Request for exemption from Final Examination'),\
-                     ('report', 'Report of Final Exam')]
-
-GENDER = [('not_sel', 'Not Selected'),\
-          ('male', 'Male'),\
-          ('female', 'Female')]
-
-ETHNICITY_TYPE = [('not_sel', 'Not Selected'),\
-                  ('his_or_la', 'Hispanic or Latino'),\
-                  ('not_his_or_la', 'Not Hispanic or Latino')]
-
-STUDENT_STATUS_TYPE = [('current', 'Current'),\
-                       ('graduated', 'Gradudated'),\
-                       ('invalid', 'Invalid')]
-
-DEGREE_TYPE = [('phd', 'PhDCS'),\
-               ('ms_thesis', 'MSCS(Thesis)'),\
-               ('ms_non_thesis', 'MSCS(Non-Thesis)'),\
-               ('meng', 'MEngCS')]
-
-SEMESTER_TYPE = [('fall', 'Fall'),\
-                 ('spring', 'Spring'),\
-                 ('summer', 'Summer')]
-
-EXAM_RESULT_TYPE = [('none', '----'),\
-                 ('pass', 'Pass'),\
-                 ('fail', 'Fail')]
-
 class Student(models.Model):
-    first_name = models.CharField(max_length=255, blank=False, verbose_name='First Name')
-    middle_name = models.CharField(max_length=255, blank=True, verbose_name='Middle Name')
-    last_name = models.CharField(max_length=255, blank=False, verbose_name='Last Name')
-    uin = models.CharField(max_length=255, blank=False, unique = True, verbose_name='UIN')
+    uin = models.CharField(max_length=63, blank=False, unique = True, verbose_name='UIN')
+    first_name = models.CharField(max_length=127, blank=False, verbose_name='First Name')
+    middle_name = models.CharField(max_length=127, blank=True, verbose_name='Middle Name')
+    last_name = models.CharField(max_length=127, blank=False, verbose_name='Last Name')
     email = models.EmailField(blank=False)
-    gender = models.CharField(max_length=255, choices=GENDER, default='not_sel')
-    ethnicity = models.CharField(max_length=255, choices=ETHNICITY_TYPE, default='not_sel')
+    gender = models.CharField(max_length=63, choices=GENDER, default='not_ans', verbose_name='Gender')
+    ethnicity = models.CharField(max_length=63, choices=ETHNICITY_TYPE, default='unknown', verbose_name='Ethnicity')
+    us_residency = models.CharField(max_length=63, choices=US_RESIDENCY_TYPE, default='u', verbose_name='US Residency')
+    texas_residency = models.CharField(max_length=63, choices=TEXAS_RESIDENCY_TYPE, default='u', verbose_name='Texas Residency')
+    citizenship = models.CharField(max_length=127, choices=CITIZENSHIP, verbose_name='Citizenship')
+    status = models.CharField(max_length=63, choices=STUDENT_STATUS_TYPE, default='current', verbose_name='Status')
+    start_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Start Year',\
+        validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
+    start_sem = models.CharField(max_length=31, choices=SEMESTER_TYPE,\
+        default='fall', verbose_name='Start Semester')
     cur_degree = models.OneToOneField('Degree', models.SET_NULL, verbose_name='Current Degree', null=True)
-    status = models.CharField(max_length=255, choices=STUDENT_STATUS_TYPE, default='current')
+    advisor = models.CharField(max_length=511, blank=True, verbose_name='Advisor')
+    upe = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='UPE')
+    ace = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='ACE')
+    iga = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='IGA')
 
 class Degree(models.Model):
-    deg_type = models.CharField(max_length=255, choices=DEGREE_TYPE, default='none')
+    deg_type = models.CharField(max_length=63, choices=DEGREE_TYPE, default='none')
+    major = models.CharField(max_length=63, choices=MAJOR_TYPE, verbose_name='Major')
     first_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='First Registered Year',\
         validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
-    first_reg_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
+    first_reg_sem = models.CharField(max_length=31, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='First Registered Semester')
     last_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Last Registered Year',\
         validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
-    last_reg_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
+    last_reg_sem = models.CharField(max_length=31, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='Last Registered Semester')
     deg_recv_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Degree Received Year',\
         validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
-    deg_recv_sem = models.CharField(max_length=255, choices=SEMESTER_TYPE,\
+    deg_recv_sem = models.CharField(max_length=31, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='Degree Received Semester')
     stu = models.ForeignKey(Student, models.CASCADE, verbose_name='Student')
 
@@ -106,7 +66,7 @@ class Pre_Exam_Doc(Document):
 
 class Pre_Exam_Info(models.Model):
     date = models.DateField(verbose_name='Prelim Date')
-    result = models.CharField(max_length=255, choices=EXAM_RESULT_TYPE, default='none')
+    result = models.CharField(max_length=15, choices=EXAM_RESULT_TYPE, default='none')
     degree = models.OneToOneField(Degree, models.CASCADE)
 
 class T_D_Prop_Doc(Document): # Thesis/Dissertation Proposal Document
@@ -126,7 +86,7 @@ class Fin_Exam_Doc(Document):
 class Fin_Exam_Info(models.Model):
     date = models.DateField()
     time = models.TimeField()
-    result = models.CharField(max_length=255, choices=EXAM_RESULT_TYPE, default='none')
+    result = models.CharField(max_length=15, choices=EXAM_RESULT_TYPE, default='none')
     title = models.CharField(max_length=255, blank=True)
     room = models.CharField(max_length=255, blank=True)
     abstract = models.CharField(max_length=1023, blank=True)
