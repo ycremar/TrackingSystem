@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <ul>
+  <ul class="w3-ul w3-card w3-hoverable">
     <li>
-      <a href="{% url 'form_upload' %}">Single File Upload</a>
+      <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Single File Upload</a>
     </li>
     <li>
-      <a href="{% url 'students' %}">Search Students</a>
+      <a href="{% url 'students' %}" class="w3-button w3-block w3-left-align">Search Students</a>
     </li>
     {% if request.user.is_superuser %}
-    <a href="{% url 'manageusers' %}">Manage Users (admin only)</a>
+    <li>
+      <a href="{% url 'manageusers' %}" class="w3-button w3-block w3-left-align">Manage Users (admin only)</a>
+    </li>
     {% endif %}
   </ul>
 

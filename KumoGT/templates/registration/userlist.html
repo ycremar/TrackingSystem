@@ -6,7 +6,7 @@
 <header class="w3-container w3-theme w3-center w3-row">      
     <h2>Users</h2>
 </header>
-<table class="w3-container w3-table w3-bordered w3-centered w3-card">
+<table class="w3-container w3-table w3-bordered w3-centered">
     <tr class="w3-theme-l3">
         <th style="width:10%">User ID</th>
         <th style="width:15%">Name</th>
@@ -57,4 +57,10 @@
 
     {% endfor %}
 </table>
+</div>
+<div class="w3-cell-row w3-center">
+    <a href="{% url 'manageusers' %}">
+        <button class="w3-button w3-theme-d5">Back</button>
+    </a>
+</div>
 {% endblock %}
