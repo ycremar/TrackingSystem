@@ -10,7 +10,7 @@ from KumoGT.functions import delete
 
 @user_passes_test(lambda u: u.is_superuser)
 def manageusers(request):
-    return render(request, 'manageusers.html')
+    return render(request, 'manage_users.html')
 
 @user_passes_test(lambda u: u.is_superuser)
 def signup(request):
@@ -23,15 +23,15 @@ def signup(request):
             group = form.cleaned_data.get('group')
             user = authenticate(username=username, password=raw_password)
             group.user_set.add(user)
-            return redirect('manageusers')
+            return redirect('manage_users')
     else:
         form = SignUpForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'sign_up.html', {'form': form})
 
 @user_passes_test(lambda u: u.is_superuser)
 def all_users(request):
     users = User.objects.all()
-    return render(request, 'userlist.html', { 'users': users })
+    return render(request, 'user_list.html', { 'users': users })
     
 @user_passes_test(lambda u: u.is_superuser)
 def changepwd(request, id):
@@ -42,15 +42,15 @@ def changepwd(request, id):
             form.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('userlist')
+            return redirect('user_list')
     else:
         form = ChangePasswordForm(user)
-    return render(request, 'changepwd.html', {'form': form, 'username': user.username})
+    return render(request, 'change_pwd.html', {'form': form, 'username': user.username})
     
 @user_passes_test(lambda u: u.is_superuser)
 def reset_admin_pwd(request, id):
     users = User.objects.all()
-    return render(request, 'userlist.html', { 'users': users })
+    return render(request, 'user_list.html', { 'users': users })
     
 @user_passes_test(lambda u: u.is_superuser)
 def deactivate_user(request, id):
@@ -64,9 +64,9 @@ def activate_user(request, id):
     user = User.objects.get(id=id)
     user.is_active = True
     user.save()
-    return redirect('userlist')
+    return redirect('user_list')
     
 @user_passes_test(lambda u: u.is_superuser)
 def delete_user(request, id):
-    return delete(request, User, id, "User", 'Username', 'username', 'userlist')
+    return delete(request, User, id, "User", 'Username', 'username', 'user_list')
     

@@ -31,9 +31,9 @@ urlpatterns = [
     # Admin and users authentication
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
-    path('manageusers/', manageusers, name='manageusers'),
-    path('manageusers/signup/', signup, name='signup'),
-    path('manageusers/userlist/', all_users, name='userlist'),
+    path('manageusers/', manageusers, name='manage_users'),
+    path('manageusers/signup/', signup, name='sign_up'),
+    path('manageusers/userlist/', all_users, name='user_list'),
     path('manageusers/userlist/resetpwd/<int:id>/', reset_admin_pwd, name='reset_pwd'),
     path('manageusers/userlist/changepwd/<int:id>/', changepwd, name='change_pwd'),
     path('manageusers/userlist/deleteuser/<int:id>/', delete_user, name='delete_user'),

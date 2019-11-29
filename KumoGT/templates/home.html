@@ -2,15 +2,17 @@
 
 {% block content %}
   <ul class="w3-ul w3-card w3-hoverable">
+    <!-- For debug
     <li>
       <a href="{% url 'form_upload' %}" class="w3-button w3-block w3-left-align">Single File Upload</a>
     </li>
+    -->
     <li>
       <a href="{% url 'students' %}" class="w3-button w3-block w3-left-align">Search Students</a>
     </li>
     {% if request.user.is_superuser %}
     <li>
-      <a href="{% url 'manageusers' %}" class="w3-button w3-block w3-left-align">Manage Users (admin only)</a>
+      <a href="{% url 'manage_users' %}" class="w3-button w3-block w3-left-align">Manage Users (admin only)</a>
     </li>
     {% endif %}
   </ul>

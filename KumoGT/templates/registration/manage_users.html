@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <ul class="w3-ul w3-card w3-hoverable">
+    <li>
+      <a href="{% url 'sign_up' %}" class="w3-button w3-block w3-left-align">Add User Account</a>
+    </li>
+    <li>
+      <a href="{% url 'user_list' %}" class="w3-button w3-block w3-left-align">Manage User Accounts</a>
+    </li>
+    <li>
+      <a href="{% url 'home' %}" class="w3-button w3-block w3-left-align">Back to Home</a>
+    </li>
+  </ul>
+{% endblock %}
