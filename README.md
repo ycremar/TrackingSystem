@@ -15,6 +15,7 @@ To run web server locally, run the following commands.
 
 ```
 source ../django_env/bin/activate
+python3 manage.py collectstatic
 python3 manage.py createsuperuser
 python3 manage.py runserver 8080
 ```
@@ -43,5 +44,4 @@ heroku git:remote -a $YOUR_HEROKU_APP_NAME
 git init
 ./push.sh $YOUR_COMMIT
 heroku run python manage.py migrate
-heroku run python manage.py collectstatic
 ```
