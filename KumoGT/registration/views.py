@@ -9,11 +9,11 @@ from KumoGT.functions import delete
 
 
 @user_passes_test(lambda u: u.is_superuser)
-def manageusers(request):
+def manage_users(request):
     return render(request, 'manage_users.html')
 
 @user_passes_test(lambda u: u.is_superuser)
-def signup(request):
+def sign_up(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -34,7 +34,7 @@ def all_users(request):
     return render(request, 'user_list.html', { 'users': users })
     
 @user_passes_test(lambda u: u.is_superuser)
-def changepwd(request, id):
+def change_pwd(request, id):
     user = User.objects.get(id=id)
     if request.method == 'POST':
         form = ChangePasswordForm(user, data=request.POST)
