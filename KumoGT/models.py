@@ -18,7 +18,7 @@ class Student(models.Model):
     gender = models.CharField(max_length=63, choices=GENDER, default='not_ans', verbose_name='Gender')
     ethnicity = models.CharField(max_length=63, choices=ETHNICITY_TYPE, default='unknown', verbose_name='Ethnicity')
     us_residency = models.CharField(max_length=63, choices=US_RESIDENCY_TYPE, default='u', verbose_name='US Residency')
-    texas_residency = models.CharField(max_length=63, choices=TEXAS_RESIDENCY_TYPE, default='u', verbose_name='Texas Residency')
+    texas_residency = models.CharField(max_length=63, choices=TEXAS_RESIDENCY_TYPE, default='s', verbose_name='Texas Residency')
     citizenship = models.CharField(max_length=127, choices=CITIZENSHIP, verbose_name='Citizenship')
     status = models.CharField(max_length=63, choices=STUDENT_STATUS_TYPE, default='current', verbose_name='Status')
     start_year = models.SmallIntegerField(blank = False, default=0, verbose_name='Start Year',\
