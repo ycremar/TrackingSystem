@@ -43,4 +43,5 @@ heroku git:remote -a $YOUR_HEROKU_APP_NAME
 git init
 ./push.sh $YOUR_COMMIT
 heroku run python manage.py migrate
+heroku run python manage.py collectstatic
 ```
