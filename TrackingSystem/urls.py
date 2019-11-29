@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import re_path
 from KumoGT import views
-from KumoGT.registration import signup, manageusers, all_users
+from KumoGT.registration import signup, manage_users, all_users
 from KumoGT.registration import changepwd, reset_admin_pwd, delete_user, activate_user, deactivate_user
 from django.contrib.auth import views as auth_views
 
@@ -31,14 +31,14 @@ urlpatterns = [
     # Admin and users authentication
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
-    path('manageusers/', manageusers, name='manage_users'),
-    path('manageusers/signup/', signup, name='sign_up'),
-    path('manageusers/userlist/', all_users, name='user_list'),
-    path('manageusers/userlist/resetpwd/<int:id>/', reset_admin_pwd, name='reset_pwd'),
-    path('manageusers/userlist/changepwd/<int:id>/', changepwd, name='change_pwd'),
-    path('manageusers/userlist/deleteuser/<int:id>/', delete_user, name='delete_user'),
-    path('manageusers/userlist/activate/<int:id>/', activate_user, name='activate_user'),
-    path('manageusers/userlist/deactivate/<int:id>/', deactivate_user, name='deactivate_user'),
+    path('manage_users/', manage_users, name='manage_users'),
+    path('manage_users/sign_up/', signup, name='sign_up'),
+    path('manage_users/user_list/', all_users, name='user_list'),
+    path('manage_users/user_list/reset_pwd/<int:id>/', reset_admin_pwd, name='reset_pwd'),
+    path('manage_users/user_list/change_pwd/<int:id>/', changepwd, name='change_pwd'),
+    path('manage_users/user_list/delete_user/<int:id>/', delete_user, name='delete_user'),
+    path('manage_users/user_list/activate/<int:id>/', activate_user, name='activate_user'),
+    path('manage_users/user_list/deactivate/<int:id>/', deactivate_user, name='deactivate_user'),
     path('admin/', admin.site.urls, name='admin'),
 
     re_path(r'^students/(?:uin=(?P<uin>[0-9]+)/)?'\
