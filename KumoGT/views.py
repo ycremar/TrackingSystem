@@ -193,6 +193,7 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
         students = Student.objects.all()
         seach_dict, search_form_params = get_stu_search_dict(kwargs, True)
         if kwargs: students = students.filter(**seach_dict)
+        students = students.order_by('uin')
         form = stu_search_form(search_form_params)
         paginator = Paginator(students, 15) # Show 15 students per page. Use 1 for test.
         page = request.GET.get('page')
@@ -297,6 +298,7 @@ def download_stu_info(request, **kwargs):
         students = Student.objects.all()
         seach_dict = get_stu_search_dict(kwargs)
         if kwargs: students = students.filter(**seach_dict)
+        students = students.order_by('uin')
         for stu in students:
             j = 1
             for model in models:
