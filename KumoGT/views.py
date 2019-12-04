@@ -165,9 +165,9 @@ def session_notes(request, stu_id, option = '', id = 0):
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def serve_protected_document(request, file_path):
-
-    file_path = os.path.join(settings.BASE_DIR, file_path)
     try:
+        if file_path[0:6] != 'media/': raise PermissionError
+        file_path = os.path.join(settings.BASE_DIR, file_path)
         with open(file_path, 'rb') as fh:
             content = Cryptographer.decrypted(fh.read())
             response = HttpResponse(content, content_type="application/pdf")
@@ -324,7 +324,8 @@ def download_stu_info(request, checked = 1):
                         j += 1
                 else: j += len(fields[name])
             i += 1
-        file_path = os.path.join(settings.MEDIA_ROOT, "data.xlsx")
+        file_name = "data.xlsx"
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
         try:
             wb.save(file_path)
         except:
@@ -332,7 +333,7 @@ def download_stu_info(request, checked = 1):
             return redirect('download_stu_info')
         finally:
             return redirect('get_tmp_file',\
-                file_path = (settings.MEDIA_URL + "data.xlsx")[1:],\
+                file_path = file_name,\
                 content_type = "application/vnd.ms-excel")
     else:
         checked = int(checked) if checked else 1
@@ -366,7 +367,7 @@ class Tmp_File(object):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def get_tmp_file(request, file_path, content_type):
     try:
-        file_path = os.path.join(settings.BASE_DIR, file_path)
+        file_path = os.path.join(settings.MEDIA_ROOT, file_path)
         fh = Tmp_File(file_path)
         content = fh.open('rb')
         response = HttpResponse(content, content_type = content_type)
