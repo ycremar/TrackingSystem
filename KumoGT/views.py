@@ -367,6 +367,7 @@ class Tmp_File(object):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def get_tmp_file(request, file_path, content_type):
     try:
+        if file_path[0:10] == 'documents/': raise PermissionError
         file_path = os.path.join(settings.MEDIA_ROOT, file_path)
         fh = Tmp_File(file_path)
         content = fh.open('rb')
