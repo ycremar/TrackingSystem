@@ -331,7 +331,9 @@ def download_stu_info(request, checked = 1):
             messages.error(request, "Some error has occured, please retry it later.")
             return redirect('download_stu_info')
         finally:
-            return redirect('get_tmp_file', file_path = file_path, content_type = "application/vnd.ms-excel")
+            return redirect('get_tmp_file',\
+                file_path = (settings.MEDIA_URL + "data.xlsx")[1:],\
+                content_type = "application/vnd.ms-excel")
     else:
         checked = int(checked) if checked else 1
         fields = []
