@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<script type="text/javascript">
+    function change_chk(isChecked) {
+        var chk_list = document.getElementsByTagName("input");
+        for (var i = 0; i < chk_list.length; i++){
+            if (chk_list[i].type == "checkbox")
+                chk_list[i].checked=isChecked;
+        }
+    };
+</script>
+
 <div class="w3-card w3-margin-bottom">
     <header class="w3-container w3-theme w3-center w3-row">      
         <h2>Download Information of Students</h2>
@@ -19,11 +30,7 @@
         <div class="w3-padding w3-container w3-center">
             {% for id, label in sub_fields %}
                 <div class="w3-container w3-mobile w3-cell w3-cell-middle">
-                    {% if checked %}
-                        <input id="{{ id }}" name="{{ model }}" value="{{ id }}" class="w3-check w3-cell" type="checkbox" checked="checked">
-                    {% else %}
-                        <input id="{{ id }}" name="{{ model }}" value="{{ id }}" class="w3-check w3-cell" type="checkbox">
-                    {% endif %}
+                    <input id="{{ id }}" name="{{ model }}" value="{{ id }}" class="w3-check w3-cell" type="checkbox" checked="checked">
                     <label for="{{ id }}" class="w3-cell w3-mobile">{{ label }}</label>
                 </div>
             {% endfor %}
@@ -31,11 +38,12 @@
     </div>
     {% endfor %}
 </form>
-{% if checked %}
-    <a href="{% url 'download_stu_info' checked=0 %}"><button class="w3-button w3-theme-d5">Clear</button></a>
-{% else %}
-    <a href="{% url 'download_stu_info' checked=1 %}"><button class="w3-button w3-theme-d5">Check all</button></a>
-{% endif %}
+<div class="w3-card">
+    <div class="w3-container w3-padding-16 w3-center">
+        <input type="checkbox" onclick="change_chk(this.checked)" class="w3-check" checked="checked">
+        <label class="">Select All</label>
+    </div>
+</div>
 <div class="w3-container w3-center">
     <button type="submit" form='select_col_form' class="w3-button w3-theme-d5">Download</button>
 </div>

@@ -59,7 +59,7 @@ urlpatterns = [
     path('manage_users/user_list/deactivate/<int:id>/', deactivate_user, name='deactivate_user'),
     path('admin/', admin.site.urls, name='admin'),
 
-    re_path(r'^download_stu_info/(?:(?P<checked>[01]+)/)?' + stu_search_options,\
+    re_path(r'^download_stu_info/' + stu_search_options,\
         views.download_stu_info, name = 'download_stu_info'),
     re_path(r'^get_tmp_file/(?:type=(?P<content_type>.+)/)(?:path=(?P<file_path>.+))$',\
         views.get_tmp_file, name = 'get_tmp_file'),

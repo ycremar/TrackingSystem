@@ -5,8 +5,8 @@
 {% comment %} Do not delete! {% endcomment %}
 <script type="text/javascript">
 	function to_edit_page(obj){//redirect to selected edit page
-        var stu_id = obj.getAttribute("stu_id")
-        var deg_id = obj.getAttribute("deg_id")
+        var stu_id = obj.getAttribute("stu_id");
+        var deg_id = obj.getAttribute("deg_id");
         var myselect = document.getElementById(stu_id + "_select");
         var sel_val = myselect.options[myselect.selectedIndex].value;
         switch(sel_val){

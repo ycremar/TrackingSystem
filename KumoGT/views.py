@@ -272,7 +272,7 @@ def degrees(request, stu_id, option = '', id = 0):
         })
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
-def download_stu_info(request, checked = 1, **kwargs):
+def download_stu_info(request, **kwargs):
     models = [Student, Degree, Pre_Exam_Info, T_D_Info]
     if request.method == 'POST':
         fields = {}
@@ -329,7 +329,6 @@ def download_stu_info(request, checked = 1, **kwargs):
                 file_path = file_name,\
                 content_type = "application/vnd.ms-excel")
     else:
-        checked = int(checked) if checked else 1
         fields = []
         for model in models:
             sub_fields = []
@@ -338,7 +337,6 @@ def download_stu_info(request, checked = 1, **kwargs):
                     sub_fields.append((field.attname, field.verbose_name))
             fields.append([model._meta.model_name, model._meta.verbose_name, sub_fields])
         return render(request, 'download_stu_info.html', {
-            'checked': checked,
             'fields': fields,
         })
 
