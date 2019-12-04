@@ -12,6 +12,22 @@ import re
 
 from django.contrib.auth.decorators import user_passes_test
 
+def get_stu_search_dict(args, need_form = False):
+    seach_dict = {}
+    if need_form: search_form_params = {}
+    for name, val in args.items():
+        if val:
+            if need_form: search_form_params[name] = val
+            if name == 'cur_degree': 
+                if val == 'none':
+                    seach_dict[name] = None
+                    continue
+                else:
+                    name += '__deg_type'
+            seach_dict[name + "__contains"] = val
+    if need_form: return [seach_dict, search_form_params]
+    else: return seach_dict
+
 def delete(request, model, id, obj_text, field_text, show_field, redirect_url, has_choices = False):
     try:
         del_obj = model.objects.get(id = id)

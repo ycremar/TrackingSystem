@@ -35,6 +35,11 @@
                 break;
         }
 	};
+    function download_stu_info(){
+        var url = document.location.toString();
+        url = url.replace("students/", "download_stu_info/");
+        window.open(url);
+    };
 </script>
 
 <style>a{TEXT-DECORATION:none}</style> 
@@ -77,7 +82,8 @@
 </div>
 <div class="w3-cell-row">
 {% include "pagination.html" with this_page=students neigh_pages=neigh_pages %}
-<div class="w3-right w3-cell">
+<button type="button" class="w3-button w3-theme-d5 w3-cell w3-margin-right" onclick="download_stu_info()">Download</button>
+<div class="w3-cell">
     <a href="{% url 'create_stu' %}" target="_blank"><button class="w3-button w3-theme-d5">Add</button></a>
 </div>
 </div>

@@ -15,7 +15,8 @@ from django.core.paginator import Paginator
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
     pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form, session_notes_form
 from .crypt import Cryptographer
-from .functions import delete, deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_notes
+from .functions import deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_notes,\
+    delete, get_stu_search_dict
 
 from openpyxl import Workbook
 
@@ -190,18 +191,7 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
         return redirect(redirect_url, **search_form_params)
     else:
         students = Student.objects.all()
-        search_form_params = {}
-        seach_dict = {}
-        for name, val in kwargs.items():
-            if val:
-                search_form_params[name] = val
-                if name == 'cur_degree': 
-                    if val == 'none':
-                        seach_dict[name] = None
-                        continue
-                    else:
-                        name += '__deg_type'
-                seach_dict[name + "__contains"] = val
+        seach_dict, search_form_params = get_stu_search_dict(kwargs, True)
         if kwargs: students = students.filter(**seach_dict)
         form = stu_search_form(search_form_params)
         paginator = Paginator(students, 15) # Show 15 students per page. Use 1 for test.
@@ -282,7 +272,7 @@ def degrees(request, stu_id, option = '', id = 0):
         })
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
-def download_stu_info(request, checked = 1):
+def download_stu_info(request, checked = 1, **kwargs):
     models = [Student, Degree, Pre_Exam_Info, T_D_Info]
     if request.method == 'POST':
         fields = {}
@@ -304,7 +294,10 @@ def download_stu_info(request, checked = 1):
                 j += 1
             fields[model._meta.model_name] = sub_fields
         i += 1
-        for stu in Student.objects.all():
+        students = Student.objects.all()
+        seach_dict = get_stu_search_dict(kwargs)
+        if kwargs: students = students.filter(**seach_dict)
+        for stu in students:
             j = 1
             for model in models:
                 name = model._meta.model_name
