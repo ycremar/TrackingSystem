@@ -14,7 +14,7 @@ class Student(models.Model):
     first_name = models.CharField(max_length=127, blank=False, verbose_name='First Name')
     middle_name = models.CharField(max_length=127, blank=True, verbose_name='Middle Name')
     last_name = models.CharField(max_length=127, blank=False, verbose_name='Last Name')
-    email = models.EmailField(blank=False)
+    email = models.EmailField(blank=False, verbose_name='Email')
     gender = models.CharField(max_length=63, choices=GENDER, default='not_ans', verbose_name='Gender')
     ethnicity = models.CharField(max_length=63, choices=ETHNICITY_TYPE, default='unknown', verbose_name='Ethnicity')
     us_residency = models.CharField(max_length=63, choices=US_RESIDENCY_TYPE, default='u', verbose_name='US Residency')
@@ -30,9 +30,11 @@ class Student(models.Model):
     upe = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='UPE')
     ace = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='ACE')
     iga = models.CharField(max_length=15, default='no', choices=YES_NO_TYPE, verbose_name='IGA')
+    class Meta:
+        verbose_name = 'Student'
 
 class Degree(models.Model):
-    deg_type = models.CharField(max_length=63, choices=DEGREE_TYPE, default='none')
+    deg_type = models.CharField(max_length=63, choices=DEGREE_TYPE, default='none', verbose_name='Degree')
     major = models.CharField(max_length=63, choices=MAJOR_TYPE, verbose_name='Major')
     first_reg_year = models.SmallIntegerField(blank = False, default=0, verbose_name='First Registered Year',\
         validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
@@ -47,55 +49,75 @@ class Degree(models.Model):
     deg_recv_sem = models.CharField(max_length=31, choices=SEMESTER_TYPE,\
         default='fall', verbose_name='Degree Received Semester')
     stu = models.ForeignKey(Student, models.CASCADE, verbose_name='Student')
+    class Meta:
+        verbose_name = 'Degree'
 
 class Document(models.Model):
     doc = EncryptedFileField(upload_to='documents/', verbose_name='Document')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True, verbose_name='Uploaded at')
     appr_cs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved CS') # Approved CS Date
     appr_ogs_date = models.DateField(blank=True, null = True, verbose_name='Aprroved OGS') # Approved OGS Date
     notes = models.CharField(max_length=511, blank=True, verbose_name='Notes')
-    degree = models.ForeignKey(Degree, models.CASCADE)
+    degree = models.ForeignKey(Degree, models.CASCADE, verbose_name='Degree')
     class Meta:
         abstract = True
 
 class Deg_Plan_Doc(Document):
-    doc_type = models.CharField(max_length=255, choices=DEGREE_PLAN_DOC_TYPE, default='not_sel')
+    doc_type = models.CharField(max_length=255, choices=DEGREE_PLAN_DOC_TYPE, default='not_sel', verbose_name='Document Type')
+    class Meta:
+        verbose_name = 'Degree Plan'
 
 class Pre_Exam_Doc(Document):
-    doc_type = models.CharField(max_length=255, choices=PRE_EXAM_DOC_TYPE, default='not_sel')
+    doc_type = models.CharField(max_length=255, choices=PRE_EXAM_DOC_TYPE, default='not_sel', verbose_name='Document Type')
+    class Meta:
+        verbose_name = 'Preliminary Exam Document'
 
 class Pre_Exam_Info(models.Model):
-    date = models.DateField(verbose_name='Prelim Date')
-    result = models.CharField(max_length=15, choices=EXAM_RESULT_TYPE, default='none')
-    degree = models.OneToOneField(Degree, models.CASCADE)
+    date = models.DateField(verbose_name='Date')
+    result = models.CharField(max_length=15, choices=EXAM_RESULT_TYPE, default='none', verbose_name='Result')
+    degree = models.OneToOneField(Degree, models.CASCADE, verbose_name='Degree')
+    class Meta:
+        verbose_name = 'Preliminary Exam'
 
 class T_D_Prop_Doc(Document): # Thesis/Dissertation Proposal Document
-    doc_type = models.CharField(max_length=255, choices=T_D_PROP_DOC_TYPE, default='not_sel')
+    doc_type = models.CharField(max_length=255, choices=T_D_PROP_DOC_TYPE, default='not_sel', verbose_name='Document Type')
+    class Meta:
+        verbose_name = 'Thesis/Dissertation Proposal Document'
 
 class T_D_Doc(Document): # Thesis/Dissertation Document
-    doc_type = models.CharField(max_length=255, choices=T_D_DOC_TYPE, default='not_sel')
+    doc_type = models.CharField(max_length=255, choices=T_D_DOC_TYPE, default='not_sel', verbose_name='Document Type')
+    class Meta:
+        verbose_name = 'Thesis/Dissertation Document'
 
 class T_D_Info(models.Model):
-    title = models.CharField(max_length=255, blank=True)
-    url = models.URLField()
-    degree = models.OneToOneField(Degree, models.CASCADE)
+    title = models.CharField(max_length=255, blank=True, verbose_name='Title')
+    url = models.URLField(verbose_name='URL')
+    degree = models.OneToOneField(Degree, models.CASCADE, verbose_name='Degree')
+    class Meta:
+        verbose_name = 'Thesis/Dissertation'
 
 class Fin_Exam_Doc(Document):
-    doc_type = models.CharField(max_length=255, choices=FIN_EXAM_DOC_TYPE, default='not_sel')
+    doc_type = models.CharField(max_length=255, choices=FIN_EXAM_DOC_TYPE, default='not_sel', verbose_name='Document Type')
+    class Meta:
+        verbose_name = 'Final Exam Document'
 
 class Fin_Exam_Info(models.Model):
-    date = models.DateField()
-    time = models.TimeField()
-    result = models.CharField(max_length=15, choices=EXAM_RESULT_TYPE, default='none')
-    title = models.CharField(max_length=255, blank=True)
-    room = models.CharField(max_length=255, blank=True)
-    abstract = models.CharField(max_length=1023, blank=True)
-    degree = models.OneToOneField(Degree, models.CASCADE)
+    date = models.DateField(verbose_name='Date')
+    time = models.TimeField(verbose_name='Time')
+    result = models.CharField(max_length=15, choices=EXAM_RESULT_TYPE, default='none', verbose_name='Result')
+    title = models.CharField(max_length=255, blank=True, verbose_name='Title')
+    room = models.CharField(max_length=255, blank=True, verbose_name='Room')
+    abstract = models.CharField(max_length=1023, blank=True, verbose_name='Abstract')
+    degree = models.OneToOneField(Degree, models.CASCADE, verbose_name='Degree')
+    class Meta:
+        verbose_name = 'Final Exam'
 
 class Session_Notes(models.Model):
-    date = models.DateField()
-    note = models.CharField(max_length=4096, blank=True)
+    date = models.DateField(verbose_name='Date')
+    note = models.CharField(max_length=4096, blank=True, verbose_name='Note')
     stu = models.ForeignKey(Student, models.CASCADE, verbose_name='Student')
+    class Meta:
+        verbose_name = 'Session Note'
 
 @receiver(models.signals.post_delete, sender=Deg_Plan_Doc)
 @receiver(models.signals.post_delete, sender=Pre_Exam_Doc)

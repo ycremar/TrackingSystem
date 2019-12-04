@@ -48,10 +48,10 @@ STUDENT_STATUS_TYPE = [('current', 'Current'),
                        ('graduated', 'Gradudated'),
                        ('invalid', 'Invalid')]
 
-DEGREE_TYPE = [('phd', 'PhD'),
-               ('ms_thesis', 'MS(Thesis)'),
-               ('ms_non_thesis', 'MS(Non-Thesis)'),
-               ('meng', 'MEng')]
+DEGREE_TYPE = [('m_thesis', 'Masters(Thesis)'),
+               ('m_non_thesis', 'Masters(Non-Thesis)'),
+               ('phd', 'PhD'),
+               ('non_degree', 'Non-Degree')]
 
 SEMESTER_TYPE = [('fall', 'Fall'),
                  ('spring', 'Spring'),

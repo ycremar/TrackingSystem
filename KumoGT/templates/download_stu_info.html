@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w3-card w3-margin-bottom">
+    <header class="w3-container w3-theme w3-center w3-row">      
+        <h2>Download Information of Students</h2>
+    </header>
+    <div class="w3-container w3-theme-l5 w3-center">
+        <p>Select data to be downloaded. Only information of current degree of students is available.</p>
+    </div>
+</div>
+<form method="post" id="select_col_form">
+    {% csrf_token %}
+    {% for model, model_name, sub_fields in fields %}
+    <div class=" w3-card w3-margin-bottom">
+        <header class="w3-container w3-theme-l3 w3-center w3-row">      
+            <h3>{{ model_name }}</h3>
+        </header>
+        <div class="w3-padding w3-container w3-center">
+            {% for id, label in sub_fields %}
+                <div class="w3-container w3-mobile w3-cell w3-cell-middle">
+                    {% if checked %}
+                        <input id="{{ id }}" name="{{ model }}" value="{{ id }}" class="w3-check w3-cell" type="checkbox" checked="checked">
+                    {% else %}
+                        <input id="{{ id }}" name="{{ model }}" value="{{ id }}" class="w3-check w3-cell" type="checkbox">
+                    {% endif %}
+                    <label for="{{ id }}" class="w3-cell w3-mobile">{{ label }}</label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</form>
+{% if checked %}
+    <a href="{% url 'download_stu_info' checked=0 %}"><button class="w3-button w3-theme-d5">Clear</button></a>
+{% else %}
+    <a href="{% url 'download_stu_info' checked=1 %}"><button class="w3-button w3-theme-d5">Check all</button></a>
+{% endif %}
+<div class="w3-container w3-center">
+    <button type="submit" form='select_col_form' class="w3-button w3-theme-d5">Download</button>
+</div>
+{% endblock %}

@@ -2,3 +2,4 @@ Django==2.1.11
 gunicorn
 django-heroku
 cryptography
+openpyxl

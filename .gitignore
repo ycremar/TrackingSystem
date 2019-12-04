@@ -3,6 +3,6 @@ KumoGT/registration/__pycache__/
 KumoGT/migrations/__pycache__/
 KumoGT/tests/__pycache__/
 TrackingSystem/__pycache__/
-media/documents/
+media/
 staticfiles/
 /db.sqlite3

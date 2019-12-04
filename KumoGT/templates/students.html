@@ -42,8 +42,8 @@
     <h2>Students</h2>   
 </header>
 <form method="post" id="search_stu_form">
+{% csrf_token %}
 <div class="w3-card w3-margin-top w3-small w3-container w3-center w3-cell-middle">
-    {% csrf_token %}
     <div class="w3-cell-row w3-padding-small">
         <div class="w3-cell"><b>UIN:&nbsp;&nbsp;</b>{{ form.uin }}</div>
         <div class="w3-cell"><b>First Name:&nbsp;&nbsp;</b>{{ form.first_name }}</div>
@@ -83,11 +83,11 @@
 </div>
 <table class="w3-container w3-table w3-bordered w3-centered w3-card">
     <tr class="w3-theme-l3">
-        <th style="width:10%">UIN</th>
+        <th style="width:9%">UIN</th>
         <th style="width:16%">Name</th>
         <th style="width:9%">Gender</th>
         <th style="width:7%">Status</th>
-        <th style="width:16%">Current Degree, Major</th>
+        <th style="width:17%">Current Degree, Major</th>
         <th style="width:13%">Operation</th>
         <th style="width:29%">Access</th>
     </tr>

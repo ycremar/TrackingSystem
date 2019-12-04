@@ -45,18 +45,18 @@
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
         <table class="w3-container w3-table w3-bordered w3-centered">
             <tr class="w3-theme-l3">
-                <th style="width:5%">Current</th>
-                <th style="width:5%">Degree</th>
-                <th style="width:5%">Major</th>
+                <th style="width:4%">Current</th>
+                <th style="width:7%">Degree</th>
+                <th style="width:4%">Major</th>
                 <th style="width:17%">First Registered</th>
                 <th style="width:17%">Last Registered</th>
                 <th style="width:17%">Degree Received</th>
-                <th style="width:7%">Operation</th>
+                <th style="width:6%">Operation</th>
                 <th style="width:27%">Access</th>
             </tr>
             {% for form in forms %}
                 <tr class="w3-hover-light-gray">
-                    <td style="width:5%">
+                    <td style="width:4%">
                         {% if form.instance.id %}
                             {% if stu %}
                                 {% if form.instance.id == cur_deg_id %}
@@ -71,20 +71,20 @@
                             <input class="w3-radio" style="margin-top:2px" type="radio" 
                                 name="current" value="0"></td>
                         {% endif %}
-                    <td style="width:5%">{{ form.deg_type }}</td>
-                    <td style="width:5%">{{ form.major }}</td>
+                    <td style="width:7%">{{ form.deg_type }}</td>
+                    <td style="width:4%">{{ form.major }}</td>
                     <td class="w3-cell-row" style="width:17%">{{ form.first_reg_sem }} {{ form.first_reg_year }}</td>
                     <td class="w3-cell-row" style="width:17%">{{ form.last_reg_sem }} {{ form.last_reg_year }}</td>
                     <td class="w3-cell-row" style="width:17%">{{ form.deg_recv_sem }} {{ form.deg_recv_year }}</td>
                     {% if form.instance.id %}
                         {% if stu %}
-                            <td style="width:7%">
+                            <td style="width:6%">
                                 <a href="{% url 'degrees' stu_id=stu.id option='del' id=form.instance.id %}">
                                     <button type="button" class="w3-button w3-red">Delete</button>
                                 </a>
                             </td>
                         {% else %}
-                            <td style="width:7%">
+                            <td style="width:6%">
                                 <a href="{% url 'degrees' stu_id=0 option='del' id=form.instance.id %}">
                                     <button type="button" class="w3-button w3-red">Delete</button>
                                 </a>

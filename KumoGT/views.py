@@ -17,6 +17,8 @@ from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
 from .crypt import Cryptographer
 from .functions import delete, deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_notes
 
+from openpyxl import Workbook
+
 import os
 
 def conditional_decorator(dec, condition):
@@ -278,3 +280,90 @@ def degrees(request, stu_id, option = '', id = 0):
             'forms': forms,
             'option': option,
         })
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def download_stu_info(request, checked = 1):
+    models = [Student, Degree, Pre_Exam_Info, T_D_Info]
+    if request.method == 'POST':
+        fields = {}
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "Information of Students"
+        i, j = 1, 1
+        for model in models:
+            name = model._meta.model_name
+            sub_fields = request.POST.getlist(name)
+            sub_fields_display = []
+            for field in model._meta.fields:
+                prefix = ""
+                if name != 'student' and name != 'degree': prefix = model._meta.verbose_name + " "
+                if field.attname in sub_fields:
+                    sub_fields_display.append(prefix + field.verbose_name)
+            for field in sub_fields_display:
+                ws.cell(row = i, column = j, value = field)
+                j += 1
+            fields[model._meta.model_name] = sub_fields
+        i += 1
+        for stu in Student.objects.all():
+            j = 1
+            for model in models:
+                name = model._meta.model_name
+                if name == 'student':
+                    obj = stu
+                elif name == 'degree':
+                    obj = stu.cur_degree
+                else:
+                    obj = getattr(stu.cur_degree, name) if hasattr(stu.cur_degree, name) else None
+                if obj:
+                    for field in fields[name]:
+                        if hasattr(obj, "get_{0}_display".format(field)):
+                            text = getattr(obj, "get_{0}_display".format(field))()
+                            ws.cell(row = i, column = j, value = text)
+                        else:
+                            ws.cell(row = i, column = j, value = obj.__dict__[field])
+                        j += 1
+                else: j += len(fields[name])
+            i += 1
+        file_path = os.path.join(settings.MEDIA_ROOT, "data.xlsx")
+        wb.save(file_path)
+        return redirect('get_tmp_file', file_path = file_path, content_type = "application/vnd.ms-excel")
+    else:
+        checked = int(checked) if checked else 1
+        fields = []
+        for model in models:
+            sub_fields = []
+            for field in model._meta.fields:
+                if not 'id' in field.attname:
+                    sub_fields.append((field.attname, field.verbose_name))
+            fields.append([model._meta.model_name, model._meta.verbose_name, sub_fields])
+        return render(request, 'download_stu_info.html', {
+            'checked': checked,
+            'fields': fields,
+        })
+
+class Tmp_File(object): 
+    def __init__(self, filename): 
+        self.filename = filename 
+        self.fd = None
+        
+    def open(self, mode): 
+        if self.fd == None: 
+            self.fd = open(self.filename, mode) 
+        return self.fd 
+
+    def __del__(self): 
+        if self.fd != None: 
+            self.fd.close() 
+            os.remove(self.filename) 
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def get_tmp_file(request, file_path, content_type):
+    try:
+        file_path = os.path.join(settings.BASE_DIR, file_path)
+        fh = Tmp_File(file_path)
+        content = fh.open('rb')
+        response = HttpResponse(content, content_type = content_type)
+        response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+        return response
+    except:
+        raise Http404
