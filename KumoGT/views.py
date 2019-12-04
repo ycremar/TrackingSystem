@@ -166,7 +166,7 @@ def session_notes(request, stu_id, option = '', id = 0):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def serve_protected_document(request, file_path):
     try:
-        if file_path[0:6] != 'media/': raise PermissionError
+        if file_path[0:6] != 'media/' or '../' in file_path: raise PermissionError
         file_path = os.path.join(settings.BASE_DIR, file_path)
         with open(file_path, 'rb') as fh:
             content = Cryptographer.decrypted(fh.read())
@@ -367,7 +367,7 @@ class Tmp_File(object):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def get_tmp_file(request, file_path, content_type):
     try:
-        if file_path[0:10] == 'documents/': raise PermissionError
+        if file_path[0:10] == 'documents/' or '../' in file_path: raise PermissionError
         file_path = os.path.join(settings.MEDIA_ROOT, file_path)
         fh = Tmp_File(file_path)
         content = fh.open('rb')
