@@ -325,8 +325,13 @@ def download_stu_info(request, checked = 1):
                 else: j += len(fields[name])
             i += 1
         file_path = os.path.join(settings.MEDIA_ROOT, "data.xlsx")
-        wb.save(file_path)
-        return redirect('get_tmp_file', file_path = file_path, content_type = "application/vnd.ms-excel")
+        try:
+            wb.save(file_path)
+        except:
+            messages.error(request, "Some error has occured, please retry it later.")
+            return redirect('download_stu_info')
+        finally:
+            return redirect('get_tmp_file', file_path = file_path, content_type = "application/vnd.ms-excel")
     else:
         checked = int(checked) if checked else 1
         fields = []
