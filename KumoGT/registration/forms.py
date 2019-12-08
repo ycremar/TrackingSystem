@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, SetPasswordForm, PasswordChangeForm
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import password_validation
 from django.utils.translation import gettext, gettext_lazy as _
@@ -34,7 +34,7 @@ class SignUpForm(UserCreationForm):
             'username': forms.TextInput(attrs = {'class': 'w3-input w3-center'}),
         }
         
-class ChangePasswordForm(SetPasswordForm):
+class AdminChangePasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(
         label=_("New password"),
         widget=forms.PasswordInput(attrs = {'class': 'w3-input w3-center'}),

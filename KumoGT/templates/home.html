@@ -11,9 +11,12 @@
       <a href="{% url 'students' %}" class="w3-button w3-block w3-left-align">Search Students</a>
     </li>
     <li>
-      <a href="{% url 'download_stu_info' %}" class="w3-button w3-block w3-left-align">Download Information of All Students</a>
+      <a href="{% url 'account' %}" class="w3-button w3-block w3-left-align">Manage My Account</a>
     </li>
     {% if request.user.is_superuser %}
+    <li>
+      <a href="{% url 'download_stu_info' %}" class="w3-button w3-block w3-left-align">Download Information of All Students (admin only)</a>
+    </li>
     <li>
       <a href="{% url 'manage_users' %}" class="w3-button w3-block w3-left-align">Manage Users (admin only)</a>
     </li>

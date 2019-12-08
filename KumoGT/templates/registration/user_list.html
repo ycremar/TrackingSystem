@@ -37,7 +37,7 @@
         {% else %}
         <td class="w3-padding-16">&#10006;</td>
         <td>
-            <a href="{% url 'change_pwd' id=user.id %}" target="_blank">
+            <a href="{% url 'change_users_pwd' id=user.id %}" target="_blank">
                 <button type="button" class="w3-button w3-theme-d5">Change Password</button>
             </a>
             {% if user.is_active %}

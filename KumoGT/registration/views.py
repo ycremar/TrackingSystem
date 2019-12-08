@@ -1,16 +1,20 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib.auth.models import User, Group
 
-from .forms import SignUpForm, ChangePasswordForm
+from .forms import SignUpForm, AdminChangePasswordForm, PasswordChangeForm
 from KumoGT.functions import delete
 
 
 @user_passes_test(lambda u: u.is_superuser)
 def manage_users(request):
     return render(request, 'manage_users.html')
+
+@login_required(login_url='/login/')
+def manage_my_account(request):
+    return render(request, 'manage_my_account.html')
 
 @user_passes_test(lambda u: u.is_superuser)
 def sign_up(request):
@@ -34,18 +38,35 @@ def all_users(request):
     return render(request, 'user_list.html', { 'users': users })
     
 @user_passes_test(lambda u: u.is_superuser)
-def change_pwd(request, id):
+def change_users_pwd(request, id):
     user = User.objects.get(id=id)
     if request.method == 'POST':
-        form = ChangePasswordForm(user, data=request.POST)
+        form = AdminChangePasswordForm(user, data=request.POST)
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Your password was successfully updated!')
             return redirect('user_list')
     else:
-        form = ChangePasswordForm(user)
+        form = AdminChangePasswordForm(user)
     return render(request, 'change_pwd.html', {'form': form, 'username': user.username})
+
+@login_required(login_url='/login/')
+def change_my_pwd(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('account')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_my_pwd.html', {
+        'form': form
+    })
     
 @user_passes_test(lambda u: u.is_superuser)
 def reset_admin_pwd(request, id):
