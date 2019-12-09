@@ -322,6 +322,8 @@ def download_stu_info(request, **kwargs):
         file_name = "data.xlsx"
         file_path = os.path.join(settings.MEDIA_ROOT, file_name)
         try:
+            if not os.path.isdir(settings.MEDIA_ROOT):
+                os.mkdir(settings.MEDIA_ROOT)
             wb.save(file_path)
         except:
             messages.error(request, "Some error has occured, please retry it later.")
