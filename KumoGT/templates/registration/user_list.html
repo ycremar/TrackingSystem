@@ -30,8 +30,8 @@
         {% if user.is_superuser %}
         <td class="w3-padding-16">&#10004;</td>
         <td>
-            <a href="#" target="_blank">
-                <button type="button" class="w3-button w3-theme-d5">Reset Password</button>
+            <a href="{% url 'change_users_pwd' id=user.id %}" target="_blank">
+                <button type="button" class="w3-button w3-theme-d5">Change Password</button>
             </a>
         </td>
         {% else %}

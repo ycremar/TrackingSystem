@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import re_path
 from KumoGT import views
-from KumoGT.registration import sign_up, manage_users, all_users, manage_my_account, change_my_pwd
-from KumoGT.registration import change_users_pwd, reset_admin_pwd, delete_user, activate_user, deactivate_user
+from KumoGT.registration import sign_up, manage_users, all_users, manage_my_account,\
+    change_my_pwd, change_users_pwd, delete_user, activate_user, deactivate_user
 from django.contrib.auth import views as auth_views
 
 from django.conf import settings
@@ -54,7 +54,6 @@ urlpatterns = [
     path('manage_users/', manage_users, name='manage_users'),
     path('manage_users/sign_up/', sign_up, name='sign_up'),
     path('manage_users/user_list/', all_users, name='user_list'),
-    path('manage_users/user_list/reset_pwd/<int:id>/', reset_admin_pwd, name='reset_pwd'),
     path('manage_users/user_list/change_pwd/<int:id>/', change_users_pwd, name='change_users_pwd'),
     path('manage_users/user_list/delete_user/<int:id>/', delete_user, name='delete_user'),
     path('manage_users/user_list/activate/<int:id>/', activate_user, name='activate_user'),

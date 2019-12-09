@@ -7,11 +7,13 @@
     <h1>Change My Password</h1>   
   </header>
   <div class="w3-container w3-card w3-padding">
-    <form method="post">
+    <form method="post" id="change_pwd_form">
       {% csrf_token %}
-      {{ form }}
-      <button type="submit">Save changes</button>
+      {% include "change_pwd_form.html" %}
     </form>
+    <div class="w3-cell-row w3-center">
+    <button type="submit" form="change_pwd_form" class="w3-button w3-theme-d5 w3-center">Change</button>
+    </div>
   </div>
 </div>
 {% endblock %}

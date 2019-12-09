@@ -272,7 +272,7 @@ def degrees(request, stu_id, option = '', id = 0):
             'option': option,
         })
 
-@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+@user_passes_test(lambda u: u.is_superuser)
 def download_stu_info(request, **kwargs):
     models = [Student, Degree, Pre_Exam_Info, T_D_Info]
     if request.method == 'POST':

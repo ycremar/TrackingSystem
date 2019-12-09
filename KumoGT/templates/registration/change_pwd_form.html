@@ -1,0 +1,17 @@
+{% for field in form %}
+<p>
+    {{ field.label_tag }}<br>
+    {{ field }}
+    {% if field.help_text %}
+    <small style="color: grey">{{ field.help_text }}</small>
+    {% endif %}
+    {% if field.errors %}
+    <div class="w3-panel w3-pale-red w3-display-container w3-card-2">
+        <span onclick="this.parentElement.style.display='none'"
+            class="w3-button w3-display-topright">X</span>
+        <h3>Error!</h3>
+        {{ field.errors }}
+    </div>
+    {% endif %}
+</p>
+{% endfor %}

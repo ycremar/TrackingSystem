@@ -82,7 +82,10 @@
 </div>
 <div class="w3-cell-row">
 {% include "pagination.html" with this_page=students neigh_pages=neigh_pages %}
-<button type="button" class="w3-button w3-theme-d5 w3-cell w3-margin-right" onclick="download_stu_info()">Download</button>
+{% if request.user.is_superuser %}
+    <button type="button" class="w3-button w3-theme-d5 w3-cell w3-margin-right" 
+        onclick="download_stu_info()">Download</button>
+{% endif %}
 <div class="w3-cell">
     <a href="{% url 'create_stu' %}" target="_blank"><button class="w3-button w3-theme-d5">Add</button></a>
 </div>
