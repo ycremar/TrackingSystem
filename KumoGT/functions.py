@@ -13,6 +13,7 @@ import re
 from django.contrib.auth.decorators import user_passes_test
 
 def get_stu_search_dict(args, need_form = False):
+    text_fields = ["uin", "first_name", "last_name", "advisor"]
     seach_dict = {}
     if need_form: search_form_params = {}
     for name, val in args.items():
@@ -24,7 +25,10 @@ def get_stu_search_dict(args, need_form = False):
                     continue
                 else:
                     name += '__deg_type'
-            seach_dict[name + "__contains"] = val
+            if name in text_fields:
+                seach_dict[name + "__contains"] = val
+            else:
+                seach_dict[name] = val
     if need_form: return [seach_dict, search_form_params]
     else: return seach_dict
 
