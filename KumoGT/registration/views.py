@@ -75,7 +75,7 @@ def deactivate_user(request, id):
     user = User.objects.get(id=id)
     user.is_active = False
     user.save()
-    return redirect('userlist')
+    return redirect('user_list')
     
 @user_passes_test(lambda u: u.is_superuser)
 def activate_user(request, id):
