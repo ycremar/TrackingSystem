@@ -112,6 +112,11 @@ class Fin_Exam_Info(models.Model):
     class Meta:
         verbose_name = 'Final Exam'
 
+class Other_Doc(Document):
+    doc_type = models.CharField(max_length=255, verbose_name='Document Type')
+    class Meta:
+        verbose_name = 'Other Document'
+
 class Session_Notes(models.Model):
     date = models.DateField(verbose_name='Date')
     note = models.CharField(max_length=4096, blank=True, verbose_name='Note')

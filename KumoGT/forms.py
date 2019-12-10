@@ -80,13 +80,15 @@ class deg_form(forms.ModelForm):
             'deg_recv_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:52%'}),
         }
 
-def create_doc_form(model_in):
+def create_doc_form(model_in, type_widget = 0): # type_widget: 0 for select, others for input
     '''Generate Model Form for docs dynamically'''
     class Meta:
         model = model_in        # model input
         fields = ['doc_type', 'doc', 'notes', 'appr_cs_date', 'appr_ogs_date']
         widgets = {
-            'doc_type': forms.Select(attrs={'class': 'w3-select'}),
+            'doc_type': forms.Select(attrs={'class': 'w3-select'})\
+                if type_widget == 0 else\
+                forms.TextInput(attrs={'class': 'w3-input'}) ,
             'notes': forms.Textarea(attrs={'cols': 15, 'rows': 5}),
             'appr_cs_date': forms.SelectDateWidget\
                 (attrs={'class': 'w3-select'},\

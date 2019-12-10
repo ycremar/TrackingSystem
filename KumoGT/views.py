@@ -9,7 +9,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info,\
-    T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Notes
+    T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Notes,\
+    Other_Doc
 from django.core.paginator import Paginator
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
@@ -147,7 +148,22 @@ def thesis_dissertation(request, deg_id, option = '', id = 0):
                 'option': option,
                 'info_form': info_form,
             })
-            
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def other_doc(request, deg_id, option = '', id = 0):
+    if request.method == 'POST':
+        return deg_doc(request, "Other Document", Other_Doc, "/other_doc/", deg_id, option, id)[1]
+    else:
+        method, data = deg_doc(request, "Other Document", Other_Doc, "/other_doc/", deg_id, option, id)
+        if method != 'show': return data
+        else:
+            deg, forms = data
+            return render(request, 'other_doc.html', {
+                'deg': deg,
+                'forms': forms,
+                'option': option,
+            })
+
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def session_notes(request, stu_id, option = '', id = 0):
     if option == 'del':
@@ -259,7 +275,7 @@ def delete_stu(request, id):
 def degrees(request, stu_id, option = '', id = 0):
     if option == 'del':
         return delete(request, Degree, id, "Degree", "",\
-            "deg_type", "/student/" + stu_id + "/degrees/", True)
+            "deg_type", "/student/" + stu_id + "/degrees/")
     if request.method == 'POST':
         return post_degrees(request, stu_id, option, id)
     else:

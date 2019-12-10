@@ -32,7 +32,7 @@ def get_stu_search_dict(args, need_form = False):
     if need_form: return [seach_dict, search_form_params]
     else: return seach_dict
 
-def delete(request, model, id, obj_text, field_text, show_field, redirect_url, has_choices = False):
+def delete(request, model, id, obj_text, field_text, show_field, redirect_url):
     try:
         del_obj = model.objects.get(id = id)
     except ObjectDoesNotExist:
@@ -43,7 +43,7 @@ def delete(request, model, id, obj_text, field_text, show_field, redirect_url, h
         if attr: field_text = "{0}".format(del_obj.__dict__[attr.group()[1:]])
         if field_text != "": field_text += ": "
         if request.method == 'POST':
-            if has_choices:
+            if hasattr(del_obj, "get_{0}_display".format(show_field)):
                 show_field_text = getattr(del_obj, "get_{0}_display".format(show_field))
                 msg_text = "({0}{1}) is deleted.".format(field_text, show_field_text())
             else:
@@ -52,7 +52,7 @@ def delete(request, model, id, obj_text, field_text, show_field, redirect_url, h
             messages.success(request, obj_text + msg_text)
             return redirect(redirect_url)
         else:
-            if has_choices:
+            if hasattr(del_obj, "get_{0}_display".format(show_field)):
                 show_field_text = getattr(del_obj, "get_{0}_display".format(show_field))
                 text = "Are you sure to delete this " + obj_text.lower() + \
                     "({0}{1})?".format(field_text, show_field_text())
@@ -148,7 +148,7 @@ def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, 
 def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, info_model = None, info_form = None):
     if option == 'del':
         return ['del', delete(request, doc_model, id, "Document", "@doc",\
-            "doc_type", "/degree/" + deg_id + redirect_url, True)]
+            "doc_type", "/degree/" + deg_id + redirect_url)]
     if option == 'del_all':
         return ['del_all', delete_record(request, deg_id, info_model, doc_model, record_text,\
             "/degree/" + deg_id + redirect_url)]
@@ -156,12 +156,13 @@ def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, i
         return post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, info_model, info_form)
     else:
         docs = doc_model.objects.all() if deg_id == '0' else doc_model.objects.filter(degree_id = deg_id)
+        type_widget = 1 if record_text == "Other Document" else 0
         forms = []
         for doc in docs:
-            forms.append(create_doc_form(doc_model)(instance = doc, prefix = str(doc.id)))
+            forms.append(create_doc_form(doc_model, type_widget)(instance = doc, prefix = str(doc.id)))
         # form for new document
         if option == 'add' and deg_id != '0':
-            forms.append(create_doc_form(doc_model)(prefix = 'new'))
+            forms.append(create_doc_form(doc_model, type_widget)(prefix = 'new'))
         deg = Degree.objects.get(id = deg_id) if deg_id != '0' else None
         return ['show', [deg, forms]]
 

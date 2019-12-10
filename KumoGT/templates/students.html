@@ -31,6 +31,9 @@
             case "cur_t_d":
                 window.open("/degree/" + deg_id + "/thesis_dissertation/");
                 break;
+            case "cur_oth_doc":
+                window.open("/degree/" + deg_id + "/other_doc/");
+                break;
             default:
                 break;
         }
@@ -129,6 +132,7 @@
                     <option value = "cur_t_d_proposal">Current Thesis/Dissertation Proposal</option>
                     <option value = "cur_fin_exam">Current Final Exam (Defense)</option>
                     <option value = "cur_t_d">Current Thesis/Dissertation</option>
+                    <option value = "cur_oth_doc">Current Other Documents</option>
                 {% endif %}
                 <option value ="ses_note">Session Notes</option>
             </select>
