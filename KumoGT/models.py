@@ -6,7 +6,8 @@ from .sel_options import GENDER, ETHNICITY_TYPE, US_RESIDENCY_TYPE,\
     TEXAS_RESIDENCY_TYPE, CITIZENSHIP, STUDENT_STATUS_TYPE, SEMESTER_TYPE,\
     YES_NO_TYPE, DEGREE_TYPE, MAJOR_TYPE,\
     DEGREE_PLAN_DOC_TYPE, PRE_EXAM_DOC_TYPE, EXAM_RESULT_TYPE,\
-    T_D_DOC_TYPE, T_D_PROP_DOC_TYPE, FIN_EXAM_DOC_TYPE
+    T_D_DOC_TYPE, T_D_PROP_DOC_TYPE, FIN_EXAM_DOC_TYPE, QUAL_EXAM_DOC_TYPE,\
+    ANNUAL_REVIEW_DOC_TYPE, ANNUAL_REVIEW_STATUS_TYPE
 import os
 
 class Student(models.Model):
@@ -79,6 +80,24 @@ class Pre_Exam_Info(models.Model):
     class Meta:
         verbose_name = 'Preliminary Exam'
 
+class Qual_Exam_Doc(Document):
+    doc_type = models.CharField(max_length=255, choices=QUAL_EXAM_DOC_TYPE, default='not_sel', verbose_name='Document Type')
+    year = models.SmallIntegerField(blank = False, default=0, verbose_name='Year',\
+        validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
+    sem = models.CharField(max_length=31, choices=SEMESTER_TYPE,\
+        default='fall', verbose_name='Semester')
+    result = models.CharField(max_length=15, choices=EXAM_RESULT_TYPE, default='none', verbose_name='Result')
+    class Meta:
+        verbose_name = 'Qualifying Exam'
+
+class Annual_Review_Doc(Document):
+    doc_type = models.CharField(max_length=255, choices=ANNUAL_REVIEW_DOC_TYPE, default='not_sel', verbose_name='Document Type')
+    year = models.SmallIntegerField(blank = False, default=0, verbose_name='Year',\
+        validators=[MaxValueValidator(32767), MinValueValidator(-32768)])
+    status = models.CharField(max_length=15, choices=ANNUAL_REVIEW_STATUS_TYPE, default='none', verbose_name='Status')
+    class Meta:
+        verbose_name = 'Annual Review'
+
 class T_D_Prop_Doc(Document): # Thesis/Dissertation Proposal Document
     doc_type = models.CharField(max_length=255, choices=T_D_PROP_DOC_TYPE, default='not_sel', verbose_name='Document Type')
     class Meta:
@@ -129,6 +148,9 @@ class Session_Notes(models.Model):
 @receiver(models.signals.post_delete, sender=T_D_Prop_Doc)
 @receiver(models.signals.post_delete, sender=T_D_Doc)
 @receiver(models.signals.post_delete, sender=Fin_Exam_Doc)
+@receiver(models.signals.post_delete, sender=Other_Doc)
+@receiver(models.signals.post_delete, sender=Qual_Exam_Doc)
+@receiver(models.signals.post_delete, sender=Annual_Review_Doc)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
     """
     Deletes file from filesystem
@@ -143,6 +165,9 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 @receiver(models.signals.pre_save, sender=T_D_Prop_Doc)
 @receiver(models.signals.pre_save, sender=T_D_Doc)
 @receiver(models.signals.pre_save, sender=Fin_Exam_Doc)
+@receiver(models.signals.pre_save, sender=Other_Doc)
+@receiver(models.signals.pre_save, sender=Qual_Exam_Doc)
+@receiver(models.signals.pre_save, sender=Annual_Review_Doc)
 def auto_delete_file_on_change(sender, instance, **kwargs):
     """
     Deletes old file from filesystem

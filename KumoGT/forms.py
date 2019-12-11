@@ -1,6 +1,7 @@
 from django import forms
 from django.utils import timezone
-from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info, Session_Notes
+from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info,\
+    Session_Notes
 from .sel_options import STUDENT_STATUS_TYPE, GENDER, ETHNICITY_TYPE,\
     US_RESIDENCY_TYPE, TEXAS_RESIDENCY_TYPE, CITIZENSHIP,\
     SEMESTER_TYPE, DEGREE_TYPE, MAJOR_TYPE, YES_NO_TYPE
@@ -80,8 +81,11 @@ class deg_form(forms.ModelForm):
             'deg_recv_sem': forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:52%'}),
         }
 
-def create_doc_form(model_in, type_widget = 0): # type_widget: 0 for select, others for input
-    '''Generate Model Form for docs dynamically'''
+def create_doc_form(model_in, type_widget = 0, extra_fields = []):
+    '''Generate Model Form for docs dynamically
+        type_widget: 0 for select, others for input
+        extra_field: [(name, widget)]
+    '''
     class Meta:
         model = model_in        # model input
         fields = ['doc_type', 'doc', 'notes', 'appr_cs_date', 'appr_ogs_date']
@@ -97,6 +101,10 @@ def create_doc_form(model_in, type_widget = 0): # type_widget: 0 for select, oth
                 (attrs={'class': 'w3-select'},\
                     years = [y for y in range(timezone.now().year - 7, timezone.now().year + 8)])
         }
+
+    for field in extra_fields:
+        Meta.fields.append(field[0])
+        Meta.widgets[field[0]] = field[1]
 
     attrs = {'Meta':Meta}
 

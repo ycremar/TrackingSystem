@@ -17,6 +17,19 @@ PRE_EXAM_DOC_TYPE = [('not_sel', 'Not Selected'),
                      ('report', 'Preliminary Exam Report'),
                      ('written', 'Preliminary Exam Written')]
 
+QUAL_EXAM_DOC_TYPE = [('not_sel', 'Not Selected'),
+                      ('qual_exam', 'Qualifying Exam'),
+                      ('other', 'Other')]
+
+ANNUAL_REVIEW_DOC_TYPE = [('not_sel', 'Not Selected'),
+                      ('annual_review', 'Annual Review'),
+                      ('other', 'Other')]
+
+ANNUAL_REVIEW_STATUS_TYPE = [('none', '----'),
+                             ('sat', 'Satisfied'),
+                             ('need_imp', 'Need Improvement'),
+                             ('unsat', 'Unsatisfied')]
+
 T_D_PROP_DOC_TYPE = [('not_sel', 'Not Selected'),
                      ('title_page', 'Thesis/Dissertation Proposal Title Page'),
                      ('prop', 'Thesis/Dissertation Proposal')]

@@ -31,6 +31,12 @@
             case "cur_t_d":
                 window.open("/degree/" + deg_id + "/thesis_dissertation/");
                 break;
+            case "cur_qual_exam":
+                window.open("/degree/" + deg_id + "/qualifying_exam/");
+                break;
+            case "cur_annual_review":
+                window.open("/degree/" + deg_id + "/annual_review/");
+                break;
             case "cur_oth_doc":
                 window.open("/degree/" + deg_id + "/other_doc/");
                 break;
@@ -129,6 +135,10 @@
                 {% if stu.cur_degree %}
                     <option value = "cur_deg_plan">Current Degree Plan</option>
                     <option value = "cur_pre_exam">Current Preliminary Exam</option>
+                    {% if stu.cur_degree.deg_type == 'phd' %}
+                    <option value = "cur_qual_exam">Current Qualifying Exam</option>
+                    <option value = "cur_annual_review">Current Annual Review</option>
+                    {% endif %}
                     <option value = "cur_t_d_proposal">Current Thesis/Dissertation Proposal</option>
                     <option value = "cur_fin_exam">Current Final Exam (Defense)</option>
                     <option value = "cur_t_d">Current Thesis/Dissertation</option>

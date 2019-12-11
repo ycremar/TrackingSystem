@@ -32,6 +32,15 @@
             case "oth_doc":
                 window.open("/degree/" + deg_id + "/other_doc/");
                 break;
+            case "qual_exam":
+                window.open("/degree/" + deg_id + "/qualifying_exam/");
+                break;
+            case "annual_review":
+                window.open("/degree/" + deg_id + "/annual_review/");
+                break;
+            case "oth_doc":
+                window.open("/degree/" + deg_id + "/other_doc/");
+                break;
             default:
                 break;
         }
@@ -97,6 +106,10 @@
                             <select class="w3-select" id="{{ form.instance.id }}_select" style="width: auto;">
                                 <option value = "deg_plan">Degree Plan</option>
                                 <option value = "pre_exam">Preliminary Exam</option>
+                                {% if form.instance.deg_type == 'phd' %}
+                                <option value = "qual_exam">Qualifying Exam</option>
+                                <option value = "annual_review">Annual Review</option>
+                                {% endif %}
                                 <option value = "t_d_proposal">Thesis/Dissertation Proposal</option>
                                 <option value = "fin_exam">Final Exam (Defense)</option>
                                 <option value = "t_d">Thesis/Dissertation</option>

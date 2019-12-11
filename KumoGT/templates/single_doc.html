@@ -1,0 +1,38 @@
+<tr class="w3-theme-l3">
+    <th style="width:30%">Document</th>
+    <th style="width:21%">File</th>
+    <th style="width:11%">Uploaded at</th>
+    <th style="width:10%">Notes</th>
+    <th style="width:11%">Approved CS</th>
+    <th style="width:11%">Approved OGS</th>
+    <th style="width:6%">Operation</th>
+</tr>
+<tr class="w3-hover-light-gray">
+    <td class="w3-padding-48" style="width:30%">{{ form.doc_type }}</td>
+    <td class="w3-padding-32" style="width:21%">{{ form.doc }}</td>
+    {% if form.instance.uploaded_at %}
+        <td class="w3-padding-48" style="width:11%">{{ form.instance.uploaded_at }}</td>
+    {% else %}
+        <td class="w3-padding-48" style="width:11%"></td>
+    {% endif %}
+    <td style="width:10%">{{ form.notes }}</td>
+    <td style="width:11%">{{ form.appr_cs_date }}</td>
+    <td style="width:11%">{{ form.appr_ogs_date }}</td>
+    {% if form.instance.id %}
+        {% if deg %}
+            <td class="w3-padding-48" style="width:6%">
+                <a href="{% url doc_url_name deg_id=deg.id option='del' id=form.instance.id %}">
+                    <button type="button" class="w3-button w3-red">Delete</button>
+                </a>
+            </td>
+        {% else %}
+            <td class="w3-padding-48" style="width:6%">
+                <a href="{% url doc_url_name deg_id=0 option='del' id=form.instance.id %}">
+                    <button type="button" class="w3-button w3-red">Delete</button>
+                </a>
+            </td>
+        {% endif %}
+    {% else %}
+        <td></td>
+    {% endif %}
+</tr>   

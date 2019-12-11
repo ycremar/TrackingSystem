@@ -1,3 +1,4 @@
+import django.forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -10,11 +11,12 @@ from django.views.static import serve
 
 from .models import Deg_Plan_Doc, Student, Degree, Pre_Exam_Doc, Pre_Exam_Info,\
     T_D_Prop_Doc, Fin_Exam_Info, Fin_Exam_Doc, T_D_Doc, T_D_Info, Session_Notes,\
-    Other_Doc
+    Other_Doc, Qual_Exam_Doc, Annual_Review_Doc
 from django.core.paginator import Paginator
 
 from .forms import create_doc_form, stu_search_form, stu_bio_form, deg_form,\
-    pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form, session_notes_form
+    pre_exam_info_form, final_exam_info_form, thesis_dissertation_info_form,\
+    session_notes_form
 from .crypt import Cryptographer
 from .functions import deg_doc, get_info_form, get_stu_objs, post_degrees, post_session_notes,\
     delete, get_stu_search_dict
@@ -92,6 +94,55 @@ def preliminary_exam(request, deg_id, option = '', id = 0):
                 'forms': forms,
                 'option': option,
                 'info_form': info_form,
+            })
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def qualifying_exam(request, deg_id, option = '', id = 0):
+    if deg_id != '0' and Degree.objects.get(id = deg_id).deg_type != 'phd':
+        messages.error(request, "Only PhD degree has qualifying exam!")
+        return redirect('home')
+    extra_fields = [
+            ('year', django.forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:45%'})),
+            ('sem', django.forms.Select(attrs = {'class': 'w3-select w3-cell', 'style': 'width:52%'})),
+            ('result', django.forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'}))
+        ]
+    if request.method == 'POST':
+        return deg_doc(request, "Qualifying Exam", Qual_Exam_Doc, "/qualifying_exam/",\
+            deg_id, option, id, extra_fields = extra_fields)[1]
+    else:
+        method, data = deg_doc(request, "Qualifying Exam", Qual_Exam_Doc, "/qualifying_exam/",\
+            deg_id, option, id, extra_fields = extra_fields)
+        if method != 'show': return data
+        else:
+            deg, forms = data
+            return render(request, 'qualifying_exam.html', {
+                'deg': deg,
+                'forms': forms,
+                'option': option,
+            })
+
+@conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
+def annual_review(request, deg_id, option = '', id = 0):
+    if deg_id != '0' and Degree.objects.get(id = deg_id).deg_type != 'phd':
+        messages.error(request, "Only PhD degree has annual review!")
+        return redirect('home')
+    extra_fields = [
+            ('year', django.forms.NumberInput(attrs = {'class': 'w3-input w3-cell', 'style': 'width:auto;'})),
+            ('status', django.forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'}))
+        ]
+    if request.method == 'POST':
+        return deg_doc(request, "Annual Review", Annual_Review_Doc, "/annual_review/",\
+            deg_id, option, id, extra_fields = extra_fields)[1]
+    else:
+        method, data = deg_doc(request, "Annual Review", Annual_Review_Doc, "/annual_review/",\
+            deg_id, option, id, extra_fields = extra_fields)
+        if method != 'show': return data
+        else:
+            deg, forms = data
+            return render(request, 'annual_review.html', {
+                'deg': deg,
+                'forms': forms,
+                'option': option,
             })
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)

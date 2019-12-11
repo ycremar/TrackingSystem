@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.utils.safestring import mark_safe
 
-from .models import Deg_Plan_Doc, Student, Degree, Session_Notes
+from .models import Deg_Plan_Doc, Student, Degree, Session_Notes,\
+    Annual_Review_Doc, Qual_Exam_Doc
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import create_doc_form, deg_form, session_notes_form
@@ -92,7 +93,8 @@ def delete_record(request, degree_id, info_model, doc_model, record_text, redire
                 'redirect_url': redirect_url,
                 })
 
-def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, info_model = None, info_form = None):
+def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, type_widget,\
+    info_model = None, info_form = None, extra_fields = []):
     forms = []
     changed, error = False, False
     # submit info form
@@ -110,7 +112,7 @@ def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, 
     # submit doc forms
     docs = doc_model.objects.all() if deg_id == '0' else doc_model.objects.filter(degree_id = deg_id)
     for doc in docs:
-        forms.append(create_doc_form(doc_model)(request.POST, request.FILES,\
+        forms.append(create_doc_form(doc_model, type_widget, extra_fields)(request.POST, request.FILES,\
             instance = doc, prefix = str(doc.id)))
     for form in forms:
         if form.has_changed():
@@ -125,7 +127,7 @@ def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, 
                     (form.instance.doc, form.instance.get_doc_type_display(), form.errors)))
     # submit new doc form
     if option == 'add' and deg_id != '0':
-        new_form = create_doc_form(doc_model)(request.POST, request.FILES, prefix = 'new')
+        new_form = create_doc_form(doc_model, type_widget, extra_fields)(request.POST, request.FILES, prefix = 'new')
         changed = True
         if new_form.is_valid():
             doc = new_form.save(commit = False)
@@ -145,24 +147,26 @@ def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, 
         messages.warning(request, "Some documents" + info_msg + "are not updated.")
     return ['submit', redirect("/degree/" + deg_id + redirect_url)]
 
-def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, info_model = None, info_form = None):
+def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id,\
+    info_model = None, info_form = None, extra_fields = []):
     if option == 'del':
         return ['del', delete(request, doc_model, id, "Document", "@doc",\
             "doc_type", "/degree/" + deg_id + redirect_url)]
     if option == 'del_all':
         return ['del_all', delete_record(request, deg_id, info_model, doc_model, record_text,\
             "/degree/" + deg_id + redirect_url)]
+    type_widget = 1 if record_text == "Other Document" else 0
     if request.method == 'POST':
-        return post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, info_model, info_form)
+        return post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, type_widget,\
+            info_model, info_form, extra_fields)
     else:
         docs = doc_model.objects.all() if deg_id == '0' else doc_model.objects.filter(degree_id = deg_id)
-        type_widget = 1 if record_text == "Other Document" else 0
         forms = []
         for doc in docs:
-            forms.append(create_doc_form(doc_model, type_widget)(instance = doc, prefix = str(doc.id)))
+            forms.append(create_doc_form(doc_model, type_widget, extra_fields)(instance = doc, prefix = str(doc.id)))
         # form for new document
         if option == 'add' and deg_id != '0':
-            forms.append(create_doc_form(doc_model, type_widget)(prefix = 'new'))
+            forms.append(create_doc_form(doc_model, type_widget, extra_fields)(prefix = 'new'))
         deg = Degree.objects.get(id = deg_id) if deg_id != '0' else None
         return ['show', [deg, forms]]
 
@@ -203,7 +207,17 @@ def post_degrees(request, stu_id, option = '', id = 0):
         if form.has_changed():
             changed = True
             if form.is_valid():
-                form.save()
+                if form.instance.deg_type != 'phd' and\
+                    (Annual_Review_Doc.objects.filter(degree_id = form.instance.id)\
+                    or Qual_Exam_Doc.objects.filter(degree_id = form.instance.id)):
+                    error = True
+                    err_text = "All annual review and qualifying exam records must be deleted before changing this degree to non-PhD degrees!"
+                    messages.error(request,\
+                        mark_safe("Degree({0} first registered at {1} {2}) failed to update due to:<br>{3}".format\
+                            (form.instance.get_deg_type_display(), form.instance.get_first_reg_sem_display(),\
+                            form.instance.first_reg_year, err_text)))
+                else:
+                    form.save()
             else:
                 error = True
                 messages.error(request,\

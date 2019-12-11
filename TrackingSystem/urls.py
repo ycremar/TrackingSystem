@@ -84,6 +84,10 @@ urlpatterns = [
         views.degree_plan, name = 'degree_plan'),
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)preliminary_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.preliminary_exam, name = 'preliminary_exam'),
+    re_path(r'^degree/(?:(?P<deg_id>\d+)/)qualifying_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+        views.qualifying_exam, name = 'qualifying_exam'),
+    re_path(r'^degree/(?:(?P<deg_id>\d+)/)annual_review/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+        views.annual_review, name = 'annual_review'),
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)thesis_dissertation_proposal/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.thesis_dissertation_proposal, name = 'thesis_dissertation_proposal'),
     re_path(r'^degree/(?:(?P<deg_id>\d+)/)final_exam/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\

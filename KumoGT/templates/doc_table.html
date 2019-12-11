@@ -44,14 +44,4 @@
             {% endfor %}
         </table>
     </div>
-    {% if deg %}
-    {% if option == 'add' %}
-        <a href="{% url doc_url_name deg_id=deg.id %}">
-            <button type="button" class="w3-button w3-theme-d5">Cancel</button>
-        </a>
-    {% else %}
-        <a href="{% url doc_url_name deg_id=deg.id option='add' %}">
-            <button type="button" class="w3-button w3-theme-d5">Add</button>
-        </a>
-    {% endif %}
-    {% endif %}
+    {% include "doc_add_cancel.html" %}
