@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="w3-container w3-content" style="max-width:600px">
+    <header class="w3-container w3-theme w3-center w3-row w3-card w3-padding">
+        <h1>Reset Password</h1>   
+    </header>
+    <div class="w3-container w3-card w3-padding">
+        <form method="post" id="reset_pwd_form">
+        {% csrf_token %}
+            <div class="w3-container w3-center w3-padding">
+                <label class="w3-cell-row w3-center">Email</label>
+                <input type="email" class="w3-input w3-center" name="email" maxlength="254" required id="id_email">
+            </div>
+            {% if form.username.errors %}
+                <div class="w3-panel w3-pale-red w3-display-container w3-card-2">
+                    <span onclick="this.parentElement.style.display='none'"
+                    class="w3-button w3-display-topright">X</span>
+                    <h3>Error!</h3>
+                    {{ form.username.errors }}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+    <div class="w3-cell-row w3-center">
+        <button type="submit" form="reset_pwd_form" class="w3-button w3-theme-d5 w3-center">Submit</button>
+    </div>
+    <div class="w3-cell-row">
+        <a href="{% url 'login' %}">
+            <button class="w3-button w3-theme-d5 w3-right">Back</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

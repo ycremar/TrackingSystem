@@ -71,6 +71,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'TrackingSystem.wsgi.application'
 
+# Email Settings
+EAMIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'kumo.tamucse@gmail.com'
+EMAIL_HOST_PASSWORD = 'TrackingSystem123'
+DEFAULT_FROM_EMAIL = 'kumo.tamucse@gmail.com'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'# Use this for debug
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="w3-container w3-content" style="max-width:600px">
+    <header class="w3-container w3-theme w3-center w3-row w3-card w3-padding">
+      <h1>Reset Password</h1>   
+    </header>
+    <div class="w3-container w3-card w3-padding">
+        <div class="w3-container w3-center w3-padding">
+            <p class="w3-cell-row w3-center">An email to reset password has been sent.</p>
+        </div>
+    </div>
+    <div class="w3-cell-row w3-center">
+        <a href="{% url 'login' %}">
+          <button class="w3-button w3-theme-d5">Back</button>
+        </a>
+    </div>
+</div>
+{% endblock %}

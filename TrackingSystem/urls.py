@@ -20,6 +20,7 @@ from KumoGT import views
 from KumoGT.registration import sign_up, manage_users, all_users, manage_my_account,\
     change_my_pwd, change_users_pwd, delete_user, activate_user, deactivate_user
 from django.contrib.auth import views as auth_views
+from KumoGT.registration.forms import AdminChangePasswordForm
 
 from django.conf import settings
 from django.conf.urls import url
@@ -51,6 +52,16 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page='/login/'), name='logout'),
     path('account/', manage_my_account, name='account'),
     path('account/change_pwd/', change_my_pwd, name='change_my_pwd'),
+    path('account/reset_pwd/', auth_views.PasswordResetView.\
+        as_view(template_name='reset_pwd.html', success_url='done/',\
+            email_template_name = 'reset_pwd_email.html'), name='reset_pwd'),
+    path('account/reset_pwd/done/',\
+        auth_views.PasswordResetDoneView.as_view(template_name='reset_pwd_done.html'), name='reset_pwd_done'),
+    path('account/reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.\
+        as_view(template_name='reset_pwd_confirm.html', success_url='/account/reset/done/',\
+        form_class=AdminChangePasswordForm), name='reset_pwd_confirm'),
+    path('account/reset/done/', auth_views.PasswordResetCompleteView.\
+        as_view(template_name='reset_pwd_complete.html'), name='reset_pwd_complete'),
     path('manage_users/', manage_users, name='manage_users'),
     path('manage_users/sign_up/', sign_up, name='sign_up'),
     path('manage_users/user_list/', all_users, name='user_list'),
