@@ -38,7 +38,7 @@ For an existing app, run
 heroku git:remote -a $YOUR_HEROKU_APP_NAME
 ```
 
-To use email functions, like password reset. A Config Var named 'SENDGRID_API_KEY' is needed in settings of Heroku App. You can fetch this key in SendGrid Official Site. For more information, read the article [Setup API Key Environment Variable](https://devcenter.heroku.com/articles/sendgrid#setup-api-key-environment-variable) and article [Obtain an API Key](https://devcenter.heroku.com/articles/sendgrid#obtaining-an-api-key).
+To use email functions, like password reset, a Config Var named 'SENDGRID_API_KEY' is needed in settings of Heroku App. You can fetch this key in SendGrid Official Site. For more information, read the article [Setup API Key Environment Variable](https://devcenter.heroku.com/articles/sendgrid#setup-api-key-environment-variable) and article [Obtain an API Key](https://devcenter.heroku.com/articles/sendgrid#obtaining-an-api-key).
 
 
 2. Deploy App
