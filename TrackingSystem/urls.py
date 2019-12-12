@@ -53,7 +53,7 @@ urlpatterns = [
     path('account/', manage_my_account, name='account'),
     path('account/change_pwd/', change_my_pwd, name='change_my_pwd'),
     path('account/reset_pwd/', auth_views.PasswordResetView.\
-        as_view(template_name='reset_pwd.html', success_url='done/',\
+        as_view(template_name='reset_pwd.html', success_url='done/', subject_template_name='reset_pwd_subject.txt',\
             email_template_name = 'reset_pwd_email.html'), name='reset_pwd'),
     path('account/reset_pwd/done/',\
         auth_views.PasswordResetDoneView.as_view(template_name='reset_pwd_done.html'), name='reset_pwd_done'),

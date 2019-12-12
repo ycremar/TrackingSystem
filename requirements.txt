@@ -3,3 +3,4 @@ gunicorn
 django-heroku
 cryptography
 openpyxl
+sendgrid
