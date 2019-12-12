@@ -4,3 +4,4 @@ django-heroku
 cryptography
 openpyxl
 sendgrid
+psycopg2 
