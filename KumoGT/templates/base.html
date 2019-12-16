@@ -6,12 +6,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-light-blue.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<!-- Use static files if no Internet
-{% load static %}
-<link rel="stylesheet" href={% static "css/w3.css" %}>
-<link rel="stylesheet" href={% static "css/w3-theme-light-blue.css" %}>
-<link rel="stylesheet" href={% static "css/roboto.css" %}>
--->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 .w3-sidebar {
@@ -38,7 +33,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 <div class="w3-main" style="margin-left:0px;margin-bottom:32px;" id="main">
 
   <div class="w3-row">
-    <div class="w3-container w3-content" style="max-width:1260px;margin-top:80px;">
+    <div class="w3-container w3-content" style="max-width:1200px;margin-top:80px;">
       {% include "messages.html" %}
       {% block content %}{% endblock %}
     </div>
