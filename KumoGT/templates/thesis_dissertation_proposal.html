@@ -11,14 +11,14 @@
 {% include "degree_info_line.html" %}
 </div>
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
-{% include "doc_table.html" with doc_url_name='thesis_dissertation_proposal' can_delete=perms.KumoGT.can_delete_thesis_dissertation_proposal_document can_add=perms.KumoGT.can_add_thesis_dissertation_proposal_document %}
+{% include "doc_table.html" with doc_url_name='thesis_dissertation_proposal' can_delete=perms.KumoGT.delete_t_d_prop_doc can_add=perms.KumoGT.add_t_d_prop_doc %}
 </form>
 <div class="w3-cell-row w3-center">
-    {% if perms.KumoGT.can_change_thesis_dissertation_proposal_document %}
+    {% if perms.KumoGT.change_t_d_prop_doc %}
         <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
     {% endif %}
 </div>
-{% if perms.KumoGT.can_delete_thesis_dissertation_proposal_document %}
+{% if perms.KumoGT.delete_t_d_prop_doc %}
     {% include "delete_record.html" with doc_url_name='thesis_dissertation_proposal' %}
 {% endif %}
 {% endblock %}

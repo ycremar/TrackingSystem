@@ -11,14 +11,14 @@
 {% include "degree_info_line.html" %}
 </div>
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
-{% include "doc_table.html" with doc_url_name='degree_plan' can_delete=perms.KumoGT.can_delete_degree_plan can_add=perms.KumoGT.can_add_degree_plan %}
+{% include "doc_table.html" with doc_url_name='degree_plan' can_delete=perms.KumoGT.delete_deg_plan_doc can_add=perms.KumoGT.add_deg_plan_doc %}
 </form>
 <div class="w3-cell-row w3-center">
-    {% if perms.KumoGT.can_change_degree_plan %}
+    {% if perms.KumoGT.change_deg_plan_doc %}
         <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
     {% endif %}
 </div>
-{% if perms.KumoGT.can_delete_degree_plan %}
+{% if perms.KumoGT.delete_deg_plan_doc %}
     {% include "delete_record.html" with doc_url_name='degree_plan' %}
 {% endif %}
 {% endblock %}

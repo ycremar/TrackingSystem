@@ -23,21 +23,21 @@
             </tr>
         </table>
         <table class="w3-container w3-table w3-bordered w3-centered">
-            {% include "single_doc.html" with doc_url_name='annual_review' can_delete=perms.KumoGT.can_delete_annual_review %}
+            {% include "single_doc.html" with doc_url_name='annual_review' can_delete=perms.KumoGT.delete_annual_review_doc %}
         </table>
     </div>
 {% endfor %}
 </form>
-{% if perms.KumoGT.can_add_annual_review %}
+{% if perms.KumoGT.add_annual_review_doc %}
     {% include "doc_add_cancel.html" with doc_url_name='annual_review' %}
 {% endif %}
 
 <div class="w3-cell-row w3-center">
-    {% if perms.KumoGT.can_change_annual_review %}
+    {% if perms.KumoGT.change_annual_review_doc %}
     <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
     {% endif %}
 </div>
-{% if perms.KumoGT.can_delete_annual_review %}
+{% if perms.KumoGT.delete_annual_review_doc %}
     {% include "delete_record.html" with doc_url_name='annual_review' %}
 {% endif %}
 {% endblock %}

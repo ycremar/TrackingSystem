@@ -151,19 +151,13 @@ def post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, 
 def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id,\
     info_model = None, info_form = None, extra_fields = []):
     if option == 'del':
-        if not request.user.has_perm('KumoGT.can_delete_'+record_text.replace(' ', '_').lower()):
-            return HttpResponse("Permission Denied")
         return ['del', delete(request, doc_model, id, "Document", "@doc",\
             "doc_type", "/degree/" + deg_id + redirect_url)]
     if option == 'del_all':
-        if not request.user.has_perm('KumoGT.can_delete_'+record_text.replace(' ', '_').lower()):
-            return HttpResponse("Permission Denied")
         return ['del_all', delete_record(request, deg_id, info_model, doc_model, record_text,\
             "/degree/" + deg_id + redirect_url)]
     type_widget = 1 if record_text == "Other Document" else 0
     if request.method == 'POST':
-        if not request.user.has_perm('KumoGT.can_change_'+record_text.replace(' ', '_').lower()):
-            return HttpResponse("Permission Denied")
         return post_deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id, type_widget,\
             info_model, info_form, extra_fields)
     else:
@@ -173,8 +167,6 @@ def deg_doc(request, record_text, doc_model, redirect_url, deg_id, option, id,\
             forms.append(create_doc_form(doc_model, type_widget, extra_fields)(instance = doc, prefix = str(doc.id)))
         # form for new document
         if option == 'add' and deg_id != '0':
-            if not request.user.has_perm('KumoGT.can_add_'+record_text.replace(' ', '_').lower()):
-                return HttpResponse("Permission Denied")
             forms.append(create_doc_form(doc_model, type_widget, extra_fields)(prefix = 'new'))
         deg = Degree.objects.get(id = deg_id) if deg_id != '0' else None
         return ['show', [deg, forms]]

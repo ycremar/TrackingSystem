@@ -24,7 +24,7 @@
     </table>
 </div>
 {% endif %}
-{% include "doc_table.html" with doc_url_name='final_exam' can_delete=perms.KumoGT.can_delete_final_exam can_add=perms.KumoGT.can_add_final_exam %}
+{% include "doc_table.html" with doc_url_name='final_exam' can_delete=perms.KumoGT.delete_fin_exam_doc can_add=perms.KumoGT.add_fin_exam_doc %}
 <br/>
 <br/>
 {% if info_form %}
@@ -51,11 +51,11 @@
 {% endif %}
 </form>
 <div class="w3-cell-row w3-center">
-    {% if perms.KumoGT.can_change_final_exam %}
+    {% if perms.KumoGT.change_fin_exam_doc or perms.KumoGT.change_fin_exam_info %}
         <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
     {% endif %}
 </div>
-{% if perms.KumoGT.can_delete_final_exam %}
+{% if perms.KumoGT.delete_fin_exam_doc and perms.KumoGT.delete_fin_exam_info %}
     {% include "delete_record.html" with doc_url_name='final_exam' %}
 {% endif %}
 {% endblock %}

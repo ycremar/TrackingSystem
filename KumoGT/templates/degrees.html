@@ -91,7 +91,7 @@
                     {% if form.instance.id %}
                         {% if stu %}
                             <td style="width:6%">
-                                {% if perms.KumoGT.can_delete_degree %}
+                                {% if perms.KumoGT.delete_degree %}
                                     <a href="{% url 'degrees' stu_id=stu.id option='del' id=form.instance.id %}">
                                         <button type="button" class="w3-button w3-red">Delete</button>
                                     </a>
@@ -99,7 +99,7 @@
                             </td>
                         {% else %}
                             <td style="width:6%">
-                                {% if perms.KumoGT.can_delete_degree %}
+                                {% if perms.KumoGT.delete_degree %}
                                     <a href="{% url 'degrees' stu_id=0 option='del' id=form.instance.id %}">
                                         <button type="button" class="w3-button w3-red">Delete</button>
                                     </a>
@@ -119,7 +119,7 @@
                                 <option value = "t_d">Thesis/Dissertation</option>
                                 <option value = "oth_doc">Other Documents</option>
                             </select>
-                            {% if perms.KumoGT.can_change_degree %}
+                            {% if perms.KumoGT.change_degree %}
                                 <button type="button" class="w3-button w3-theme-d5" id="{{ form.instance.id }}_edit"
                                     deg_id="{{ form.instance.id }}" onclick="to_edit_page(this)">Edit/View</button>
                             {% else %}
@@ -150,7 +150,7 @@
 </form>
 </div>
 {% if stu %}
-    {% if perms.KumoGT.can_add_degree %}
+    {% if perms.KumoGT.add_degree %}
         {% if option == 'add' %}
             <a href="{% url 'degrees' stu_id=stu.id %}"><button class="w3-button w3-theme-d5">Cancel</button></a>
         {% else %}
@@ -159,7 +159,7 @@
     {% endif %}
 {% endif %}
 <div class="w3-cell-row w3-center">
-    {% if perms.KumoGT.can_change_degree %}
+    {% if perms.KumoGT.change_degree %}
         <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
     {% endif %}
 </div>

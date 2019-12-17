@@ -96,7 +96,7 @@
         onclick="download_stu_info()">Download</button>
 {% endif %}
 <div class="w3-cell">
-    {% if perms.KumoGT.can_add_student %}
+    {% if perms.KumoGT.add_student %}
         <a href="{% url 'create_stu' %}" target="_blank"><button class="w3-button w3-theme-d5">Add</button></a>
     {% endif %}
 </div>
@@ -124,7 +124,7 @@
             <td class="w3-padding-16">None</td>
         {% endif %}
         <td>
-            {% if perms.KumoGT.can_change_student %}
+            {% if perms.KumoGT.change_student %}
             <a href="{% url 'edit_stu' id=stu.id %}" target="_blank">
                 <button type="button" class="w3-button w3-theme-d5">Edit</button>
             </a>
@@ -133,7 +133,7 @@
                 <button type="button" class="w3-button w3-theme-d5">View</button>
             </a>
             {% endif %}
-            {% if perms.KumoGT.can_delete_student %}
+            {% if perms.KumoGT.delete_student %}
             <a href="{% url 'delete_stu' id=stu.id %}">
                 <button type="button" class="w3-button w3-red">Delete</button>
             </a>
@@ -157,7 +157,7 @@
                 <option value ="ses_note">Session Notes</option>
             </select>
             {% if stu.cur_degree %}
-                {% if perms.KumoGT.can_change_student %}
+                {% if perms.KumoGT.change_student %}
                     <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
                         stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">Edit</button>
                 {% else %}
@@ -165,7 +165,7 @@
                         stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">View</button>
                 {% endif %}
             {% else %}
-                {% if perms.KumoGT.can_change_student %}
+                {% if perms.KumoGT.change_student %}
                     <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
                         stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">Edit</button>
                 {% else %}

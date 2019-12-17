@@ -18,7 +18,7 @@
             <td class="w3-padding-16" style="width:10%">{{ note.date }}</td>
             <td style="width:70%"></td>
             <td style="width:10%">
-                {% if perms.KumoGT.can_delete_session_note %}
+                {% if perms.KumoGT.delete_session_notes %}
                     {% if stu %}
                         <a href="{% url 'session_notes' stu_id=stu.id option='del' id=note.id %}">
                             <button type="button" class="w3-button w3-red w3-right">Delete</button>
@@ -56,7 +56,7 @@
         </table>
     {% endif %}
 </div>
-{% if stu and perms.KumoGT.can_add_session_note %}
+{% if stu and perms.KumoGT.add_session_notes %}
     {% if option == 'add' %}
         <a href="{% url 'session_notes' stu_id=stu.id %}">
             <button type="button" class="w3-button w3-theme-d5">Cancel</button>
