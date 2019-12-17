@@ -126,7 +126,7 @@
         <td>
             {% if perms.KumoGT.can_change_student %}
             <a href="{% url 'edit_stu' id=stu.id %}" target="_blank">
-                <button type="button" class="w3-button w3-theme-d5">Edit/View</button>
+                <button type="button" class="w3-button w3-theme-d5">Edit</button>
             </a>
             {% else %}
             <a href="{% url 'edit_stu' id=stu.id %}" target="_blank">
@@ -159,7 +159,7 @@
             {% if stu.cur_degree %}
                 {% if perms.KumoGT.can_change_student %}
                     <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
-                        stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">Edit/View</button>
+                        stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">Edit</button>
                 {% else %}
                     <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
                         stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">View</button>
@@ -167,7 +167,7 @@
             {% else %}
                 {% if perms.KumoGT.can_change_student %}
                     <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
-                        stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">Edit/View</button>
+                        stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">Edit</button>
                 {% else %}
                     <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
                         stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">View</button>
