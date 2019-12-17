@@ -24,10 +24,14 @@
     </table>
 </div>
 {% endif %}
-{% include "doc_table.html" with doc_url_name='preliminary_exam' %}
+{% include "doc_table.html" with doc_url_name='preliminary_exam' can_delete=perms.KumoGT.can_delete_preliminary_exam can_add=perms.KumoGT.can_add_preliminary_exam %}
 </form>
 <div class="w3-cell-row w3-center">
-    <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+    {% if perms.KumoGT.can_change_preliminary_exam %}
+        <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+    {% endif %}
 </div>
-{% include "delete_record.html" with doc_url_name='preliminary_exam' %}
+{% if perms.KumoGT.can_delete_preliminary_exam %}
+    {% include "delete_record.html" with doc_url_name='preliminary_exam' %}
+{% endif %}
 {% endblock %}

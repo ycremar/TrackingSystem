@@ -52,6 +52,8 @@ def upload(request):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def form_upload(request):
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_student'):
+            return HttpResponse("Permission Denied")
         form = create_doc_form(Deg_Plan_Doc)(request.POST, request.FILES)
         if form.is_valid():
             form.save()
@@ -65,6 +67,8 @@ def form_upload(request):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def degree_plan(request, deg_id, option = '', id = 0):
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_degree_plan'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Degree Plan", Deg_Plan_Doc, "/degree_plan/", deg_id, option, id)[1]
     else:
         method, data = deg_doc(request, "Degree Plan", Deg_Plan_Doc, "/degree_plan/", deg_id, option, id)
@@ -81,6 +85,8 @@ def degree_plan(request, deg_id, option = '', id = 0):
 def preliminary_exam(request, deg_id, option = '', id = 0):
     info_form = get_info_form(request, deg_id, Pre_Exam_Info, pre_exam_info_form)
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_preliminary_exam'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Preliminary Exam", Pre_Exam_Doc, "/preliminary_exam/",\
             deg_id, option, id, Pre_Exam_Info, info_form)[1]
     else:
@@ -107,6 +113,8 @@ def qualifying_exam(request, deg_id, option = '', id = 0):
             ('result', django.forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'}))
         ]
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_qualifying_exam'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Qualifying Exam", Qual_Exam_Doc, "/qualifying_exam/",\
             deg_id, option, id, extra_fields = extra_fields)[1]
     else:
@@ -131,6 +139,8 @@ def annual_review(request, deg_id, option = '', id = 0):
             ('status', django.forms.Select(attrs = {'class': 'w3-select', 'style': 'width:auto;'}))
         ]
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_annual_review'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Annual Review", Annual_Review_Doc, "/annual_review/",\
             deg_id, option, id, extra_fields = extra_fields)[1]
     else:
@@ -148,6 +158,8 @@ def annual_review(request, deg_id, option = '', id = 0):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def thesis_dissertation_proposal(request, deg_id, option = '', id = 0):
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_thesis_dissertation_proposal_document'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Thesis/Dissertation Proposal", T_D_Prop_Doc, "/thesis_dissertation_proposal/",\
             deg_id, option, id)[1]
     else:
@@ -166,6 +178,8 @@ def thesis_dissertation_proposal(request, deg_id, option = '', id = 0):
 def final_exam(request, deg_id, option = '', id = 0):
     info_form = get_info_form(request, deg_id, Fin_Exam_Info, final_exam_info_form)
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_final_exam'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Final Exam", Fin_Exam_Doc, "/final_exam/",\
             deg_id, option, id, Fin_Exam_Info, info_form)[1]
     else:
@@ -185,6 +199,8 @@ def final_exam(request, deg_id, option = '', id = 0):
 def thesis_dissertation(request, deg_id, option = '', id = 0):
     info_form = get_info_form(request, deg_id, T_D_Info, thesis_dissertation_info_form)
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_thesis_dissertation'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Thesis/Dissertation", T_D_Doc, "/thesis_dissertation/",\
             deg_id, option, id, T_D_Info, info_form)[1]
     else:
@@ -203,6 +219,8 @@ def thesis_dissertation(request, deg_id, option = '', id = 0):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def other_doc(request, deg_id, option = '', id = 0):
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_other_document'):
+            return HttpResponse("Permission Denied")
         return deg_doc(request, "Other Document", Other_Doc, "/other_doc/", deg_id, option, id)[1]
     else:
         method, data = deg_doc(request, "Other Document", Other_Doc, "/other_doc/", deg_id, option, id)
@@ -218,9 +236,13 @@ def other_doc(request, deg_id, option = '', id = 0):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def session_notes(request, stu_id, option = '', id = 0):
     if option == 'del':
+        if not request.user.has_perm('KumoGT.can_delete_session_note'):
+            return HttpResponse("Permission Denied")
         return delete(request, Session_Notes, id, "Session Note", "advised at",\
             "date", "/student/" + stu_id + "/session_notes/")
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_student'):
+            return HttpResponse("Permission Denied")
         return post_session_notes(request, stu_id, option, id)
     else:
         notes, student, new_form = get_stu_objs(Session_Notes, session_notes_form, stu_id, option, False)
@@ -282,6 +304,8 @@ def students(request, **kwargs):# uin, first_name, last_name, gender, status, cu
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def create_stu(request, back_url = None):
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_add_student'):
+            return HttpResponse("Permission Denied")
         form = stu_bio_form(request.POST)
         if form.is_valid():
             form.save()
@@ -300,6 +324,8 @@ def create_stu(request, back_url = None):
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def edit_stu(request, id, back_url = None):
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_student'):
+            return HttpResponse("Permission Denied")
         form = stu_bio_form(request.POST, instance = Student.objects.get(id = id))
         if form.has_changed():
             if form.is_valid():
@@ -320,14 +346,20 @@ def edit_stu(request, id, back_url = None):
             
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def delete_stu(request, id):
+    if not request.user.has_perm('KumoGT.can_delete_student'):
+            return HttpResponse("Permission Denied")
     return delete(request, Student, id, "Student", 'UIN', 'uin', '/students/')
 
 @conditional_decorator(login_required(login_url='/login/'), not settings.DEBUG)
 def degrees(request, stu_id, option = '', id = 0):
     if option == 'del':
+        if not request.user.has_perm('KumoGT.can_delete_degree'):
+            return HttpResponse("Permission Denied")
         return delete(request, Degree, id, "Degree", "",\
             "deg_type", "/student/" + stu_id + "/degrees/")
     if request.method == 'POST':
+        if not request.user.has_perm('KumoGT.can_change_degree'):
+            return HttpResponse("Permission Denied")
         return post_degrees(request, stu_id, option, id)
     else:
         forms, student = get_stu_objs(Degree, deg_form, stu_id, option)

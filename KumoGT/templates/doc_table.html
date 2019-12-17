@@ -24,15 +24,19 @@
                     {% if form.instance.id %}
                         {% if deg %}
                             <td class="w3-padding-48" style="width:6%">
-                                <a href="{% url doc_url_name deg_id=deg.id option='del' id=form.instance.id %}">
-                                    <button type="button" class="w3-button w3-red">Delete</button>
-                                </a>
+                                {% if can_delete %}
+                                    <a href="{% url doc_url_name deg_id=deg.id option='del' id=form.instance.id %}">
+                                        <button type="button" class="w3-button w3-red">Delete</button>
+                                    </a>
+                                {% endif %}
                             </td>
                         {% else %}
                             <td class="w3-padding-48" style="width:6%">
-                                <a href="{% url doc_url_name deg_id=0 option='del' id=form.instance.id %}">
-                                    <button type="button" class="w3-button w3-red">Delete</button>
-                                </a>
+                                {% if can_delete %}
+                                    <a href="{% url doc_url_name deg_id=0 option='del' id=form.instance.id %}">
+                                        <button type="button" class="w3-button w3-red">Delete</button>
+                                    </a>
+                                {% endif %}
                             </td>
                         {% endif %}
                     {% else %}
@@ -44,4 +48,7 @@
             {% endfor %}
         </table>
     </div>
-    {% include "doc_add_cancel.html" %}
+    
+    {% if can_add %}
+        {% include "doc_add_cancel.html" %}
+    {% endif %}

@@ -11,7 +11,7 @@
 {% include "degree_info_line.html" %}
 </div>
 <form method="post" id="data_form" enctype="multipart/form-data">{% csrf_token %}
-{% include "doc_table.html" with doc_url_name='thesis_dissertation' %}
+{% include "doc_table.html" with doc_url_name='thesis_dissertation' can_delete=perms.KumoGT.can_delete_thesis_dissertation can_add=perms.KumoGT.can_add_thesis_dissertation %}
 <br/>
 <br/>
 {% if info_form %}
@@ -30,7 +30,11 @@
 {% endif %}
 </form>
 <div class="w3-cell-row w3-center">
-    <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+    {% if perms.KumoGT.can_change_thesis_dissertation %}
+        <button form='data_form' type="submit" class="w3-button w3-theme-d5">Submit</button>
+    {% endif %}
 </div>
-{% include "delete_record.html" with doc_url_name='thesis_dissertation' %}
+{% if perms.KumoGT.can_delete_thesis_dissertation %}
+    {% include "delete_record.html" with doc_url_name='thesis_dissertation' %}
+{% endif %}
 {% endblock %}

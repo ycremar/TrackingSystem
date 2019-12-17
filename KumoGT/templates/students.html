@@ -96,7 +96,9 @@
         onclick="download_stu_info()">Download</button>
 {% endif %}
 <div class="w3-cell">
-    <a href="{% url 'create_stu' %}" target="_blank"><button class="w3-button w3-theme-d5">Add</button></a>
+    {% if perms.KumoGT.can_add_student %}
+        <a href="{% url 'create_stu' %}" target="_blank"><button class="w3-button w3-theme-d5">Add</button></a>
+    {% endif %}
 </div>
 </div>
 <table class="w3-container w3-table w3-bordered w3-centered w3-card">
@@ -122,12 +124,20 @@
             <td class="w3-padding-16">None</td>
         {% endif %}
         <td>
+            {% if perms.KumoGT.can_change_student %}
             <a href="{% url 'edit_stu' id=stu.id %}" target="_blank">
-                <button type="button" class="w3-button w3-theme-d5">Edit</button>
+                <button type="button" class="w3-button w3-theme-d5">Edit/View</button>
             </a>
+            {% else %}
+            <a href="{% url 'edit_stu' id=stu.id %}" target="_blank">
+                <button type="button" class="w3-button w3-theme-d5">View</button>
+            </a>
+            {% endif %}
+            {% if perms.KumoGT.can_delete_student %}
             <a href="{% url 'delete_stu' id=stu.id %}">
                 <button type="button" class="w3-button w3-red">Delete</button>
             </a>
+            {% endif %}
         </td>
         <td>
             <select class="w3-select" id="{{ stu.id }}_select" style="width: auto;">
@@ -147,11 +157,22 @@
                 <option value ="ses_note">Session Notes</option>
             </select>
             {% if stu.cur_degree %}
-                <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
-                    stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">Edit</button>
+                {% if perms.KumoGT.can_change_student %}
+                    <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
+                        stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">Edit/View</button>
+                {% else %}
+                    <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
+                        stu_id="{{ stu.id }}" deg_id="{{ stu.cur_degree.id }}" onclick="to_edit_page(this)">View</button>
+                {% endif %}
             {% else %}
-                <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
-                    stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">Edit</button>
+                {% if perms.KumoGT.can_change_student %}
+                    <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
+                        stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">Edit/View</button>
+                {% else %}
+                    <button type="button" class="w3-button w3-theme-d5" id="{{ stu.id }}_edit"
+                        stu_id="{{ stu.id }}" deg_id="0" onclick="to_edit_page(this)">View</button>
+                {% endif %}
+                
             {% endif %}
         </td>
     </tr>
