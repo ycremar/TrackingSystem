@@ -4,15 +4,21 @@ from django.contrib import messages
 from django.utils.safestring import mark_safe
 from django.http import HttpResponse
 
-from .models import Deg_Plan_Doc, Student, Degree, Session_Notes,\
+from .models import Deg_Plan_Doc, Student, Degree, Session_Note,\
     Annual_Review_Doc, Qual_Exam_Doc
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import create_doc_form, deg_form, session_notes_form
+from .forms import create_doc_form, deg_form, session_note_form
 
 import re
 
 from django.contrib.auth.decorators import user_passes_test
+
+def permission_check(request, model, option = ''):
+    perm_type = {'del':'delete', 'del_all':'delete', 'add':'add', None:'change', 'ch':'change'}
+    if request.user.has_perm("KumoGT.{0}_{1}".format(perm_type[option], model._meta.model_name)):
+        return True
+    else: return False
 
 def get_stu_search_dict(args, need_form = False):
     text_fields = ["uin", "first_name", "last_name", "advisor"]
@@ -255,13 +261,13 @@ def post_degrees(request, stu_id, option = '', id = 0):
     else: messages.warning(request, 'Some degrees are not updated.')
     return redirect('degrees', stu_id = stu_id)
 
-def post_session_notes(request, stu_id, option = '', id = 0):
+def post_session_note(request, stu_id, option = '', id = 0):
     changed, error = False, False
     if stu_id != '0':
         student = Student.objects.get(id = stu_id)
         if option == 'add':
             changed = True
-            new_form = session_notes_form(request.POST, prefix = 'new')
+            new_form = session_note_form(request.POST, prefix = 'new')
             if new_form.is_valid():
                 note = new_form.save(commit = False)
                 note.stu = student
@@ -275,4 +281,4 @@ def post_session_notes(request, stu_id, option = '', id = 0):
     if not changed: messages.info(request, 'Noting is changed.')
     elif not error: messages.success(request, 'Session notes are updated.')
     else: messages.warning(request, 'Some session notes are not updated.')
-    return redirect('session_notes', stu_id = stu_id)
+    return redirect('session_note', stu_id = stu_id)

@@ -15,7 +15,7 @@ class Student(models.Model):
     first_name = models.CharField(max_length=127, blank=False, verbose_name='First Name')
     middle_name = models.CharField(max_length=127, blank=True, verbose_name='Middle Name')
     last_name = models.CharField(max_length=127, blank=False, verbose_name='Last Name')
-    email = models.EmailField(blank=False, verbose_name='Email')
+    email = models.EmailField(blank=False, unique=True, verbose_name='Email')
     gender = models.CharField(max_length=63, choices=GENDER, default='not_ans', verbose_name='Gender')
     ethnicity = models.CharField(max_length=63, choices=ETHNICITY_TYPE, default='unknown', verbose_name='Ethnicity')
     us_residency = models.CharField(max_length=63, choices=US_RESIDENCY_TYPE, default='u', verbose_name='US Residency')
@@ -136,7 +136,7 @@ class Other_Doc(Document):
     class Meta:
         verbose_name = 'Other Document'
 
-class Session_Notes(models.Model):
+class Session_Note(models.Model):
     date = models.DateField(verbose_name='Date')
     note = models.CharField(max_length=4096, blank=True, verbose_name='Note')
     stu = models.ForeignKey(Student, models.CASCADE, verbose_name='Student')

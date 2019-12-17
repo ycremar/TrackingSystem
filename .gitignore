@@ -5,3 +5,4 @@ KumoGT/tests/__pycache__/
 TrackingSystem/__pycache__/
 media/
 staticfiles/
+db.sqlite3

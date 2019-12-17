@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 from .models import Student, Degree, Pre_Exam_Info, Fin_Exam_Info, T_D_Info,\
-    Session_Notes
+    Session_Note
 from .sel_options import STUDENT_STATUS_TYPE, GENDER, ETHNICITY_TYPE,\
     US_RESIDENCY_TYPE, TEXAS_RESIDENCY_TYPE, CITIZENSHIP,\
     SEMESTER_TYPE, DEGREE_TYPE, MAJOR_TYPE, YES_NO_TYPE
@@ -148,9 +148,9 @@ class thesis_dissertation_info_form(forms.ModelForm):
             'url': forms.URLInput(attrs={'cols': 50, 'rows': 1, 'style':"width:80%"}),
         }
         
-class session_notes_form(forms.ModelForm):
+class session_note_form(forms.ModelForm):
     class Meta:
-        model = Session_Notes
+        model = Session_Note
         fields = ['date', 'note']
         widgets = {
             'date': forms.SelectDateWidget\

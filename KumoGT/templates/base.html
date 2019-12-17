@@ -6,7 +6,12 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-light-blue.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!-- Use static files if no Internet
+{% load static %}
+<link rel="stylesheet" href={% static "css/w3.css" %}>
+<link rel="stylesheet" href={% static "css/w3-theme-light-blue.css" %}>
+<link rel="stylesheet" href={% static "css/roboto.css" %}>
+-->
 <style>
 html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 .w3-sidebar {
@@ -24,7 +29,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     <a href="{% url 'students' %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Students</a>
     <!-- These links is for debug
     <a href="{% url 'form_upload' %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Upload</a>
-    <a href="{% url 'session_notes' stu_id=0 %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Session Notes</a>
+    <a href="{% url 'session_note' stu_id=0 %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Session Notes</a>
     <a href="{% url 'preliminary_exam' deg_id=0 %}" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-hover-white">Preliminary Exam(Dubug)</a>
     -->
     <a href="{% url 'logout' %}" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-right w3-hover-white">Logout</a>

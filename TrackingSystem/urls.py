@@ -85,8 +85,8 @@ urlpatterns = [
 
     re_path(r'^student/(?:(?P<stu_id>\d+)/)degrees/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
         views.degrees, name = 'degrees'),
-    re_path(r'^student/(?:(?P<stu_id>\d+)/)session_notes/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
-        views.session_notes, name = 'session_notes'),
+    re_path(r'^student/(?:(?P<stu_id>\d+)/)session_note/(?:(?P<option>[a-z_]+)/)?(?:(?P<id>\d+)/)?$',\
+        views.session_note, name = 'session_note'),
 
     path('upload/', views.upload, name='upload'),
     path('form_upload/', views.form_upload, name='form_upload'),
