@@ -26,7 +26,7 @@ SECRET_KEY = '^k=sr#6vw7&+huh-q*a7e1(e3)^4$=(xf+u^fw4$y_b70!s*07'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "192.168.0.121", "127.0.0.1", "*"]
+ALLOWED_HOSTS = ["localhost", "192.168.0.121", "127.0.0.1"]
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
